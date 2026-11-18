@@ -55,5 +55,6 @@ Essentials-style core plugin for the **APPLECUBE** Minecraft server.
 mvn package            # compile, run unit tests, build the jar
 ```
 
-Tests check the text pipeline, duration parsing, the EssentialsX permission mapping, and that every message key
-used in code exists in `messages.yml`.
+Tests check the text pipeline, duration parsing, the EssentialsX and TrustEssentials permission mappings, rank and
+KillerMoney parsing, that every message key used in code exists in `messages.yml`, and that every permission checked
+in code is declared in `plugin.yml`.

@@ -27,6 +27,7 @@ presets; groups that already have the EssentialsX or TrustEssentials nodes need 
 | Ignore all command cooldowns | `applecore.cooldown.bypass` | **`essentials.commandcooldowns.bypass`** |
 | Ignore one command's cooldown | `applecore.<command>.cooldown.bypass` | **`essentials.commandcooldowns.bypass.<command>`** |
 | Teleport without warm-up | `applecore.teleport.bypass-delay` | **`essentials.teleport.timer.bypass`** |
+| Move during the warm-up | `applecore.teleport.bypass-move` | **`essentials.teleport.timer.move`** |
 | Shorter warm-up (seconds) | `applecore.teleport.delay.<n>` (lowest wins) | — |
 | See vanished players | `applecore.vanish.see` | `essentials.vanish.see` |
 

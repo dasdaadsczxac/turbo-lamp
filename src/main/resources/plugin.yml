@@ -29,6 +29,9 @@ permissions:
   applecore.teleport.bypass-delay:
     description: Teleport without warm-up (essentials.teleport.timer.bypass)
     default: op
+  applecore.teleport.bypass-move:
+    description: Moving does not cancel the teleport warm-up (essentials.teleport.timer.move)
+    default: op
 
   # ─── Teleport ────────────────────────────────────────────────────────────────
   applecore.tp:

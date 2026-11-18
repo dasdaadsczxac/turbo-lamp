@@ -140,7 +140,9 @@ public final class TeleportService implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
-        if (!event.hasChangedBlock() || !plugin.getConfig().getBoolean("teleport.cancel-on-move", true)) {
+        if (!event.hasChangedBlock() || !plugin.getConfig().getBoolean("teleport.cancel-on-move", true)
+                || !warmups.containsKey(event.getPlayer().getUniqueId())
+                || plugin.permissions().has(event.getPlayer(), "applecore.teleport.bypass-move")) {
             return;
         }
         Warmup warmup = warmups.remove(event.getPlayer().getUniqueId());

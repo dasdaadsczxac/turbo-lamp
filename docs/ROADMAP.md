@@ -116,6 +116,32 @@ donate chat. Everything else is EssentialsX-named, so the EssentialsX nodes appl
   `trustessentials.workbench` unlock /fly and /craft, `trustessentials.systemwarp` does not unlock /serverwarp;
   every placeholder.
 
-## Stage 6: Polish and handoff ⏳
+## Stage 6: Polish and handoff ✅
 
-Audit that every permission checked in code is declared, final documentation pass, handoff notes.
+- `PermissionsDeclaredTest`: every `applecore.*` node checked in code must be declared in `plugin.yml` (found and fixed
+  `applecore.teleport.bypass-move`, which had an EssentialsX twin but no check: moving now keeps the warm-up for
+  holders of `essentials.teleport.timer.move`). Verified with a bot: cancelled without the node, completed with it.
+- Code defaults for missing config keys now match the bundled `config.yml` (an older `config.yml` without a key
+  used the code value: player warp limit 1 instead of 0, empty currency suffix).
+- Documentation: `docs/PERMISSIONS.md` (all node sets, TrustEssentials table), README, AGENTS.md.
+
+## Handoff
+
+State: stages 1–6 are done; each tag `stage-N` builds with `mvn package` and was loaded on Paper 1.21.11.
+
+Assumptions to confirm with the server owner:
+
+- `ranks.yml` was built from `plugins/DeluxeMenus/gui_menus/menu/donate.yml` of the APPLECUBE pack (prices, colours,
+  perks, home and warp limits). Only AppleCore commands are in the presets; `/kit`, `/rtp`, `/ec`, `/grant`, `/bc`,
+  punishments, auction slots and regions belong to other plugins. Pumpkin inherits Caesar; KillerMoney multipliers
+  (x1.1 … x2.5) are not in the donate menu and were chosen as a sensible curve.
+- The rank badges (`\uF823`, `\u0200` … `\u0217`, `\u01D3`) come from the server's main resource pack, as in the donate
+  menu; the bordo pack does not define them. Players without that pack see the coloured rank name.
+- Player warps start at Prince (`warps.player-limit: 0`), as in the donate menu.
+
+Not verifiable here: the menus with the real resource pack in a client (bots cannot render packs; layouts were matched
+to the pack's slot map and checked item by item), and the KillerMoney action bar (bots do not report it; the same text
+was checked in chat mode).
+
+Ideas for later: `/serverwarp import` from EssentialsX / TrustEssentials warp files, a GUI for `/ranks`, PvP
+protection for new players in KillerMoney.
