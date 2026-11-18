@@ -1,44 +1,47 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  AppleCore — main configuration
-#  Reload with /applecore reload (command/module changes need a restart).
+#  AppleCore — основная конфигурация
+#  /applecore reload применяет изменения (включение команд и модулей — после рестарта).
+#  Тексты сообщений — в messages.yml, настройки команд — в commands.yml.
 # ═══════════════════════════════════════════════════════════════════════════════
 
-language:
-  # File name from plugins/AppleCore/lang/ without .yml (bundled: ru_ru, en_us).
-  default: ru_ru
-  # Use the player's client language when a matching file exists.
-  per-player: false
+# Модули: false — модуль не регистрирует ни команд, ни обработчиков (нужен рестарт).
+modules:
+  teleport: true
+  homes: true
+  spawn: true
 
-# Feature modules. A disabled module registers no commands or listeners (restart required).
-modules: {}
+permissions:
+  # Второй набор прав: точные права EssentialsX (essentials.fly, essentials.home.others,
+  # essentials.sethome.multiple.vip …) работают наравне с правами applecore.*.
+  # Если в LuckPerms уже настроены права EssentialsX, менять ничего не нужно. Таблица: docs/PERMISSIONS.md
+  essentials-compat: true
 
 commands:
-  # Hide commands the player has no permission for (tab-complete and "unknown command").
-  # Keep false on donation servers: players then see which rank unlocks a command.
+  # Скрывать команды без прав из подсказок (и отвечать «неизвестная команда»).
+  # На донат-сервере лучше false: игрок увидит, какая привилегия открывает команду.
   hide-unpermitted: false
-  # When a permission is missing, name the cheapest donation rank that grants it (ranks.yml).
+  # При нехватке прав называть самую дешёвую привилегию, которая их даёт (ranks.yml, этап 5).
   no-permission-rank-hint: true
 
-# ─── Resource pack (APPLECUBE "bordo" pack through ItemsAdder) ───────────────────
+# ─── Ресурспак APPLECUBE «bordo» (через ItemsAdder) ─────────────────────────────
 resource-pack:
-  # true  — menus use the pack: window backgrounds in the title, item_model buttons, pack sounds,
-  #         chat "!" icons and the bold menu font.
-  # false — plain vanilla design everywhere (no pack required).
+  # true  — меню с фонами из пака, кнопки через item_model, звуки пака, значки в чате, жирный шрифт меню.
+  # false — обычный ванильный вид везде (пак не нужен).
   enabled: true
-  # Players who declined or failed to download the pack automatically get the plain design.
+  # Игроки, отказавшиеся от пака (или у которых он не загрузился), автоматически видят ванильный вид.
   plain-for-declined: true
-  # Tooltip frame applied to every menu item while the pack is used ("" to disable).
+  # Рамка подсказок для всех предметов меню при включённом паке ("" — без рамки).
   tooltip-style: "bordo_menu:menu"
-  # Font used by the <menu-font> tag.
+  # Шрифт для тега <menu-font>.
   menu-font: "bordo_menu:bold"
-  # Send a pack from AppleCore. Leave disabled when ItemsAdder already hosts and sends the pack.
+  # Отправка пака самим AppleCore. Оставьте выключенным, если пак раздаёт ItemsAdder.
   send:
     enabled: false
     url: ""
     hash: ""
     required: false
 
-# Theme colours, available in every message as tags: <accent>, <text>, <muted> …
+# Цвета темы — теги <accent>, <text>, <muted> … в messages.yml.
 style:
   colors:
     accent: "#FB2200"
@@ -50,7 +53,7 @@ style:
     warn: "#FFC23D"
     info: "#59C3FF"
 
-# Sounds: "pack" is played when the viewer uses the resource pack, "plain" otherwise.
+# Звуки: pack — если у игрока ресурспак, plain — без него.
 sounds:
   menu-open:
     pack: "bordo_menu:menu.open_rtp"
@@ -73,34 +76,70 @@ sounds:
     plain: "minecraft:entity.enderman.teleport"
     volume: 0.7
 
-# ─── Teleportation (homes, warps, spawn, tpa …) ─────────────────────────────────
+# ─── Телепортация (дома, варпы, спавн, tpa …) ──────────────────────────────────
 teleport:
-  # Warm-up in seconds. applecore.teleport.delay.<n> lowers it per rank,
-  # applecore.teleport.bypass-delay removes it.
+  # Задержка в секундах. applecore.teleport.delay.<n> уменьшает её для привилегий,
+  # applecore.teleport.bypass-delay (essentials.teleport.timer.bypass) убирает совсем.
   delay: 3
   cancel-on-move: true
   cancel-on-damage: true
   particles: true
   bossbar:
     enabled: true
-    # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE. Avoid YELLOW with the pack's bossbar_clear module.
+    # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE. YELLOW скрывает модуль пака bossbar_clear.
     color: RED
     overlay: PROGRESS
-  # Look for a safe spot when the destination is obstructed or above lava/void.
+  # Искать безопасное место, если точка занята блоками или под ней лава/пустота.
   safe-location: true
-  # Damage immunity after arriving (ticks, 20 = 1 second).
+  # Неуязвимость после телепортации (в тиках, 20 = 1 секунда).
   invulnerability-ticks: 60
+  # Дальность /jump в блоках.
+  jump-distance: 160
+  requests:
+    # Сколько живёт запрос /tpa: 60s, 2m …
+    timeout: 2m
   back:
-    # Remember the previous location on command/plugin teleports for /back.
+    # Запоминать прошлое место при телепортации командами и плагинами (для /back).
     record-teleports: true
-    # Remember the death location (needs applecore.back.ondeath).
+    # Запоминать место смерти (нужно applecore.back.ondeath / essentials.back.ondeath).
     record-death: true
 
+# ─── Дома ──────────────────────────────────────────────────────────────────────
+homes:
+  # Лимит без прав на лимит. Больше — applecore.homes.limit.<n> или applecore.homes.unlimited.
+  default-limit: 1
+  # Название для /sethome без аргумента.
+  default-name: home
+  # Наборы как sethome-multiple в EssentialsX: essentials.sethome.multiple даёт «default»,
+  # essentials.sethome.multiple.<набор> — значение набора. Выбирается наибольший лимит.
+  sethome-multiple:
+    default: 3
+    vip: 5
+    staff: 10
+  # Миры, где нельзя ставить дом (обход: applecore.sethome.bypass-world).
+  disabled-worlds: []
+
+# ─── Спавн ─────────────────────────────────────────────────────────────────────
+spawn:
+  teleport-on-first-join: true
+  teleport-on-join: false
+  # Возрождать на спавне, если у игрока нет кровати/якоря возрождения.
+  respawn-at-spawn: true
+  # Возрождать на спавне всегда, даже с кроватью.
+  force-respawn-at-spawn: false
+  # /setspawn также ставит точку возрождения мира.
+  set-world-spawn: true
+  # Падение в пустоту в указанных мирах возвращает на спавн.
+  void:
+    enabled: false
+    worlds: [spawn]
+    y: -64
+
 economy:
-  # java.text.DecimalFormat pattern for money amounts.
+  # Формат сумм (java.text.DecimalFormat).
   format: "#,##0.##"
   grouping-separator: " "
 
 storage:
-  # How often changed player data is written to disk.
+  # Как часто изменённые данные игроков сохраняются на диск (минуты).
   autosave-minutes: 5

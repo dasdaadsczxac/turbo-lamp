@@ -1,0 +1,226 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  AppleCore — сообщения
+#
+#  Формат: MiniMessage (https://docs.advntr.dev/minimessage/format), &-коды тоже работают.
+#  Теги AppleCore:
+#    <prefix:ok|error|warn|info>        значок перед сообщением (с паком — «!»-иконки APPLECUBE)
+#    <icon:lmb|rmb|mmb|bar|dot|apple>   иконки мыши, полоска, точка, яблоко
+#    <menu-font>…</menu-font>           жирный шрифт меню пака (без пака — обычный жирный)
+#    <accent> <text> <muted> <highlight> <good> <bad> <warn> <info>
+#                                       цвета темы (config.yml → style.colors)
+#    <pack>…</pack> / <plain>…</plain>  только с ресурспаком / только без него
+#  Символы пака пишите в двойных кавычках: "\uEBA1". Пустая строка '' отключает сообщение.
+#  Плейсхолдеры вида <player> подставляет плагин; %плейсхолдеры% PlaceholderAPI тоже работают.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+prefix:
+  ok: "<pack><white>\uEBA1</white> </pack><plain><good>✔</good> </plain>"
+  error: "<pack><white>\uEBA0</white> </pack><plain><bad>✘</bad> </plain>"
+  warn: "<pack><white>\uEBA2</white> </pack><plain><warn>⚠</warn> </plain>"
+  info: "<pack><white>\uEBA3</white> </pack><plain><info>✦</info> </plain>"
+
+icons:
+  lmb: "<pack><white>\uEB01</white></pack><plain><highlight>ЛКМ</highlight></plain>"
+  rmb: "<pack><white>\uEB02</white></pack><plain><highlight>ПКМ</highlight></plain>"
+  mmb: "<pack><white>\uEB03</white></pack><plain><highlight>СКМ</highlight></plain>"
+  bar: "<pack>\uEB00</pack><plain>┃</plain>"
+  dot: "<pack>\uEB05</pack><plain>•</plain>"
+  apple: "<pack><white>\uEB04</white></pack><plain><accent>❤</accent></plain>"
+
+common:
+  enabled: "<good>включено</good>"
+  disabled: "<bad>выключено</bad>"
+  none: "<muted>нет</muted>"
+  console: "Консоль"
+  unlimited: "∞"
+
+time:
+  days: "<amount> д."
+  hours: "<amount> ч."
+  minutes: "<amount> мин."
+  seconds: "<amount> сек."
+
+errors:
+  no-permission: "<prefix:error><text>Недостаточно прав для этой команды."
+  no-permission-rank: "<prefix:error><text>Доступно с привилегии <rank><text>. Купить: <click:open_url:'https://applecube.fun'><hover:show_text:'<text>Открыть сайт'><accent><u>applecube.fun</u></accent></hover></click>"
+  players-only: "<prefix:error><text>Команда доступна только игрокам."
+  player-not-found: "<prefix:error><text>Игрок <accent><player></accent> не в сети."
+  player-never-joined: "<prefix:error><text>Игрок <accent><player></accent> ни разу не заходил на сервер."
+  invalid-number: "<prefix:error><text>«<accent><input></accent>» — не число."
+  number-range: "<prefix:error><text>Укажите число от <accent><min></accent> до <accent><max></accent>."
+  cooldown: "<prefix:warn><text>Подождите ещё <accent><time></accent>"
+  internal: "<prefix:error><text>Что-то пошло не так. Сообщите администрации."
+  economy-unavailable: "<prefix:error><text>Экономика недоступна: нужен Vault и плагин экономики."
+  world-not-found: "<prefix:error><text>Мир <accent><world></accent> не найден."
+
+teleport:
+  warmup: "<prefix:info><text>Телепортация через <accent><seconds> сек.</accent> — не двигайтесь."
+  bossbar: "<text>Телепортация через <highlight><seconds></highlight> сек."
+  cancelled-move: "<prefix:warn><text>Телепортация отменена: вы сдвинулись с места."
+  cancelled-damage: "<prefix:warn><text>Телепортация отменена: вы получили урон."
+  unsafe: "<prefix:error><text>Точка назначения небезопасна — телепортация отменена."
+  failed: "<prefix:error><text>Не удалось телепортироваться."
+
+resource-pack:
+  prompt: "<accent>APPLECUBE</accent> <text>— ресурспак сервера: меню, иконки и шрифт."
+
+# Запросы на телепортацию (/tpa, /tpahere)
+tpa:
+  self: "<prefix:error><text>Нельзя отправить запрос самому себе."
+  disabled: "<prefix:error><text>Игрок <accent><player></accent> отключил телепортацию к себе."
+  cannot-accept: "<prefix:error><text>Игрок <accent><player></accent> не может принимать запросы."
+  sent: "<prefix:ok><text>Запрос отправлен игроку <accent><player></accent>. Он действует <highlight><time></highlight>"
+  received: "<prefix:info><accent><player></accent> <text>хочет телепортироваться к вам."
+  received-here: "<prefix:info><accent><player></accent> <text>просит вас телепортироваться к нему."
+  buttons: " <accept>  <deny>  <muted>или /tpaccept, /tpdeny"
+  button-accept: "<good>[✔ Принять]</good>"
+  button-accept-hover: "<text>Нажмите, чтобы принять запрос"
+  button-deny: "<bad>[✘ Отклонить]</bad>"
+  button-deny-hover: "<text>Нажмите, чтобы отклонить запрос"
+  none: "<prefix:error><text>У вас нет активных запросов на телепортацию."
+  none-outgoing: "<prefix:error><text>У вас нет отправленных запросов."
+  offline: "<prefix:error><text>Игрок, отправивший запрос, уже вышел."
+  accepted: "<prefix:ok><text>Вы приняли запрос игрока <accent><player></accent>."
+  accepted-by: "<prefix:ok><accent><player></accent> <text>принял ваш запрос."
+  denied: "<prefix:ok><text>Вы отклонили запрос игрока <accent><player></accent>."
+  denied-by: "<prefix:warn><accent><player></accent> <text>отклонил ваш запрос."
+  cancelled: "<prefix:ok><text>Отменено запросов: <accent><amount></accent>."
+  cancelled-by: "<prefix:info><accent><player></accent> <text>отменил запрос на телепортацию."
+
+commands:
+  applecore:
+    description: "Управление плагином AppleCore"
+    usage: "<prefix:info><text>Использование: <accent>/applecore <reload|info></accent>"
+    reloaded: "<prefix:ok><text>AppleCore перезагружен за <accent><ms> мс</accent>. Новые команды и модули включатся после рестарта."
+    info:
+      - "<accent><menu-font>AppleCore</menu-font></accent> <muted>v<version>"
+      - " <icon:dot> <text>Ресурспак: <resourcepack>"
+      - " <icon:dot> <text>Права EssentialsX: <essentials>"
+      - " <icon:dot> <text>Модули: <highlight><modules>"
+      - " <icon:dot> <text>Команд: <highlight><commands>"
+      - " <icon:dot> <text>Интеграции: <muted><hooks>"
+
+  # ─── Телепортация ────────────────────────────────────────────────────────────
+  tp:
+    description: "Телепортироваться к игроку или на координаты"
+    usage: "<prefix:info><text>Использование: <accent>/tp <игрок> [к_игроку]</accent> <muted>или</muted> <accent>/tp [игрок] <x> <y> <z></accent>"
+    to-player: "<prefix:ok><text>Вы телепортировались к <accent><player></accent>."
+    other-to-player: "<prefix:ok><accent><player></accent> <text>телепортирован к <accent><target></accent>."
+    to-position: "<prefix:ok><text>Вы телепортировались на <accent><x>, <y>, <z></accent>."
+    other-to-position: "<prefix:ok><accent><player></accent> <text>телепортирован на <accent><x>, <y>, <z></accent>."
+  tpo:
+    description: "Телепортироваться к игроку, даже если он отключил телепортацию"
+    usage: "<prefix:info><text>Использование: <accent>/tpo <игрок></accent>"
+  tphere:
+    description: "Телепортировать игрока к себе"
+    usage: "<prefix:info><text>Использование: <accent>/tphere <игрок></accent>"
+    done: "<prefix:ok><accent><player></accent> <text>телепортирован к вам."
+    target: "<prefix:info><text>Вас телепортировал к себе <accent><player></accent>."
+  tpohere:
+    description: "Телепортировать игрока к себе, даже если он отключил телепортацию"
+    usage: "<prefix:info><text>Использование: <accent>/tpohere <игрок></accent>"
+  tppos:
+    description: "Телепортироваться на координаты"
+    usage: "<prefix:info><text>Использование: <accent>/tppos <x> <y> <z> [мир] [игрок]</accent>"
+  tpall:
+    description: "Телепортировать всех игроков к себе"
+    usage: "<prefix:info><text>Использование: <accent>/tpall [игрок]</accent>"
+    done: "<prefix:ok><text>К <accent><player></accent> телепортировано игроков: <accent><amount></accent>."
+    target: "<prefix:info><text>Все игроки телепортированы к <accent><player></accent>."
+  back:
+    description: "Вернуться на предыдущее место"
+    usage: "<prefix:info><text>Использование: <accent>/back [игрок]</accent>"
+    none: "<prefix:error><text>Некуда возвращаться."
+    none-other: "<prefix:error><text>Игроку <accent><player></accent> некуда возвращаться."
+    done: "<prefix:ok><text>Вы вернулись на предыдущее место."
+    done-other: "<prefix:ok><accent><player></accent> <text>возвращён на предыдущее место."
+  top:
+    description: "Подняться на самый верхний блок"
+    usage: "<prefix:info><text>Использование: <accent>/top</accent>"
+    none: "<prefix:error><text>Над вами нет безопасного места."
+    done: "<prefix:ok><text>Вы на вершине: <accent><x>, <y>, <z></accent>."
+  jump:
+    description: "Телепортироваться на блок, на который вы смотрите"
+    usage: "<prefix:info><text>Использование: <accent>/jump</accent>"
+    no-target: "<prefix:error><text>Вы не смотрите на блок (или он слишком далеко)."
+    done: "<prefix:ok><text>Прыжок на <accent><x>, <y>, <z></accent>."
+
+  # ─── Запросы на телепортацию ─────────────────────────────────────────────────
+  tpa:
+    description: "Попросить разрешения телепортироваться к игроку"
+    usage: "<prefix:info><text>Использование: <accent>/tpa <игрок></accent>"
+  tpahere:
+    description: "Попросить игрока телепортироваться к вам"
+    usage: "<prefix:info><text>Использование: <accent>/tpahere <игрок></accent>"
+  tpaall:
+    description: "Попросить всех игроков телепортироваться к вам"
+    usage: "<prefix:info><text>Использование: <accent>/tpaall</accent>"
+    done: "<prefix:ok><text>Запрос отправлен игрокам: <accent><amount></accent>."
+  tpaccept:
+    description: "Принять запрос на телепортацию"
+    usage: "<prefix:info><text>Использование: <accent>/tpaccept [игрок]</accent>"
+  tpdeny:
+    description: "Отклонить запрос на телепортацию"
+    usage: "<prefix:info><text>Использование: <accent>/tpdeny [игрок]</accent>"
+  tpacancel:
+    description: "Отменить отправленные запросы на телепортацию"
+    usage: "<prefix:info><text>Использование: <accent>/tpacancel [игрок]</accent>"
+  tptoggle:
+    description: "Разрешить или запретить телепортацию к себе"
+    usage: "<prefix:info><text>Использование: <accent>/tptoggle [игрок]</accent>"
+    turned-on: "<prefix:ok><text>Запросы на телепортацию <good>включены</good>."
+    turned-off: "<prefix:ok><text>Запросы на телепортацию <bad>выключены</bad>."
+    changed-other: "<prefix:ok><text>Запросы на телепортацию у <accent><player></accent>: <state>."
+  tpauto:
+    description: "Автоматически принимать запросы /tpa"
+    usage: "<prefix:info><text>Использование: <accent>/tpauto [игрок]</accent>"
+    turned-on: "<prefix:ok><text>Автопринятие запросов <good>включено</good>."
+    turned-off: "<prefix:ok><text>Автопринятие запросов <bad>выключено</bad>."
+    changed-other: "<prefix:ok><text>Автопринятие запросов у <accent><player></accent>: <state>."
+
+  # ─── Дома ────────────────────────────────────────────────────────────────────
+  home:
+    description: "Телепортироваться домой или показать список домов"
+    usage: "<prefix:info><text>Использование: <accent>/home [название]</accent>"
+    none: "<prefix:info><text>У вас пока нет точек дома. Установите: <accent>/sethome [название]</accent>"
+    none-other: "<prefix:info><text>У игрока <accent><player></accent> нет точек дома."
+    list: "<prefix:info><text>Ваши дома <muted>(<count>/<limit>)</muted><text>: <homes>"
+    list-other: "<prefix:info><text>Дома игрока <accent><player></accent> <muted>(<count>)</muted><text>: <homes>"
+    entry: "<accent><home></accent>"
+    entry-hover: "<text>Дом <accent><home></accent><newline><muted>Мир: <world><newline>X: <x>  Y: <y>  Z: <z><newline><newline><icon:lmb> <highlight>Телепортироваться"
+    separator: "<muted>, "
+    teleported: "<prefix:ok><text>Добро пожаловать домой: <accent><home></accent>."
+    not-found: "<prefix:error><text>Дом <accent><home></accent> не найден."
+  homes:
+    description: "Список ваших домов"
+    usage: "<prefix:info><text>Использование: <accent>/homes [игрок]</accent>"
+  sethome:
+    description: "Установить точку дома"
+    usage: "<prefix:info><text>Использование: <accent>/sethome [название]</accent>"
+    set: "<prefix:ok><text>Дом <accent><home></accent> установлен <muted>(<count>/<limit>)</muted><text>."
+    updated: "<prefix:ok><text>Дом <accent><home></accent> перенесён сюда."
+    set-other: "<prefix:ok><text>Дом <accent><home></accent> игрока <accent><player></accent> установлен."
+    limit: "<prefix:error><text>Достигнут лимит домов: <accent><limit></accent>. Больше домов — у привилегий на <click:open_url:'https://applecube.fun'><accent><u>applecube.fun</u></accent></click>"
+    invalid-name: "<prefix:error><text>Название «<accent><home></accent>» не подходит: до 24 букв, цифр, «_» или «-»."
+    world-disabled: "<prefix:error><text>В этом мире нельзя ставить дом."
+  delhome:
+    description: "Удалить точку дома"
+    usage: "<prefix:info><text>Использование: <accent>/delhome <название></accent>"
+    deleted: "<prefix:ok><text>Дом <accent><home></accent> удалён."
+    deleted-other: "<prefix:ok><text>Дом <accent><home></accent> игрока <accent><player></accent> удалён."
+  playerhome:
+    description: "Посмотреть дома другого игрока"
+    usage: "<prefix:info><text>Использование: <accent>/playerhome <игрок> [дом]</accent>"
+
+  # ─── Спавн ───────────────────────────────────────────────────────────────────
+  spawn:
+    description: "Телепортироваться на спавн"
+    usage: "<prefix:info><text>Использование: <accent>/spawn [игрок]</accent>"
+    not-set: "<prefix:error><text>Спавн не установлен."
+    done: "<prefix:ok><text>Вы на спавне."
+    done-other: "<prefix:ok><accent><player></accent> <text>телепортирован на спавн."
+    void: "<prefix:warn><text>Вы упали в пустоту — возвращаем на спавн."
+  setspawn:
+    description: "Установить точку спавна"
+    usage: "<prefix:info><text>Использование: <accent>/setspawn</accent>"
+    done: "<prefix:ok><text>Спавн установлен: <accent><world></accent> <muted><x>, <y>, <z></muted>."

@@ -1,7 +1,7 @@
 package fun.applecube.core.command;
 
 import fun.applecube.core.AppleCorePlugin;
-import fun.applecube.core.lang.Messages;
+import fun.applecube.core.message.Messages;
 import fun.applecube.core.util.Players;
 import org.jetbrains.annotations.Nullable;
 

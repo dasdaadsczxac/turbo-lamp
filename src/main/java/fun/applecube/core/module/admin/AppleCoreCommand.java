@@ -13,7 +13,7 @@ import java.util.Locale;
 final class AppleCoreCommand extends AbstractCommand {
 
     AppleCoreCommand(AppleCorePlugin plugin) {
-        super(plugin, "applecore", "acore", "ac");
+        super(plugin, "applecore", "acore");
         permission("applecore.admin");
     }
 
@@ -29,8 +29,8 @@ final class AppleCoreCommand extends AbstractCommand {
             case "info", "version" -> {
                 ctx.replyCmd("info",
                         Ph.of("version", plugin.getPluginMeta().getVersion()),
-                        Ph.of("language", plugin.lang().defaultId()),
                         Ph.of("resourcepack", plugin.messages().bool(ctx.sender(), plugin.pack().enabled())),
+                        Ph.of("essentials", plugin.messages().bool(ctx.sender(), plugin.permissions().essentialsCompat())),
                         Ph.of("modules", String.join(", ", plugin.moduleIds())),
                         Ph.of("commands", plugin.commands().size()),
                         Ph.of("hooks", String.join(" | ", plugin.hooks().status())));

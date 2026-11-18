@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * All AppleCore teleports go through here: warm-up with boss bar and particles (cancelled by moving
@@ -52,6 +53,15 @@ public final class TeleportService implements Listener {
     }
 
     public void teleport(Player player, Location target, int delaySeconds, @Nullable Runnable onArrive) {
+        Location fixed = target.clone();
+        teleport(player, () -> fixed, delaySeconds, onArrive);
+    }
+
+    /**
+     * Teleports to a destination resolved when the warm-up ends (e.g. another player's current position).
+     * A null destination aborts with {@code teleport.failed}.
+     */
+    public void teleport(Player player, Supplier<@Nullable Location> target, int delaySeconds, @Nullable Runnable onArrive) {
         cancel(player.getUniqueId());
         if (delaySeconds <= 0) {
             finish(player, target, onArrive);
@@ -65,7 +75,7 @@ public final class TeleportService implements Listener {
 
     /** Warm-up in seconds: config default, lowered by {@code applecore.teleport.delay.<n>}. */
     public int delaySeconds(Player player) {
-        if (player.hasPermission("applecore.teleport.bypass-delay")) {
+        if (plugin.permissions().has(player, "applecore.teleport.bypass-delay")) {
             return 0;
         }
         int base = Math.max(0, plugin.getConfig().getInt("teleport.delay", 3));
@@ -90,7 +100,12 @@ public final class TeleportService implements Listener {
         warmups.clear();
     }
 
-    private void finish(Player player, Location target, @Nullable Runnable onArrive) {
+    private void finish(Player player, Supplier<@Nullable Location> destinationSupplier, @Nullable Runnable onArrive) {
+        Location target = destinationSupplier.get();
+        if (target == null || target.getWorld() == null) {
+            plugin.messages().send(player, "teleport.failed");
+            return;
+        }
         boolean checkSafety = plugin.getConfig().getBoolean("teleport.safe-location", true)
                 && !player.getAllowFlight()
                 && (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE);
@@ -173,7 +188,7 @@ public final class TeleportService implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         if (plugin.getConfig().getBoolean("teleport.back.record-death", true)
-                && player.hasPermission("applecore.back.ondeath")) {
+                && plugin.permissions().has(player, "applecore.back.ondeath")) {
             User user = plugin.users().user(player);
             user.lastLocation(StoredLocation.of(player.getLocation()));
         }
@@ -184,7 +199,7 @@ public final class TeleportService implements Listener {
     private final class Warmup {
 
         private final Player player;
-        private final Location target;
+        private final Supplier<@Nullable Location> target;
         private final long durationMillis;
         private final @Nullable Runnable onArrive;
         private final long startedAt = System.currentTimeMillis();
@@ -192,7 +207,7 @@ public final class TeleportService implements Listener {
         private @Nullable BukkitTask task;
         private long shownSeconds = -1;
 
-        Warmup(Player player, Location target, int seconds, @Nullable Runnable onArrive) {
+        Warmup(Player player, Supplier<@Nullable Location> target, int seconds, @Nullable Runnable onArrive) {
             this.player = player;
             this.target = target;
             this.durationMillis = seconds * 1000L;

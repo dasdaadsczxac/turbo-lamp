@@ -16,14 +16,135 @@ softdepend:
   - HeadDatabase
 
 # Commands are registered at runtime through Paper's command API (see commands.yml).
-# Permission reference: docs/PERMISSIONS.md
+# Every node below also accepts its exact EssentialsX equivalent (essentials.<command>…);
+# the full table is in docs/PERMISSIONS.md. Defaults: player basics "true", everything else "op".
 permissions:
+  # ─── Admin ───────────────────────────────────────────────────────────────────
   applecore.admin:
-    description: /applecore reload | info
+    description: /applecore reload | info (EssentialsX essentials.essentials)
     default: op
   applecore.cooldown.bypass:
-    description: Ignore every command cooldown from commands.yml
+    description: Ignore every command cooldown from commands.yml (essentials.commandcooldowns.bypass)
     default: op
   applecore.teleport.bypass-delay:
-    description: Teleport instantly (no warm-up)
+    description: Teleport without warm-up (essentials.teleport.timer.bypass)
+    default: op
+
+  # ─── Teleport ────────────────────────────────────────────────────────────────
+  applecore.tp:
+    description: /tp to a player
+    default: op
+  applecore.tp.others:
+    description: /tp one player to another
+    default: op
+  applecore.tp.position:
+    description: /tp to coordinates
+    default: op
+  applecore.tpo:
+    description: /tpo - teleport to players who disabled teleports
+    default: op
+  applecore.tphere:
+    description: /tphere
+    default: op
+  applecore.tpohere:
+    description: /tpohere
+    default: op
+  applecore.tppos:
+    description: /tppos
+    default: op
+  applecore.tppos.others:
+    description: /tppos for another player
+    default: op
+  applecore.tpall:
+    description: /tpall
+    default: op
+  applecore.tptoggle.bypass:
+    description: Reach players who disabled teleports with /tp, /tphere and /tpa (essentials.tpo)
+    default: op
+  applecore.back:
+    description: /back (donation perk)
+    default: op
+  applecore.back.ondeath:
+    description: /back returns to the death location (essentials.back.ondeath)
+    default: op
+  applecore.back.others:
+    description: /back for another player
+    default: op
+  applecore.top:
+    description: /top
+    default: op
+  applecore.jump:
+    description: /jump (donation perk)
+    default: op
+
+  # ─── Teleport requests ───────────────────────────────────────────────────────
+  applecore.tpa:
+    description: /tpa
+    default: true
+  applecore.tpahere:
+    description: /tpahere (donation perk)
+    default: op
+  applecore.tpaall:
+    description: /tpaall
+    default: op
+  applecore.tpaccept:
+    description: /tpaccept (also needed to receive requests)
+    default: true
+  applecore.tpdeny:
+    description: /tpdeny
+    default: true
+  applecore.tpacancel:
+    description: /tpacancel
+    default: true
+  applecore.tptoggle:
+    description: /tptoggle
+    default: true
+  applecore.tptoggle.others:
+    description: /tptoggle for another player
+    default: op
+  applecore.tpauto:
+    description: /tpauto (donation perk)
+    default: op
+  applecore.tpauto.others:
+    description: /tpauto for another player
+    default: op
+
+  # ─── Homes ───────────────────────────────────────────────────────────────────
+  applecore.home:
+    description: /home, /homes
+    default: true
+  applecore.home.others:
+    description: /home player:home (essentials.home.others)
+    default: op
+  applecore.sethome:
+    description: /sethome
+    default: true
+  applecore.sethome.others:
+    description: /sethome player:home
+    default: op
+  applecore.sethome.bypass-world:
+    description: /sethome in homes.disabled-worlds
+    default: op
+  applecore.delhome:
+    description: /delhome
+    default: true
+  applecore.delhome.others:
+    description: /delhome player:home
+    default: op
+  applecore.playerhome:
+    description: /playerhome (essentials.home.others)
+    default: op
+  applecore.homes.unlimited:
+    description: No home limit (essentials.sethome.multiple.unlimited)
+    default: op
+
+  # ─── Spawn ───────────────────────────────────────────────────────────────────
+  applecore.spawn:
+    description: /spawn
+    default: true
+  applecore.spawn.others:
+    description: /spawn player
+    default: op
+  applecore.setspawn:
+    description: /setspawn
     default: op

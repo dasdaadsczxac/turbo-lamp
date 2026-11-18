@@ -5,10 +5,12 @@ import fun.applecube.core.config.ConfigFile;
 import fun.applecube.core.gui.MenuListener;
 import fun.applecube.core.hook.Hooks;
 import fun.applecube.core.item.ItemFactory;
-import fun.applecube.core.lang.Lang;
-import fun.applecube.core.lang.Messages;
+import fun.applecube.core.message.Messages;
 import fun.applecube.core.module.Module;
 import fun.applecube.core.module.admin.AdminModule;
+import fun.applecube.core.module.homes.HomesModule;
+import fun.applecube.core.module.spawn.SpawnModule;
+import fun.applecube.core.module.teleport.TeleportModule;
 import fun.applecube.core.pack.PackStyle;
 import fun.applecube.core.permission.PermissionService;
 import fun.applecube.core.storage.AsyncIo;
@@ -32,7 +34,6 @@ public final class AppleCorePlugin extends JavaPlugin {
     private AsyncIo io;
     private ConfigFile commandsFile;
     private PackStyle pack;
-    private Lang lang;
     private Messages messages;
     private Hooks hooks;
     private ItemFactory items;
@@ -49,7 +50,6 @@ public final class AppleCorePlugin extends JavaPlugin {
         saveDefaultConfig();
         commandsFile = new ConfigFile(this, "commands.yml", true);
         pack = new PackStyle(this);
-        lang = new Lang(this);
         messages = new Messages(this);
         hooks = new Hooks(this);
         items = new ItemFactory(this);
@@ -88,6 +88,9 @@ public final class AppleCorePlugin extends JavaPlugin {
     private List<Module> createModules() {
         List<Module> list = new ArrayList<>();
         list.add(new AdminModule(this));
+        list.add(new TeleportModule(this));
+        list.add(new HomesModule(this));
+        list.add(new SpawnModule(this));
         return list;
     }
 
@@ -115,12 +118,12 @@ public final class AppleCorePlugin extends JavaPlugin {
     private void loadConfiguration() {
         reloadConfig();
         commandsFile.load();
-        lang.load();
         messages.reload();
         pack.reload();
+        permissions.reload();
     }
 
-    /** /applecore reload: configs, languages, pack style, module settings, command cooldowns. */
+    /** /applecore reload: configs, messages, pack style, module settings, command cooldowns. */
     public void reload() {
         MenuListener.closeAll();
         loadConfiguration();
@@ -154,10 +157,6 @@ public final class AppleCorePlugin extends JavaPlugin {
 
     public PackStyle pack() {
         return pack;
-    }
-
-    public Lang lang() {
-        return lang;
     }
 
     public Messages messages() {

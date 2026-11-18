@@ -1,14 +1,45 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  AppleCore — per-command settings
-#  Commands not listed here use their defaults (enabled, built-in aliases, no cooldown).
+#  AppleCore — настройки команд
+#  Команды, которых здесь нет, работают по умолчанию: включены, встроенные алиасы, без задержки.
 #
-#    enabled: false   — do not register the command, e.g. to leave it to another plugin (restart)
-#    aliases: [a, b]  — replaces the built-in aliases (restart)
-#    cooldown: 30s    — per-player cooldown: 10s, 5m, 1h30m … (reload)
-#                       bypass: applecore.<command>.cooldown.bypass or applecore.cooldown.bypass
+#    enabled: false   — не регистрировать команду (например, оставить её другому плагину) — рестарт
+#    aliases: [a, b]  — заменить встроенные алиасы — рестарт
+#    cooldown: 30s    — задержка между использованиями: 10s, 5m, 1h30m, 1ч30м … — /applecore reload
+#                       обход: applecore.<команда>.cooldown.bypass или applecore.cooldown.bypass
+#                       (в EssentialsX: essentials.commandcooldowns.bypass[.<команда>])
 #
-#  /ec and /kit are intentionally not part of AppleCore (AppleEnderChest and AppleKits own them).
+#  /ec и киты в AppleCore намеренно отсутствуют — это AppleEnderChest и AppleKits.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 applecore:
-  aliases: [acore, ac]
+  aliases: [acore]
+
+# ─── Телепортация ──────────────────────────────────────────────────────────────
+tp:
+  aliases: [tele, tp2p]
+tphere:
+  aliases: [s]
+tppos:
+  aliases: [tpcord, pos]
+back:
+  aliases: [return]
+  cooldown: 0
+jump:
+  aliases: [j, jumpto]
+tpa:
+  aliases: [call, tpask]
+  cooldown: 0
+tpaccept:
+  aliases: [tpyes, tpallow]
+tpdeny:
+  aliases: [tpno, tpcancel]
+
+# ─── Дома и спавн ──────────────────────────────────────────────────────────────
+sethome:
+  aliases: [createhome]
+delhome:
+  aliases: [remhome, rmhome, removehome, deletehome]
+playerhome:
+  aliases: [phome]
+spawn:
+  cooldown: 0

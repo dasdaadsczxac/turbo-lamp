@@ -11,8 +11,9 @@ Legend: ✅ done · 🔜 next · ⏳ planned
 - Maven project, Paper API 1.21.11, Java 21; `plugin.yml` with soft dependencies.
 - `AppleCorePlugin`: service getters plus a module list (`createModules()`); modules can be turned off in `config.yml`.
 - Config: `config.yml` (theme colours, sounds, teleport, resource pack), `commands.yml` (per-command enable/aliases/cooldown).
-- Localization: `lang/ru_ru.yml` and `lang/en_us.yml`; MiniMessage plus `&` codes, PlaceholderAPI, AppleCore tags
-  (`<prefix:*>`, `<icon:*>`, `<menu-font>`, theme colours, `<pack>`/`<plain>` sections); optional per-player language.
+- Messages: MiniMessage plus `&` codes, PlaceholderAPI, AppleCore tags (`<prefix:*>`, `<icon:*>`, `<menu-font>`,
+  theme colours, `<pack>`/`<plain>` sections). (Stage 1 shipped ru/en language files; stage 2 replaced them with a
+  single Russian `messages.yml` at the owner's request.)
 - Commands: `AbstractCommand` (mirrors TrustEssentials' `TrustCommand`: name, aliases, permission, player-only),
   registered through Paper's Brigadier `BasicCommand` API; `.others` convention; cooldowns; the no-permission
   message can name the donation rank that unlocks the command (hook used in stage 5).
@@ -28,14 +29,23 @@ Legend: ✅ done · 🔜 next · ⏳ planned
 - Admin: `/applecore reload|info`.
 - Tests: text pipeline, durations, language parity, and keys used in code.
 
-## Stage 2: Teleport, homes, spawn 🔜
+## Stage 2: Russian-only messages, EssentialsX permissions, teleport, homes, spawn ✅
 
-Commands (TrustEssentials names/aliases): `tp`, `tphere (s)`, `tppos`, `tpall`, `tpa (call)`, `tpahere`,
-`tpaccept (tpyes)`, `tpdeny (tpno, tpcancel)`, `tpacancel`, `tptoggle`, `tpauto`, `back`, `top`, `jump`,
-`spawn`, `setspawn`, `home (homes)`, `sethome (createhome)`, `delhome`, `playerhome (phome)`.
-Home limits through `applecore.homes.limit.<n>`; spawn on join/respawn options.
+- Owner requests applied: the localization system is gone (no `lang/`, no English, no locale switching); all texts
+  are Russian in `messages.yml`, config comments are Russian. A second permission set: every check also accepts the
+  exact EssentialsX node (`PermissionService.has` + `EssentialsPermissions`, table in `docs/PERMISSIONS.md`),
+  including EssentialsX `sethome-multiple` home sets, timer/cooldown bypasses and `essentials.tpo`.
+- Teleport: `tp` (players, coordinates with `~`, selectors fall back to `minecraft:tp`), `tphere (s)`, `tpo`,
+  `tpohere`, `tppos`, `tpall`, `back (return)` incl. death point, `top`, `jump (j, jumpto)`.
+- Requests: `tpa (call, tpask)`, `tpahere`, `tpaall`, `tpaccept (tpyes)`, `tpdeny (tpno, tpcancel)`, `tpacancel`,
+  `tptoggle`, `tpauto`; clickable accept/deny buttons, expiry, destination resolved when the warm-up ends.
+- Homes: `home`, `homes`, `sethome (createhome)`, `delhome`, `playerhome (phome)`, `player:home` syntax for staff,
+  clickable home list, limits, disabled worlds.
+- Spawn: `spawn`, `setspawn` (`spawn.yml`), first-join/join teleport, respawn at spawn, void rescue.
+- Verified on Paper 1.21.11 + LuckPerms with two bot players: limits from `essentials.sethome.multiple.vip`,
+  `/back` via `essentials.back`, `/tpahere` via `essentials.tpahere`, warm-up cancel on move/damage, TPA flow.
 
-## Stage 3: Essentials utilities, chat, economy ⏳
+## Stage 3: Essentials utilities, chat, economy 🔜
 
 Player: `fly`, `god`, `heal`, `feed`, `ext`, `burn`, `speed`, `flyspeed`, `gamemode (gm, gmc/gms/gma/gmsp)`, `hat`,
 `repair (fix)`, `workbench (craft, wb)`, `anvil`, `stonecutter`, `grindstone`, `loom`, `cartographytable`,
