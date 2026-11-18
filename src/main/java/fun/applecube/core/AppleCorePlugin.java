@@ -15,6 +15,9 @@ import fun.applecube.core.module.homes.HomesModule;
 import fun.applecube.core.module.spawn.SpawnModule;
 import fun.applecube.core.module.teleport.TeleportModule;
 import fun.applecube.core.module.warps.WarpsModule;
+import fun.applecube.core.module.ranks.RanksModule;
+import fun.applecube.core.module.killermoney.KillerMoneyModule;
+import fun.applecube.core.hook.PapiExpansion;
 import fun.applecube.core.pack.PackStyle;
 import fun.applecube.core.permission.PermissionService;
 import fun.applecube.core.storage.AsyncIo;
@@ -83,6 +86,9 @@ public final class AppleCorePlugin extends JavaPlugin {
             }
         }
         commands.registerWithPaper();
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            PapiExpansion.register(this);
+        }
         users.start();
         getLogger().info("AppleCore " + getPluginMeta().getVersion() + " enabled in "
                 + (System.currentTimeMillis() - started) + " ms: modules " + moduleIds());
@@ -99,6 +105,8 @@ public final class AppleCorePlugin extends JavaPlugin {
         list.add(new WorldModule(this));
         list.add(new EconomyModule(this));
         list.add(new WarpsModule(this));
+        list.add(new RanksModule(this));
+        list.add(new KillerMoneyModule(this));
         return list;
     }
 
