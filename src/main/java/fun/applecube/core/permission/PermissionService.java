@@ -10,17 +10,23 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Permission checks for AppleCore. Every check accepts two node sets:
+ * Permission checks for AppleCore. Every check accepts several node sets:
  * <ul>
  *     <li>AppleCore nodes: {@code applecore.<command>}, {@code applecore.<command>.others}, numeric limits such as
  *     {@code applecore.homes.limit.5} (highest wins) or {@code applecore.teleport.delay.1} (lowest wins);</li>
- *     <li>the exact EssentialsX nodes ({@link EssentialsPermissions}), so a LuckPerms setup made for
- *     EssentialsX keeps working ({@code permissions.essentials-compat} in config.yml).</li>
+ *     <li>the exact EssentialsX nodes ({@link EssentialsPermissions}) and TrustEssentials nodes
+ *     ({@link TrustEssentialsPermissions}), so a LuckPerms setup made for either keeps working
+ *     ({@code permissions.essentials-compat} / {@code permissions.trustessentials-compat} in config.yml);</li>
+ *     <li>the presets of the player's donation ranks (ranks.yml), including their limits.</li>
  * </ul>
  */
 public final class PermissionService {
@@ -30,7 +36,9 @@ public final class PermissionService {
     private final AppleCorePlugin plugin;
     private final Map<String, Integer> sethomeMultiple = new LinkedHashMap<>();
     private boolean essentialsCompat = true;
-    private @Nullable Function<String, Component> rankHint;
+    private boolean trustEssentialsCompat = true;
+    private @Nullable BiFunction<CommandSender, String, Component> rankHint;
+    private @Nullable Function<Player, Set<String>> rankNodes;
 
     public PermissionService(AppleCorePlugin plugin) {
         this.plugin = plugin;
@@ -38,6 +46,7 @@ public final class PermissionService {
 
     public void reload() {
         essentialsCompat = plugin.getConfig().getBoolean("permissions.essentials-compat", true);
+        trustEssentialsCompat = plugin.getConfig().getBoolean("permissions.trustessentials-compat", true);
         sethomeMultiple.clear();
         ConfigurationSection sets = plugin.getConfig().getConfigurationSection("homes.sethome-multiple");
         if (sets != null) {
@@ -47,16 +56,56 @@ public final class PermissionService {
         }
     }
 
-    /** True when the AppleCore node or its EssentialsX equivalent is granted. */
+    /**
+     * True when the AppleCore node, its EssentialsX or TrustEssentials equivalent, or the player's donation rank
+     * grants it. An AppleCore node explicitly set to false (e.g. negated in LuckPerms) always denies.
+     */
     public boolean has(Permissible who, String node) {
         if (who.hasPermission(node)) {
             return true;
         }
-        if (!essentialsCompat) {
+        if (who.isPermissionSet(node)) {
             return false;
         }
-        String essentials = EssentialsPermissions.map(node);
-        return essentials != null && who.hasPermission(essentials);
+        if (essentialsCompat) {
+            String essentials = EssentialsPermissions.map(node);
+            if (essentials != null && who.hasPermission(essentials)) {
+                return true;
+            }
+        }
+        if (trustEssentialsCompat) {
+            String trust = TrustEssentialsPermissions.map(node);
+            if (trust != null && who.hasPermission(trust)) {
+                return true;
+            }
+        }
+        return grantedByRank(who, node);
+    }
+
+    private boolean grantedByRank(Permissible who, String node) {
+        Set<String> nodes = rankNodes(who);
+        if (nodes.isEmpty()) {
+            return false;
+        }
+        if (nodes.contains(node)) {
+            return true;
+        }
+        for (int dot = node.lastIndexOf('.'); dot > 0; dot = node.lastIndexOf('.', dot - 1)) {
+            if (nodes.contains(node.substring(0, dot) + ".*")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Nodes granted by the player's donation ranks (ranks.yml); empty without the ranks module. */
+    public Set<String> rankNodes(Permissible who) {
+        return rankNodes != null && who instanceof Player player ? rankNodes.apply(player) : Set.of();
+    }
+
+    /** The ranks module registers the presets of the player's ranks. */
+    public void rankNodes(@Nullable Function<Player, Set<String>> provider) {
+        this.rankNodes = provider;
     }
 
     public boolean essentialsCompat() {
@@ -72,17 +121,33 @@ public final class PermissionService {
             return true;
         }
         String essentials = essentialsCompat ? EssentialsPermissions.map(node) : null;
-        return essentials != null && who.isPermissionSet(essentials) && who.hasPermission(essentials);
+        if (essentials != null && who.isPermissionSet(essentials) && who.hasPermission(essentials)) {
+            return true;
+        }
+        String trust = trustEssentialsCompat ? TrustEssentialsPermissions.map(node) : null;
+        return trust != null && who.isPermissionSet(trust) && who.hasPermission(trust);
+    }
+
+    /** Tails of the granted nodes starting with {@code prefix}: effective permissions plus the rank presets. */
+    private List<String> tails(Permissible who, String prefix) {
+        List<String> out = new ArrayList<>();
+        for (PermissionAttachmentInfo info : who.getEffectivePermissions()) {
+            if (info.getValue() && info.getPermission().startsWith(prefix)) {
+                out.add(info.getPermission().substring(prefix.length()));
+            }
+        }
+        for (String node : rankNodes(who)) {
+            if (node.startsWith(prefix)) {
+                out.add(node.substring(prefix.length()));
+            }
+        }
+        return out;
     }
 
     /** Highest {@code <prefix><n>} the player has, {@link #UNLIMITED} for {@code <prefix>unlimited}, else {@code def}. */
     public int highest(Permissible who, String prefix, int def) {
         int best = Integer.MIN_VALUE;
-        for (PermissionAttachmentInfo info : who.getEffectivePermissions()) {
-            if (!info.getValue() || !info.getPermission().startsWith(prefix)) {
-                continue;
-            }
-            String tail = info.getPermission().substring(prefix.length());
+        for (String tail : tails(who, prefix)) {
             if (tail.equals("unlimited") || tail.equals("*")) {
                 return UNLIMITED;
             }
@@ -98,17 +163,34 @@ public final class PermissionService {
     public int lowest(Permissible who, String prefix, int def) {
         int best = Integer.MAX_VALUE;
         boolean found = false;
-        for (PermissionAttachmentInfo info : who.getEffectivePermissions()) {
-            if (!info.getValue() || !info.getPermission().startsWith(prefix)) {
-                continue;
-            }
-            Integer value = parse(info.getPermission().substring(prefix.length()));
+        for (String tail : tails(who, prefix)) {
+            Integer value = parse(tail);
             if (value != null && value < best) {
                 best = value;
                 found = true;
             }
         }
         return found ? best : def;
+    }
+
+    /** Highest decimal {@code <prefix><x>} ({@code 1.5}, {@code x1.5}, {@code 1_5}), else {@code def}. */
+    public double highestDecimal(Permissible who, String prefix, double def) {
+        double best = Double.NaN;
+        for (String tail : tails(who, prefix)) {
+            String s = tail.toLowerCase(java.util.Locale.ROOT).replace('_', '.');
+            if (s.startsWith("x")) {
+                s = s.substring(1);
+            }
+            try {
+                double value = Double.parseDouble(s);
+                if (Double.isFinite(value) && (Double.isNaN(best) || value > best)) {
+                    best = value;
+                }
+            } catch (NumberFormatException ignored) {
+                // not a number
+            }
+        }
+        return Double.isNaN(best) ? def : best;
     }
 
     /**
@@ -144,8 +226,8 @@ public final class PermissionService {
         }
     }
 
-    /** Ranks module registers a provider: permission → name of the cheapest rank that grants it. */
-    public void rankHint(@Nullable Function<String, Component> provider) {
+    /** Ranks module registers a provider: (viewer, permission) → the cheapest rank that grants it, or null. */
+    public void rankHint(@Nullable BiFunction<CommandSender, String, Component> provider) {
         this.rankHint = provider;
     }
 
@@ -153,7 +235,7 @@ public final class PermissionService {
     public void denied(CommandSender sender, String permission) {
         if (rankHint != null && sender instanceof Player player
                 && plugin.getConfig().getBoolean("commands.no-permission-rank-hint", true)) {
-            Component rank = rankHint.apply(permission);
+            Component rank = rankHint.apply(sender, permission);
             if (rank != null) {
                 plugin.messages().send(sender, "errors.no-permission-rank", Ph.of("rank", rank), Ph.of("permission", permission));
                 plugin.pack().play(player, "error");
