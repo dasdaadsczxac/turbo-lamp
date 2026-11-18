@@ -12,6 +12,7 @@ import java.util.Locale;
 public final class Players {
 
     public static final String SEE_VANISHED = "applecore.vanish.see";
+    public static final String SEE_VANISHED_ESSENTIALS = "essentials.vanish.see";
 
     private Players() {
     }
@@ -36,7 +37,7 @@ public final class Players {
 
     public static boolean canSee(CommandSender viewer, Player target) {
         return !(viewer instanceof Player player) || player.equals(target) || player.canSee(target)
-                || player.hasPermission(SEE_VANISHED);
+                || player.hasPermission(SEE_VANISHED) || player.hasPermission(SEE_VANISHED_ESSENTIALS);
     }
 
     public static List<String> names(CommandSender viewer) {

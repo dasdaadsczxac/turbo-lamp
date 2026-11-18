@@ -63,11 +63,11 @@ public final class CommandContext {
     }
 
     public boolean hasPermission(String permission) {
-        return sender.hasPermission(permission);
+        return plugin.permissions().has(sender, permission);
     }
 
     public void require(String permission) throws CommandException {
-        if (!sender.hasPermission(permission)) {
+        if (!plugin.permissions().has(sender, permission)) {
             throw CommandException.noPermission(permission);
         }
     }
@@ -105,18 +105,21 @@ public final class CommandContext {
     }
 
     /** A player who has joined before, by exact name (offline lookups use the server cache only). */
-    @SuppressWarnings("deprecation")
     public OfflinePlayer knownPlayer(int index) throws CommandException {
         if (!has(index)) {
             throw usage();
         }
-        Player online = Players.find(sender, args[index]);
+        return knownPlayer(args[index]);
+    }
+
+    public OfflinePlayer knownPlayer(String name) throws CommandException {
+        Player online = Players.find(sender, name);
         if (online != null) {
             return online;
         }
-        OfflinePlayer cached = Bukkit.getOfflinePlayerIfCached(args[index]);
+        OfflinePlayer cached = Bukkit.getOfflinePlayerIfCached(name);
         if (cached == null || !cached.hasPlayedBefore() && !cached.isOnline()) {
-            throw new CommandException("errors.player-never-joined", Ph.of("player", args[index]));
+            throw new CommandException("errors.player-never-joined", Ph.of("player", name));
         }
         return cached;
     }

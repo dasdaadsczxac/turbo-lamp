@@ -1,0 +1,85 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  AppleCore — KillerMoney: деньги за убийство мобов и игроков (нужен Vault)
+#  /applecore reload применяет изменения.
+#
+#  Множитель игрока задаётся правом LuckPerms applecore.killermoney.multiplier.<x> (берётся наибольший),
+#  например: lp group king permission set applecore.killermoney.multiplier.1.5
+#  (можно и .2, .x2, .1_5). Без права — x1. Затем умножается на global-multiplier. Свой множитель: /killermoney
+# ═══════════════════════════════════════════════════════════════════════════════
+
+enabled: true
+# Общий множитель для всех (например x2 на выходных). Можно писать 2 или "x2".
+global-multiplier: x1
+# Миры без наград. Пусто — награды везде.
+disabled-worlds: []
+# Где показывать награду за моба: actionbar, chat или none.
+notify: actionbar
+# Округление наград: знаков после запятой.
+decimals: 2
+
+# Награды за мобов: ТИП: число или "мин-макс". Типы — как в /summon (zombie, wither_skeleton …).
+# default — для мобов, которых нет в списке (0 — ничего).
+mobs:
+  default: 0
+  zombie: 1-3
+  husk: 1-3
+  drowned: 1-3
+  zombie_villager: 1-3
+  skeleton: 1-3
+  stray: 1-3
+  bogged: 1-3
+  spider: 1-3
+  cave_spider: 1-3
+  creeper: 2-4
+  slime: 0.5-1
+  magma_cube: 1-2
+  silverfish: 0.5
+  phantom: 2-4
+  pillager: 2-4
+  vindicator: 3-6
+  evoker: 8-12
+  ravager: 10-15
+  witch: 3-5
+  enderman: 3-6
+  endermite: 1
+  blaze: 3-6
+  ghast: 4-8
+  hoglin: 2-4
+  zoglin: 3-5
+  piglin_brute: 6-10
+  wither_skeleton: 4-8
+  guardian: 3-5
+  elder_guardian: 50
+  shulker: 4-6
+  breeze: 5-8
+  warden: 300
+  wither: 400
+  ender_dragon: 1000
+
+# Шанс получить награду, %.
+chance: 100
+
+# Защита от ферм.
+anti-farm:
+  # Мобы из спавнеров и яиц призыва ничего не дают.
+  spawner-mobs: false
+  spawn-egg-mobs: false
+  # Не больше N наград за мобов в одном чанке за period (на игрока). 0 — без ограничения.
+  chunk-limit: 40
+  period: 10m
+  # В творческом режиме наград нет.
+  creative: false
+
+# Убийство игрока: убийца забирает часть баланса жертвы.
+pvp:
+  enabled: true
+  # Сколько процентов баланса жертвы забирает убийца.
+  steal-percent: 5
+  min: 1
+  max: 5000
+  # Повторное убийство того же игрока раньше этого срока денег не приносит.
+  same-victim-cooldown: 10m
+  # Не платить, если у убийцы и жертвы один IP (твинки).
+  ignore-same-ip: true
+  # Применять множитель привилегии к сумме (забирается у жертвы больше). По умолчанию нет.
+  apply-multiplier: false

@@ -1,0 +1,106 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  AppleCore — меню варпов (/warp, /playerwarps, выбор иконки)
+#  Тексты кнопок — в messages.yml (menus.warps.*). /applecore reload применяет изменения.
+#
+#  Слоты повторяют фон ресурспака APPLECUBE bordo (символы \uEB98 и \uEB99): вкладки и ячейки нарисованы
+#  в самом фоне, поэтому без смены картинок слоты лучше не трогать.
+#
+#  Формат предмета:
+#    item: PAPER                        материал или предмет плагина: itemsadder:<ns>:<id>, nexo:<id>,
+#                                       oraxen:<id>, craftengine:<ns>:<id>, hdb:<id>, head:<текстура base64>
+#    model: bordo_menu:gui/warp_pin     item_model — только у игроков с ресурспаком
+#    fallback: ENDER_PEARL              что показать игрокам без ресурспака (или если плагина предметов нет)
+#    tooltip-style: bordo_menu:menu     рамка подсказки (по умолчанию resource-pack.tooltip-style из config.yml)
+#    glow: true | custom-model-data: 5
+#  Кнопки пака как предметы ItemsAdder: item: "itemsadder:bordo_menu:warp_pin" (без model).
+# ═══════════════════════════════════════════════════════════════════════════════
+
+slots:
+  # Вкладки: невидимые предметы поверх нарисованных вкладок, клик переключает меню.
+  tab-server: [0, 1, 2, 3]
+  info: 4
+  tab-players: [5, 6, 7, 8]
+  # Варпы, 28 на страницу.
+  warps: [10, 11, 12, 13, 14, 15, 16,
+          19, 20, 21, 22, 23, 24, 25,
+          28, 29, 30, 31, 32, 33, 34,
+          37, 38, 39, 40, 41, 42, 43]
+  back: 45
+  my-warps: 47
+  previous: 48
+  page: 49
+  next: 50
+  create: 51
+  close: 53
+  # Рамка из стекла — только для игроков без ресурспака (с паком она нарисована в фоне).
+  decoration: [9, 17, 18, 26, 27, 35, 36, 44, 46, 52]
+
+items:
+  tab-server: {item: PAPER, model: "bordo_menu:gui/ui_invisible", fallback: CYAN_STAINED_GLASS_PANE}
+  tab-players: {item: PAPER, model: "bordo_menu:gui/ui_invisible", fallback: PURPLE_STAINED_GLASS_PANE}
+  info-server: {item: PAPER, model: "bordo_menu:gui/btn_info", fallback: BOOK}
+  info-players: {item: PAPER, model: "bordo_menu:gui/btn_info", fallback: BOOK}
+  info-icons: {item: PAPER, model: "bordo_menu:gui/btn_info", fallback: BOOK}
+  back: {item: PAPER, model: "bordo_menu:gui/btn_back", fallback: ARROW}
+  back-mine: {item: PAPER, model: "bordo_menu:gui/btn_back", fallback: ARROW}
+  back-server: {item: PAPER, model: "bordo_menu:gui/btn_back", fallback: ARROW}
+  close: {item: PAPER, model: "bordo_menu:gui/ui_close", fallback: BARRIER}
+  previous: {item: PAPER, model: "bordo_menu:gui/auc_prev", fallback: SPECTRAL_ARROW}
+  next: {item: PAPER, model: "bordo_menu:gui/auc_next", fallback: SPECTRAL_ARROW}
+  page: {item: PAPER, model: "bordo_menu:gui/ui_page", fallback: PAPER}
+  my-warps: {item: PAPER, model: "bordo_menu:gui/warp_my", fallback: PLAYER_HEAD}
+  all-warps: {item: PAPER, model: "bordo_menu:gui/warp_pin", fallback: ENDER_EYE}
+  create: {item: PAPER, model: "bordo_menu:gui/warp_create", fallback: LIME_DYE}
+  empty: {item: PAPER, model: "bordo_menu:gui/warp_pin", fallback: COMPASS}
+  empty-mine: {item: PAPER, model: "bordo_menu:gui/warp_create", fallback: LIME_DYE}
+  icon-hand-empty: {item: PAPER, model: "bordo_menu:gui/warp_create", fallback: ITEM_FRAME}
+  decoration: {item: GRAY_STAINED_GLASS_PANE}
+  # Иконки варпов, если своя не выбрана. owner-head — голова владельца.
+  server-default: {item: PAPER, model: "bordo_menu:gui/warp_server", fallback: LODESTONE}
+  player-default: {item: PAPER, model: "bordo_menu:gui/warp_pin", fallback: ENDER_PEARL}
+
+# Иконки на выбор для своего варпа (ПКМ по варпу или /warpicon <варп> с пустой рукой).
+# Кроме них игрок может поставить любой предмет из руки, в том числе из ItemsAdder, Nexo, Oraxen, CraftEngine.
+icon-palette:
+  - {item: PAPER, model: "bordo_menu:gui/warp_pin", fallback: ENDER_PEARL}
+  - {item: PAPER, model: "bordo_menu:gui/warp_mine", fallback: IRON_PICKAXE}
+  - {item: PAPER, model: "bordo_menu:gui/warp_boss", fallback: WITHER_SKELETON_SKULL}
+  - {item: PAPER, model: "bordo_menu:gui/clan_home", fallback: RED_BED}
+  - {item: PAPER, model: "bordo_menu:gui/clan_pvp_on", fallback: IRON_SWORD}
+  - {item: PAPER, model: "bordo_menu:gui/ui_star", fallback: NETHER_STAR}
+  - {item: PAPER, model: "bordo_menu:gui/ui_shop", fallback: EMERALD}
+  - {item: PAPER, model: "bordo_menu:gui/ui_coin", fallback: GOLD_NUGGET}
+  - {item: PAPER, model: "bordo_menu:gui/clan_bank", fallback: GOLD_BLOCK}
+  - {item: PAPER, model: "bordo_menu:gui/case_donate", fallback: ENDER_CHEST}
+  - {item: PAPER, model: "bordo_menu:gui/clan_top", fallback: GOLDEN_HELMET}
+  - owner-head
+  - GRASS_BLOCK
+  - OAK_LOG
+  - CHERRY_SAPLING
+  - WHEAT
+  - CAKE
+  - FISHING_ROD
+  - DIAMOND
+  - EMERALD_BLOCK
+  - DIAMOND_SWORD
+  - BOW
+  - SHIELD
+  - ANVIL
+  - ENCHANTING_TABLE
+  - BREWING_STAND
+  - BEACON
+  - CHEST
+  - HOPPER
+  - REDSTONE
+  - TNT
+  - NOTE_BLOCK
+  - BOOKSHELF
+  - MAP
+  - ELYTRA
+  - TOTEM_OF_UNDYING
+  - NETHERRACK
+  - END_STONE
+  - PRISMARINE
+  - SNOW_BLOCK
+  - SAND
+  - AMETHYST_SHARD

@@ -1,44 +1,52 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  AppleCore — main configuration
-#  Reload with /applecore reload (command/module changes need a restart).
+#  AppleCore — основная конфигурация
+#  /applecore reload применяет изменения (включение команд и модулей — после рестарта).
+#  Тексты сообщений — в messages.yml, настройки команд — в commands.yml.
 # ═══════════════════════════════════════════════════════════════════════════════
 
-language:
-  # File name from plugins/AppleCore/lang/ without .yml (bundled: ru_ru, en_us).
-  default: ru_ru
-  # Use the player's client language when a matching file exists.
-  per-player: false
+# Модули: false — модуль не регистрирует ни команд, ни обработчиков (нужен рестарт).
+modules:
+  teleport: true
+  homes: true
+  spawn: true
+  player: true
+  world: true
+  economy: true
+  warps: true
+  killermoney: true
 
-# Feature modules. A disabled module registers no commands or listeners (restart required).
-modules: {}
+permissions:
+  # Второй набор прав: точные права EssentialsX (essentials.fly, essentials.home.others,
+  # essentials.sethome.multiple.vip …) работают наравне с правами applecore.*.
+  # Если в LuckPerms уже настроены права EssentialsX, менять ничего не нужно. Таблица: docs/PERMISSIONS.md
+  essentials-compat: true
+  # Третий набор: права TrustEssentials (trustessentials.fly, trustessentials.fly.other, trustessentials.createwarp …).
+  trustessentials-compat: true
 
 commands:
-  # Hide commands the player has no permission for (tab-complete and "unknown command").
-  # Keep false on donation servers: players then see which rank unlocks a command.
+  # Скрывать команды без прав из подсказок (и отвечать «неизвестная команда»).
+  # На донат-сервере лучше false: игрок видит донатные команды и сообщение о нехватке прав.
   hide-unpermitted: false
-  # When a permission is missing, name the cheapest donation rank that grants it (ranks.yml).
-  no-permission-rank-hint: true
 
-# ─── Resource pack (APPLECUBE "bordo" pack through ItemsAdder) ───────────────────
+# ─── Ресурспак APPLECUBE «bordo» (через ItemsAdder) ─────────────────────────────
 resource-pack:
-  # true  — menus use the pack: window backgrounds in the title, item_model buttons, pack sounds,
-  #         chat "!" icons and the bold menu font.
-  # false — plain vanilla design everywhere (no pack required).
+  # true  — меню с фонами из пака, кнопки через item_model, звуки пака, значки в чате, жирный шрифт меню.
+  # false — обычный ванильный вид везде (пак не нужен).
   enabled: true
-  # Players who declined or failed to download the pack automatically get the plain design.
+  # Игроки, отказавшиеся от пака (или у которых он не загрузился), автоматически видят ванильный вид.
   plain-for-declined: true
-  # Tooltip frame applied to every menu item while the pack is used ("" to disable).
+  # Рамка подсказок для всех предметов меню при включённом паке ("" — без рамки).
   tooltip-style: "bordo_menu:menu"
-  # Font used by the <menu-font> tag.
+  # Шрифт для тега <menu-font>.
   menu-font: "bordo_menu:bold"
-  # Send a pack from AppleCore. Leave disabled when ItemsAdder already hosts and sends the pack.
+  # Отправка пака самим AppleCore. Оставьте выключенным, если пак раздаёт ItemsAdder.
   send:
     enabled: false
     url: ""
     hash: ""
     required: false
 
-# Theme colours, available in every message as tags: <accent>, <text>, <muted> …
+# Цвета темы — теги <accent>, <text>, <muted> … в messages.yml.
 style:
   colors:
     accent: "#FB2200"
@@ -50,7 +58,7 @@ style:
     warn: "#FFC23D"
     info: "#59C3FF"
 
-# Sounds: "pack" is played when the viewer uses the resource pack, "plain" otherwise.
+# Звуки: pack — если у игрока ресурспак, plain — без него.
 sounds:
   menu-open:
     pack: "bordo_menu:menu.open_rtp"
@@ -73,34 +81,152 @@ sounds:
     plain: "minecraft:entity.enderman.teleport"
     volume: 0.7
 
-# ─── Teleportation (homes, warps, spawn, tpa …) ─────────────────────────────────
+# ─── Телепортация (дома, варпы, спавн, tpa …) ──────────────────────────────────
 teleport:
-  # Warm-up in seconds. applecore.teleport.delay.<n> lowers it per rank,
-  # applecore.teleport.bypass-delay removes it.
+  # Задержка в секундах. applecore.teleport.delay.<n> уменьшает её для привилегий,
+  # applecore.teleport.bypass-delay (essentials.teleport.timer.bypass) убирает совсем.
   delay: 3
   cancel-on-move: true
   cancel-on-damage: true
   particles: true
   bossbar:
     enabled: true
-    # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE. Avoid YELLOW with the pack's bossbar_clear module.
+    # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE. YELLOW скрывает модуль пака bossbar_clear.
     color: RED
     overlay: PROGRESS
-  # Look for a safe spot when the destination is obstructed or above lava/void.
+  # Искать безопасное место, если точка занята блоками или под ней лава/пустота.
   safe-location: true
-  # Damage immunity after arriving (ticks, 20 = 1 second).
+  # Неуязвимость после телепортации (в тиках, 20 = 1 секунда).
   invulnerability-ticks: 60
+  # Дальность /jump в блоках.
+  jump-distance: 160
+  requests:
+    # Сколько живёт запрос /tpa: 60s, 2m …
+    timeout: 2m
   back:
-    # Remember the previous location on command/plugin teleports for /back.
+    # Запоминать прошлое место при телепортации командами и плагинами (для /back).
     record-teleports: true
-    # Remember the death location (needs applecore.back.ondeath).
+    # Запоминать место смерти (нужно applecore.back.ondeath / essentials.back.ondeath).
     record-death: true
 
+# ─── Дома ──────────────────────────────────────────────────────────────────────
+homes:
+  # Лимит домов задаётся только правами LuckPerms (берётся наибольший):
+  #   applecore.homes.limit.<n>  — например lp group king permission set applecore.homes.limit.20
+  #   applecore.homes.unlimited  — без ограничений (в EssentialsX: essentials.sethome.multiple.unlimited)
+  # Всем игрокам по умолчанию выдано applecore.homes.limit.1 (один дом); запретить: … applecore.homes.limit.1 false
+  # Название для /sethome без аргумента.
+  default-name: home
+  # Миры, где нельзя ставить дом (обход: applecore.sethome.bypass-world).
+  disabled-worlds: []
+
+# ─── Спавн ─────────────────────────────────────────────────────────────────────
+spawn:
+  teleport-on-first-join: true
+  teleport-on-join: false
+  # Возрождать на спавне, если у игрока нет кровати/якоря возрождения.
+  respawn-at-spawn: true
+  # Возрождать на спавне всегда, даже с кроватью.
+  force-respawn-at-spawn: false
+  # /setspawn также ставит точку возрождения мира.
+  set-world-spawn: true
+  # Падение в пустоту в указанных мирах возвращает на спавн.
+  void:
+    enabled: false
+    worlds: [spawn]
+    y: -64
+
+# ─── Возможности игрока ────────────────────────────────────────────────────────
+fly:
+  # Миры, где /fly не включается (обход: applecore.fly.bypass-world).
+  disabled-worlds: []
+speed:
+  # Максимальная скорость без applecore.speed.bypass (1–10).
+  max-fly: 10
+  max-walk: 10
+near:
+  # Радиус /near по умолчанию и максимум без applecore.near.maxexempt.
+  radius: 200
+nick:
+  prefix: "~"
+  min-length: 3
+  max-length: 16
+  # Допустимые символы ника (регулярное выражение, без учёта цветов).
+  allowed: "[\\p{L}\\p{N}_]+"
+  # Показывать ник и в табе.
+  tab-list: true
+vanish:
+  # Игроки в ванише не подбирают предметы.
+  prevent-pickup: true
+repair:
+  # Чинить зачарованные предметы без applecore.repair.enchanted (как repair-enchanted в EssentialsX).
+  allow-enchanted: true
+  # Стоимость починки (0 — бесплатно; обход: applecore.repair.free).
+  cost:
+    hand: 0
+    all: 0
+itemname:
+  max-length: 50
+fireball:
+  # Разрушают ли /fireball и /beezooka блоки.
+  block-damage: false
+
+# ─── /day, /night, /sun, /rain, /storm ─────────────────────────────────────────
+world-commands:
+  # Миры, где можно менять время и погоду (пусто — во всех; обход: applecore.world-commands.any-world).
+  worlds: []
+  # Сообщать игрокам мира, кто изменил время или погоду.
+  broadcast: true
+
+# ─── Экономика ─────────────────────────────────────────────────────────────────
 economy:
-  # java.text.DecimalFormat pattern for money amounts.
+  # auto      — AppleCore регистрирует свою экономику в Vault с низшим приоритетом:
+  #             если есть другой плагин экономики (CMI, XConomy …), работает он.
+  # applecore — экономика AppleCore главная.
+  # none      — своей экономики нет, только чужая через Vault.
+  provider: auto
+  starting-balance: 0
+  # Формат сумм (java.text.DecimalFormat) и подпись валюты.
   format: "#,##0.##"
   grouping-separator: " "
+  currency-suffix: " ⛃"
+  currency-singular: "монета"
+  currency-plural: "монет"
+  pay:
+    min: 1
+    # Комиссия перевода в процентах.
+    commission-percent: 0
+  # Как часто пересчитывать /baltop для чужого плагина экономики.
+  baltop-refresh: 5m
+  # Сообщать игроку об /eco give|take|set.
+  notify-eco: true
+
+# ─── Варпы (/warp, /setwarp, /serverwarp) ────────────────────────────────────
+# Внешний вид меню — menus/warps.yml, тексты — messages.yml (warps.*, menus.warps.*).
+warps:
+  # Какая вкладка открывается по /warp: server или players (/playerwarps всегда открывает варпы игроков).
+  default-tab: server
+  # Лимит варпов игрока — только права LuckPerms (берётся наибольший): applecore.playerwarps.limit.<n>,
+  # без ограничений — applecore.playerwarps.unlimited. Без этих прав свой варп создать нельзя
+  # (на APPLECUBE — с «Принца»: lp group prince permission set applecore.playerwarps.limit.10).
+  # Цена создания варпа игрока (нужен Vault). 0 — бесплатно. Без оплаты: applecore.setwarp.free
+  creation-cost: 0
+  # Миры, где игроки не могут ставить варпы. Обход: applecore.setwarp.bypass-world
+  disabled-worlds: []
+  # Допустимые названия варпов (регулярное выражение Java).
+  name-pattern: "[\\p{L}\\p{N}_\\-]{2,16}"
+  # Порядок варпов игроков: likes (лайки, потом посещения), visits, newest или name.
+  sort: likes
+  # true — на каждый серверный варп нужно право applecore.warps.<варп> (в EssentialsX: essentials.warps.<варп>),
+  # как per-warp-permission в EssentialsX.
+  per-warp-permission: false
+  # Команда кнопки «Назад» без «/», например главное меню DeluxeMenus. Пусто — кнопка просто закрывает меню.
+  back-command: "menu"
+  # Описание варпа игрока (/warpdesc): строк и символов в строке.
+  description:
+    max-lines: 3
+    max-line-length: 40
 
 storage:
-  # How often changed player data is written to disk.
+  # Как часто изменённые данные игроков сохраняются на диск (минуты).
   autosave-minutes: 5

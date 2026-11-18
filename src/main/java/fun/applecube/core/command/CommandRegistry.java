@@ -103,13 +103,15 @@ public final class CommandRegistry {
                 throw new CommandException("errors.players-only");
             }
             String permission = command.permission();
-            if (permission != null && !sender.hasPermission(permission)) {
+            if (permission != null && !plugin.permissions().has(sender, permission)) {
                 throw CommandException.noPermission(permission);
             }
             Long cooldown = cooldowns.get(command.name());
             boolean tracked = cooldown != null && sender instanceof Player player
-                    && !player.hasPermission("applecore.cooldown.bypass")
-                    && !player.hasPermission("applecore." + command.name() + ".cooldown.bypass");
+                    && !plugin.permissions().has(player, "applecore.cooldown.bypass")
+                    && !plugin.permissions().has(player, "applecore." + command.name() + ".cooldown.bypass")
+                    && !(plugin.permissions().essentialsCompat()
+                    && player.hasPermission("essentials." + command.name() + ".cooldown.bypass"));
             if (tracked) {
                 long left = plugin.cooldowns().remaining(((Player) sender).getUniqueId(), "cmd:" + command.name());
                 if (left > 0) {
@@ -134,7 +136,7 @@ public final class CommandRegistry {
 
     private List<String> complete(AbstractCommand command, CommandSender sender, String[] args) {
         String permission = command.permission();
-        if (permission != null && !sender.hasPermission(permission)) {
+        if (permission != null && !plugin.permissions().has(sender, permission)) {
             return List.of();
         }
         String[] normalized = args.length == 0 ? new String[]{""} : args;
@@ -173,7 +175,7 @@ public final class CommandRegistry {
         @Override
         public boolean canUse(CommandSender sender) {
             String permission = command.permission();
-            return !hideUnpermitted || permission == null || sender.hasPermission(permission);
+            return !hideUnpermitted || permission == null || plugin.permissions().has(sender, permission);
         }
 
         @Override

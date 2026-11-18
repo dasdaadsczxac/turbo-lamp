@@ -8,11 +8,24 @@ Read this before changing code. It is written for any developer or AI model that
   Do not upgrade the API version unless asked.
 - **No `/ec` and no kit system.** The server runs AppleEnderChest and AppleKits; AppleCore must not register
   `ec`, `enderchest`, `kit`, `kits` or anything kit-like.
-- Every player-facing string lives in `src/main/resources/lang/ru_ru.yml` **and** `en_us.yml` with identical keys.
-  `LangFilesTest` fails the build otherwise.
-- Permissions follow Essentials: `applecore.<command>`, `applecore.<command>.others` for other players,
-  numeric limits `applecore.<feature>.limit.<n>`, bypasses `applecore.<feature>.bypass...`. Declare new nodes in
-  `plugin.yml` (and in `docs/PERMISSIONS.md` once it exists).
+- **Russian only, no localization system.** Every player-facing string lives in `src/main/resources/messages.yml`
+  (one file, Russian). Do not add language files or locale switching. `MessagesFileTest` fails the build if a key
+  used in code is missing or a command has no `description`/`usage`. Config comments are Russian too.
+- **Three permission sets, no rank system.** Check permissions only through
+  `plugin.permissions().has(sender, "applecore.x")` (or `ctx.require` / `ctx.hasPermission`); it also accepts the exact
+  EssentialsX node and the TrustEssentials node. Name commands after their EssentialsX counterpart when one exists, so
+  `applecore.<cmd>` maps to `essentials.<cmd>` automatically; add exceptions to `EssentialsPermissions`
+  (+ `EssentialsPermissionsTest`) and AppleCore-only features to its `APPLECORE_ONLY` set. TrustEssentials nodes are an
+  explicit table in `TrustEssentialsPermissions` (taken from its executors; add a row only with evidence). Never let a
+  donor-level node grant a staff feature. Declare new AppleCore nodes in `plugin.yml` and list the equivalents in
+  `docs/PERMISSIONS.md`.
+- **Limits only from LuckPerms permissions** (owner's decision). Donation ranks are LuckPerms groups. Per-player
+  numbers are numeric nodes read with `highest()` / `lowest()` / `highestDecimal()` (`applecore.homes.limit.<n>`,
+  `applecore.playerwarps.limit.<n>`, `applecore.killermoney.multiplier.<x>`); a default for everyone is a
+  `default: true` node in `plugin.yml` (`applecore.homes.limit.1`). Do not add limit tables, rank presets or group maps
+  to the configs.
+- **Config defaults:** `getConfig().getInt("path", def)` returns `def`, not the bundled value, when an older
+  `config.yml` lacks the key, so `def` must equal the value in the bundled `config.yml`.
 - Do not commit third-party jars (TrustEssentials) or the resource-pack archive. The pack is installed on the
   server through ItemsAdder; AppleCore only references its glyphs, item models and sounds.
 - Run `mvn package` before every commit; it compiles and runs the tests.
@@ -24,13 +37,15 @@ fun.applecube.core
 ├── AppleCorePlugin      service getters + createModules() (add new modules there)
 ├── command/             AbstractCommand, CommandContext, CommandException, CommandRegistry (Paper BasicCommand)
 ├── config/ConfigFile    YAML file with bundled defaults for missing keys
-├── lang/                Lang (files, per-player locale), Messages (render/send/actionbar/title/duration)
+├── message/Messages     messages.yml: render/send/actionbar/title/duration
 ├── text/                Text (legacy→MiniMessage, <pack>/<plain>), Ph (safe placeholders)
 ├── pack/PackStyle       pack vs plain design per player, sounds, optional pack sending
-├── hook/                Vault economy facade, PlaceholderAPI, item/ (ItemsAdder, Nexo, Oraxen, CraftEngine, HDB)
+├── hook/                Vault economy facade, PlaceholderAPI (PapiHook, PapiExpansion %applecore_*%),
+│                        item/ (ItemsAdder, Nexo, Oraxen, CraftEngine, HDB)
 ├── item/                ItemSpec (config format), ItemFactory (spec → ItemStack), ItemBuilder
 ├── gui/                 Menu, MenuListener, Click
-├── permission/          PermissionService (numeric limits, no-permission message with rank hint)
+├── permission/          PermissionService (all node sets, numeric limits), EssentialsPermissions,
+│                        TrustEssentialsPermissions (mappings)
 ├── teleport/            TeleportService (warm-up, safety, /back), SafeLocation
 ├── user/                User (JSON model), UserManager (load/save lifecycle)
 ├── storage/             AsyncIo, JsonFiles, StoredLocation
@@ -46,18 +61,26 @@ fun.applecube.core
 2. Implement `execute(CommandContext ctx)`. Use `ctx.targetOrSelf(i)` for "self or other player" commands; it enforces
    `.others`. Throw `ctx.usage()` or `new CommandException("key", Ph.of(...))` for errors.
 3. Register it in the module's `enable()` with `command(new XCommand(plugin))`.
-4. Add `commands.name.description`, `commands.name.usage` and the messages to **both** language files.
-5. Add the permission to `plugin.yml` and, if it is a donation perk, to the rank presets (stage 5).
+4. Add `commands.name.description`, `commands.name.usage` and the messages to `messages.yml` (Russian).
+5. Add the permission to `plugin.yml` and `docs/PERMISSIONS.md` (with its EssentialsX node). Donation perks default to
+   `op`; the server owner grants them to the LuckPerms donation groups.
 6. Optionally list it in `commands.yml` (aliases/cooldown).
 
 ## Messages
 
-- `plugin.messages().send(sender, "key", Ph.of("player", name))`. Placeholders are inserted unparsed, so
+- `plugin.messages().send(sender, "key", Ph.of("player", name))` reads `messages.yml`. Placeholders are inserted unparsed, so
   player input cannot inject formatting. Use `Ph.parsed` only for trusted config text.
 - Tags available everywhere: `<prefix:ok|error|warn|info>`, `<icon:lmb|rmb|mmb|bar|dot|apple>`, `<menu-font>`,
   theme colours `<accent> <text> <muted> <highlight> <good> <bad> <warn> <info>`, and `<pack>…</pack>` /
   `<plain>…</plain>` for content that only makes sense with or without the resource pack.
-- Never name a placeholder `pack` or `plain`.
+- Never name a placeholder `pack` or `plain`, and never use YAML keys `on`, `off`, `yes`, `no` (YAML turns them into booleans).
+
+## Menus
+
+- A menu extends `gui/Menu`; its layout and items live in `src/main/resources/menus/<menu>.yml` (`slots`, `items` in
+  the `ItemSpec` format `item` / `model` / `fallback`), its texts in `messages.yml` under `menus.<menu>.<key>.name|lore`.
+  Follow the pack's slot map and give every pack button a vanilla `fallback`. Example: `module/warps/WarpMenu` with
+  `menus/warps.yml`.
 
 ## Resource pack contract (APPLECUBE bordo v2)
 

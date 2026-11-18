@@ -12,13 +12,15 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 /**
- * Economy facade over Vault. No Vault type appears in this class, so it loads safely without Vault;
- * the actual calls live in {@link VaultEconomyBridge}.
+ * Money for every AppleCore feature. Uses the active Vault economy (any plugin, or AppleCore's own provider
+ * registered by the economy module); without Vault it falls back to AppleCore's accounts directly.
+ * No Vault type appears here, so this class loads safely without Vault.
  */
 public final class EconomyService {
 
     private final AppleCorePlugin plugin;
     private @Nullable VaultEconomyBridge bridge;
+    private @Nullable EconomyBackend internal;
 
     public EconomyService(AppleCorePlugin plugin) {
         this.plugin = plugin;
@@ -26,7 +28,7 @@ public final class EconomyService {
 
     void setup() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
-            plugin.getLogger().info("Vault not found: money features (killer money, /pay, /balance) are disabled");
+            plugin.getLogger().info("Vault not found: AppleCore money works only for its own commands and killer money");
             return;
         }
         bridge = new VaultEconomyBridge();
@@ -34,32 +36,69 @@ public final class EconomyService {
         Bukkit.getPluginManager().registerEvents(bridge, plugin);
     }
 
-    public boolean available() {
+    /** Called by the economy module when AppleCore's own accounts are enabled. */
+    public void internal(@Nullable EconomyBackend backend) {
+        this.internal = backend;
+    }
+
+    public boolean vaultPresent() {
+        return bridge != null;
+    }
+
+    private boolean viaVault() {
         return bridge != null && bridge.ready();
     }
 
+    public boolean available() {
+        return viaVault() || internal != null;
+    }
+
+    /** True when AppleCore's own accounts hold the money (directly or as the active Vault provider). */
+    public boolean usesInternal() {
+        return viaVault() ? "AppleCore".equals(bridge.name()) : internal != null;
+    }
+
     public String providerName() {
-        return bridge == null ? "-" : bridge.name();
+        return viaVault() ? bridge.name() : internal != null ? "AppleCore" : "-";
     }
 
     public double balance(OfflinePlayer player) {
-        return available() ? bridge.balance(player) : 0;
+        if (viaVault()) {
+            return bridge.balance(player);
+        }
+        return internal != null ? internal.balance(player) : 0;
     }
 
     public boolean has(OfflinePlayer player, double amount) {
-        return available() && bridge.has(player, amount);
+        return balance(player) >= amount;
     }
 
     public boolean withdraw(OfflinePlayer player, double amount) {
-        return amount <= 0 || available() && bridge.withdraw(player, amount);
+        if (amount <= 0) {
+            return true;
+        }
+        if (viaVault()) {
+            return bridge.withdraw(player, amount);
+        }
+        return internal != null && internal.withdraw(player, amount);
     }
 
     public boolean deposit(OfflinePlayer player, double amount) {
-        return amount <= 0 || available() && bridge.deposit(player, amount);
+        if (amount <= 0) {
+            return true;
+        }
+        if (viaVault()) {
+            return bridge.deposit(player, amount);
+        }
+        return internal != null && internal.deposit(player, amount);
     }
 
-    /** Sets the balance by depositing/withdrawing the difference (Vault has no "set"). */
+    /** Sets the balance (through deposit/withdraw of the difference when another plugin owns the money). */
     public boolean set(OfflinePlayer player, double amount) {
+        if (!viaVault() && internal != null) {
+            internal.set(player, amount);
+            return true;
+        }
         if (!available()) {
             return false;
         }
@@ -67,7 +106,7 @@ public final class EconomyService {
         return amount >= current ? deposit(player, amount - current) : withdraw(player, current - amount);
     }
 
-    /** Formats money with the pattern from config ({@code economy.format}), e.g. "12 345.50". */
+    /** Formats money with {@code economy.format}, e.g. "12 345.5". */
     public String format(double amount) {
         String pattern = plugin.getConfig().getString("economy.format", "#,##0.##");
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(Locale.ROOT);
@@ -76,6 +115,7 @@ public final class EconomyService {
             symbols.setGroupingSeparator(separator.charAt(0));
         }
         DecimalFormat format = new DecimalFormat(pattern, symbols);
-        return format.format(BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP));
+        return format.format(BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP))
+                + plugin.getConfig().getString("economy.currency-suffix", " ⛃");
     }
 }
