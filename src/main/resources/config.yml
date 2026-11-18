@@ -13,12 +13,16 @@ modules:
   world: true
   economy: true
   warps: true
+  ranks: true
+  killermoney: true
 
 permissions:
   # Второй набор прав: точные права EssentialsX (essentials.fly, essentials.home.others,
   # essentials.sethome.multiple.vip …) работают наравне с правами applecore.*.
   # Если в LuckPerms уже настроены права EssentialsX, менять ничего не нужно. Таблица: docs/PERMISSIONS.md
   essentials-compat: true
+  # Третий набор: права TrustEssentials (trustessentials.fly, trustessentials.fly.other, trustessentials.createwarp …).
+  trustessentials-compat: true
 
 commands:
   # Скрывать команды без прав из подсказок (и отвечать «неизвестная команда»).
@@ -209,9 +213,10 @@ economy:
 warps:
   # Какая вкладка открывается по /warp: server или players (/playerwarps всегда открывает варпы игроков).
   default-tab: server
-  # Сколько варпов может создать игрок без привилегии. Больше — applecore.playerwarps.limit.<n>
-  # (берётся наибольшее), без ограничений — applecore.playerwarps.unlimited. 0 — только по правам.
-  player-limit: 1
+  # Сколько варпов может создать игрок без привилегии (на APPLECUBE варпы — с «Принца», лимиты в ranks.yml).
+  # Больше — applecore.playerwarps.limit.<n>
+  # (берётся наибольшее), без ограничений — applecore.playerwarps.unlimited. 0 — только с привилегией.
+  player-limit: 0
   # Цена создания варпа игрока (нужен Vault). 0 — бесплатно. Без оплаты: applecore.setwarp.free
   creation-cost: 0
   # Миры, где игроки не могут ставить варпы. Обход: applecore.setwarp.bypass-world

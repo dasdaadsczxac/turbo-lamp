@@ -11,11 +11,17 @@ Read this before changing code. It is written for any developer or AI model that
 - **Russian only, no localization system.** Every player-facing string lives in `src/main/resources/messages.yml`
   (one file, Russian). Do not add language files or locale switching. `MessagesFileTest` fails the build if a key
   used in code is missing or a command has no `description`/`usage`. Config comments are Russian too.
-- **Two permission sets.** Check permissions only through `plugin.permissions().has(sender, "applecore.x")` (or
-  `ctx.require` / `ctx.hasPermission`); it also accepts the exact EssentialsX node. Name commands after their
-  EssentialsX counterpart when one exists, so `applecore.<cmd>` maps to `essentials.<cmd>` automatically; add
+- **Three permission sets plus rank presets.** Check permissions only through
+  `plugin.permissions().has(sender, "applecore.x")` (or `ctx.require` / `ctx.hasPermission`); it also accepts the exact
+  EssentialsX node, the TrustEssentials node and the presets of the player's ranks (`ranks.yml`). Name commands after
+  their EssentialsX counterpart when one exists, so `applecore.<cmd>` maps to `essentials.<cmd>` automatically; add
   exceptions to `EssentialsPermissions` (+ `EssentialsPermissionsTest`) and AppleCore-only features to its
-  `APPLECORE_ONLY` set. Declare new AppleCore nodes in `plugin.yml` and list both nodes in `docs/PERMISSIONS.md`.
+  `APPLECORE_ONLY` set. TrustEssentials nodes are an explicit table in `TrustEssentialsPermissions` (taken from its
+  executors; add a row only with evidence). Numeric limits go through `highest()` / `lowest()` so rank `homes:` /
+  `warps:` count. Never let a donor-level node grant a staff feature. Declare new AppleCore nodes in `plugin.yml` and
+  list the equivalents in `docs/PERMISSIONS.md`; donation commands go into the rank presets in `ranks.yml`.
+- **Config defaults:** `getConfig().getInt("path", def)` returns `def`, not the bundled value, when an older
+  `config.yml` lacks the key, so `def` must equal the value in the bundled `config.yml`.
 - Do not commit third-party jars (TrustEssentials) or the resource-pack archive. The pack is installed on the
   server through ItemsAdder; AppleCore only references its glyphs, item models and sounds.
 - Run `mvn package` before every commit; it compiles and runs the tests.
@@ -30,10 +36,12 @@ fun.applecube.core
 ├── message/Messages     messages.yml: render/send/actionbar/title/duration
 ├── text/                Text (legacy→MiniMessage, <pack>/<plain>), Ph (safe placeholders)
 ├── pack/PackStyle       pack vs plain design per player, sounds, optional pack sending
-├── hook/                Vault economy facade, PlaceholderAPI, item/ (ItemsAdder, Nexo, Oraxen, CraftEngine, HDB)
+├── hook/                Vault economy facade, PlaceholderAPI (PapiHook, PapiExpansion %applecore_*%),
+│                        item/ (ItemsAdder, Nexo, Oraxen, CraftEngine, HDB)
 ├── item/                ItemSpec (config format), ItemFactory (spec → ItemStack), ItemBuilder
 ├── gui/                 Menu, MenuListener, Click
-├── permission/          PermissionService (dual check, limits, rank hint), EssentialsPermissions (mapping)
+├── permission/          PermissionService (all node sets, ranks, limits, rank hint), EssentialsPermissions,
+│                        TrustEssentialsPermissions (mappings)
 ├── teleport/            TeleportService (warm-up, safety, /back), SafeLocation
 ├── user/                User (JSON model), UserManager (load/save lifecycle)
 ├── storage/             AsyncIo, JsonFiles, StoredLocation

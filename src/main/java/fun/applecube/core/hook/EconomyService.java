@@ -116,6 +116,6 @@ public final class EconomyService {
         }
         DecimalFormat format = new DecimalFormat(pattern, symbols);
         return format.format(BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP))
-                + plugin.getConfig().getString("economy.currency-suffix", "");
+                + plugin.getConfig().getString("economy.currency-suffix", " ⛃");
     }
 }

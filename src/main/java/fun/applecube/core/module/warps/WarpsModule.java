@@ -70,7 +70,7 @@ public final class WarpsModule extends Module {
             return PermissionService.UNLIMITED;
         }
         return plugin.permissions().highest(player, "applecore.playerwarps.limit.",
-                plugin.getConfig().getInt("warps.player-limit", 1));
+                plugin.getConfig().getInt("warps.player-limit", 0));
     }
 
     /** Whether the player may use the warp: its own permission, per-warp permissions, closed player warps. */

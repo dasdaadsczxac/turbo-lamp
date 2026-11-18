@@ -11,18 +11,24 @@ Essentials-style core plugin for the **APPLECUBE** Minecraft server.
 
 ## What it does
 
-- **Essentials-style commands, two permission sets**: every command is guarded by `applecore.<command>`
+- **Essentials-style commands, three permission sets**: every command is guarded by `applecore.<command>`
   (`.others` to act on other players, numeric limits like `applecore.homes.limit.5`) **and** by the exact
-  EssentialsX node (`essentials.<command>`, `essentials.sethome.multiple.<set>` …). A LuckPerms setup made for
-  EssentialsX works as is. Table: [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
+  EssentialsX node (`essentials.<command>`, `essentials.sethome.multiple.<set>` …) **and** by the TrustEssentials
+  node (`trustessentials.<command>`, `.other`). A LuckPerms setup made for either plugin works as is.
+  Table: [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
   The command set follows TrustEssentials and EssentialsX (names and aliases), minus `/ec` and kits, which
   belong to AppleEnderChest and AppleKits.
 - **GUI warps**: two tabs, server warps (set by staff) and player warps (created by players, limited per rank),
   drawn with the APPLECUBE "bordo" resource pack. Icons can be ItemsAdder, Nexo, Oraxen, CraftEngine or
   HeadDatabase items, vanilla items, `item_model` components or textured heads.
-- **Donation ranks**: guard → caesar (+ the seasonal pumpkin) as permission presets, so a donation shop only
-  has to put the player into a LuckPerms group. Players without access see which rank unlocks a command.
-- **KillerMoney**: money for killing mobs and players, with a multiplier per donation rank.
+- **Donation ranks** (`ranks.yml`, from the server's donate menu): guard → caesar (+ the seasonal pumpkin) as
+  permission presets with home / warp limits and a KillerMoney multiplier. A donation shop only has to put the player
+  into the LuckPerms group (or run `/ranks give <player> <rank> [time]`). Players without access see which rank
+  unlocks a command.
+- **KillerMoney** (`killermoney.yml`): money for killing mobs and a share of the victim's balance for PvP kills, with
+  anti-farm limits and a multiplier per donation rank (`killermoney: x1.5`).
+- **PlaceholderAPI**: `%applecore_rank%`, `%applecore_rank_display%`, `%applecore_killermoney_x%`,
+  `%applecore_homes_limit%`, `%applecore_warps_limit%`, `%applecore_balance%` …
 - **Russian only**: every text lives in one editable file, `messages.yml` (MiniMessage and `&` codes).
   There is no language switching.
 - **Resource-pack aware**: with the pack, menus use glyph backgrounds, `item_model` buttons, pack sounds,

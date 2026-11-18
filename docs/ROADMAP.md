@@ -90,13 +90,32 @@ donate chat. Everything else is EssentialsX-named, so the EssentialsX nodes appl
   name validation, `/serverwarp` denied and then allowed by `essentials.setwarp`, `/warp <warp> <player>` by
   `essentials.warp.others`, console `/serverwarp list`.
 
-## Stage 5: Donation ranks and KillerMoney ⏳
+## Stage 5: Donation ranks, KillerMoney, TrustEssentials permissions ✅
 
-`ranks.yml`: guard, khignt, prince, king, imperator, triton, gercog, caesar, pumpkin; each rank is a permission preset
-(registered as a Bukkit permission with children, so a LuckPerms group only needs `applecore.rank.<id>`), with display
-name, prefix glyph, home/warp limits and teleport delay. `killermoney.yml`: mob rewards, PvP steal percentage,
-anti-farm rules, multiplier per rank. PlaceholderAPI expansion `%applecore_*%`.
+- `ranks.yml`, taken from the server's DeluxeMenus `donate.yml`: guard (Страж) → khignt → prince → king → imperator →
+  triton → gercog → caesar, plus the seasonal pumpkin. Each rank: LuckPerms `group`, name, badge glyph (from the
+  server pack), price, `inherits`, command permissions from the donate menu, `homes`, `warps`, optional
+  `teleport-delay`, `killermoney: x1.5`. A player holds a rank through the LuckPerms group (`group.<group>`, explicit
+  only, so operators don't get every rank) or `applecore.rank.<id>`; the preset then counts in `PermissionService.has`
+  and in the numeric limits. `applecore.rank.<id>` is also registered as a Bukkit permission with the preset as children.
+- Denied commands name the cheapest rank that has them ("Доступно с привилегии <badge>"); `/setwarp` without warps
+  does the same. `/ranks` (list, prices, limits, multiplier), `/ranks info [player]`, `/ranks give <player> <rank> [time]`
+  and `/ranks take` for donation shops (configurable console commands, LuckPerms by default; announcement + title).
+- KillerMoney (`killermoney.yml`): reward ranges per mob, chance, spawner / spawn-egg mobs excluded, per-chunk limit,
+  no rewards in creative; PvP takes `steal-percent` of the victim's balance (min/max, same-victim cooldown, same-IP
+  check). Multiplier = max(rank, `applecore.killermoney.multiplier.<x>`) × `global-multiplier`. `/killermoney`.
+- PlaceholderAPI: `%applecore_rank%`, `rank_name`, `rank_badge`, `rank_display`, `rank_price`, `killermoney_x`,
+  `killermoney_multiplier`, `homes_limit`, `warps`, `warps_limit`, `balance`, `balance_raw`.
+- Third permission set: TrustEssentials (`TrustEssentialsPermissions`, 98 nodes taken from its executors, unit-tested);
+  `permissions.trustessentials-compat`. Server warps no longer accept `essentials.setwarp` (a donor perk here).
+- Explicitly negated AppleCore nodes deny even when a rank or a compat node would grant them.
+- Verified on Paper 1.21.11 + LuckPerms + Vault + PlaceholderAPI 2.12.3 with bot players: hints for /feed, /fly,
+  /setwarp; LuckPerms group `king` unlocks the inherited guard → king perks, homes 20, warps 15, x1.5; negation;
+  mob rewards with and without x1.5; PvP 5% (50 of 1000) and the cooldown; `/ranks give Helper prince 30d` from the
+  console (announcement, title, limits) and `/ranks take`; wrong rank / time errors; `trustessentials.fly` and
+  `trustessentials.workbench` unlock /fly and /craft, `trustessentials.systemwarp` does not unlock /serverwarp;
+  every placeholder.
 
 ## Stage 6: Polish and handoff ⏳
 
-Permission reference, resource-pack integration guide, final language review, live-server smoke test.
+Audit that every permission checked in code is declared, final documentation pass, handoff notes.

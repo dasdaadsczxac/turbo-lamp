@@ -1,0 +1,164 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  AppleCore — донатные привилегии
+#  /applecore reload применяет изменения.
+#
+#  Как игрок получает привилегию (любой способ):
+#    • состоит в группе LuckPerms из group: (LuckPerms сам выдаёт участникам право group.<группа>);
+#    • имеет право applecore.rank.<id>.
+#  Выдача из донат-магазина: /ranks give <ник> <привилегия> [срок], например /ranks give Steve king 30d
+#  (выполняет команды из give-commands ниже и объявляет покупку).
+#
+#  Каждая привилегия — набор прав AppleCore. Старшая получает всё от inherits (и от их inherits).
+#    permissions:     права команд (applecore.<команда>), можно с .*: applecore.fireball.*
+#    homes / warps:   лимит точек дома и варпов игрока (больший лимит из всех привилегий побеждает)
+#    teleport-delay:  задержка телепорта в секундах (меньшая побеждает); не указано — из config.yml
+#    killermoney:     множитель KillerMoney: x1.5 (или 1.5)
+#  Значки — символы из ресурспака сервера (те же, что в donate.yml DeluxeMenus); без пака виден цветной текст.
+#  Игрок без прав видит, с какой самой дешёвой привилегии доступна команда (hint: false — не предлагать).
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Команды выдачи и снятия (выполняются от консоли). <player>, <group>, <time>.
+give-commands:
+  - "lp user <player> parent add <group>"
+give-temp-commands:
+  - "lp user <player> parent addtemp <group> <time>"
+take-commands:
+  - "lp user <player> parent remove <group>"
+  - "lp user <player> parent removetemp <group>"
+# Объявить покупку в чате всем игрокам и показать покупателю титр.
+announce: true
+
+ranks:
+  guard:
+    group: guard
+    name: "<#D3773A>Страж"
+    badge: "\uF823"
+    price: 60
+    homes: 5
+    killermoney: x1.1
+    permissions:
+      - applecore.workbench
+      - applecore.stonecutter
+      - applecore.feed
+      - applecore.itemdb
+      - applecore.loom
+      - applecore.anvil
+
+  khignt:
+    group: khignt
+    name: "<#E76EE0>Рыцарь"
+    badge: "\u0200"
+    price: 75
+    inherits: guard
+    homes: 10
+    killermoney: x1.2
+    permissions:
+      - applecore.sun
+      - applecore.storm
+      - applecore.recipe
+      - applecore.cartographytable
+      - applecore.grindstone
+      - applecore.repair
+
+  prince:
+    group: prince
+    name: "<#C7C515>Принц"
+    badge: "\u020A"
+    price: 88
+    inherits: khignt
+    homes: 15
+    warps: 10
+    killermoney: x1.3
+    permissions:
+      - applecore.setwarp
+      - applecore.day
+      - applecore.night
+      - applecore.ptime
+      - applecore.hat
+      - applecore.jump
+      - applecore.ext
+
+  king:
+    group: king
+    name: "<#FF5F5F>Король"
+    badge: "\u020B"
+    price: 140
+    inherits: prince
+    homes: 20
+    warps: 15
+    killermoney: x1.5
+    permissions:
+      - applecore.near
+      - applecore.clearinventory
+      - applecore.invsee
+      - applecore.repair.all
+
+  imperator:
+    group: imperator
+    name: "<#30D152>Император"
+    badge: "\u020C"
+    price: 210
+    inherits: king
+    homes: 25
+    warps: 20
+    killermoney: x1.75
+    permissions:
+      - applecore.heal
+
+  triton:
+    group: triton
+    name: "<#1972D6>Тритон"
+    badge: "\u0212"
+    price: 299
+    inherits: imperator
+    homes: 30
+    warps: 25
+    killermoney: x2
+    permissions:
+      - applecore.tpahere
+      - applecore.tpauto
+      - applecore.fly
+
+  gercog:
+    group: gercog
+    name: "<#E2137E>Герцог"
+    badge: "\u0213"
+    price: 340
+    inherits: triton
+    homes: 35
+    warps: 30
+    killermoney: x2.25
+    permissions:
+      - applecore.burn
+      - applecore.depth
+      - applecore.getpos
+      - applecore.fireball
+
+  caesar:
+    group: caesar
+    name: "<#A80E0E>Цезарь"
+    badge: "\u0217"
+    price: 400
+    inherits: gercog
+    homes: 40
+    warps: 35
+    killermoney: x2.5
+    permissions:
+      - applecore.suicide
+      - applecore.playtime
+      - applecore.back
+
+  # Сезонная привилегия: продаётся ограниченное время, в подсказках «доступно с…» не предлагается.
+  pumpkin:
+    group: pumpkin
+    name: "<#E48518>Тыква"
+    badge: "\u01D3"
+    price: 250
+    inherits: caesar
+    hint: false
+    homes: 40
+    warps: 38
+    killermoney: x2.5
+    permissions:
+      - applecore.disposal
+      - applecore.beezooka
