@@ -63,6 +63,18 @@ public final class PermissionService {
         return essentialsCompat;
     }
 
+    /**
+     * For opt-in flags such as {@code applecore.near.exclude}: only an explicitly granted node counts. Bukkit grants
+     * undeclared nodes (all EssentialsX nodes) to operators, which must not hide every op from /near.
+     */
+    public boolean hasExplicit(Permissible who, String node) {
+        if (who.isPermissionSet(node) && who.hasPermission(node)) {
+            return true;
+        }
+        String essentials = essentialsCompat ? EssentialsPermissions.map(node) : null;
+        return essentials != null && who.isPermissionSet(essentials) && who.hasPermission(essentials);
+    }
+
     /** Highest {@code <prefix><n>} the player has, {@link #UNLIMITED} for {@code <prefix>unlimited}, else {@code def}. */
     public int highest(Permissible who, String prefix, int def) {
         int best = Integer.MIN_VALUE;

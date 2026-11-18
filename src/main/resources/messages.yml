@@ -35,10 +35,10 @@ common:
   unlimited: "∞"
 
 time:
-  days: "<amount> д."
-  hours: "<amount> ч."
-  minutes: "<amount> мин."
-  seconds: "<amount> сек."
+  days: "<amount> д"
+  hours: "<amount> ч"
+  minutes: "<amount> мин"
+  seconds: "<amount> сек"
 
 errors:
   no-permission: "<prefix:error><text>Недостаточно прав для этой команды."
@@ -52,6 +52,8 @@ errors:
   internal: "<prefix:error><text>Что-то пошло не так. Сообщите администрации."
   economy-unavailable: "<prefix:error><text>Экономика недоступна: нужен Vault и плагин экономики."
   world-not-found: "<prefix:error><text>Мир <accent><world></accent> не найден."
+  empty-hand: "<prefix:error><text>Возьмите предмет в руку."
+  not-enough-money: "<prefix:error><text>Недостаточно денег: нужно <accent><amount></accent>."
 
 teleport:
   warmup: "<prefix:info><text>Телепортация через <accent><seconds> сек.</accent> — не двигайтесь."
@@ -224,3 +226,347 @@ commands:
     description: "Установить точку спавна"
     usage: "<prefix:info><text>Использование: <accent>/setspawn</accent>"
     done: "<prefix:ok><text>Спавн установлен: <accent><world></accent> <muted><x>, <y>, <z></muted>."
+
+  # ─── Возможности игрока ──────────────────────────────────────────────────────
+  fly:
+    description: "Включить или выключить полёт"
+    usage: "<prefix:info><text>Использование: <accent>/fly [игрок] [on|off]</accent>"
+    turned-on: "<prefix:ok><text>Режим полёта <good>включён</good>."
+    turned-off: "<prefix:ok><text>Режим полёта <bad>выключен</bad>."
+    changed-other: "<prefix:ok><text>Полёт игрока <accent><player></accent>: <state>."
+    world-disabled: "<prefix:error><text>В этом мире летать нельзя."
+  god:
+    description: "Режим бессмертия"
+    usage: "<prefix:info><text>Использование: <accent>/god [игрок] [on|off]</accent>"
+    turned-on: "<prefix:ok><text>Бессмертие <good>включено</good>."
+    turned-off: "<prefix:ok><text>Бессмертие <bad>выключено</bad>."
+    changed-other: "<prefix:ok><text>Бессмертие игрока <accent><player></accent>: <state>."
+  heal:
+    description: "Восстановить здоровье"
+    usage: "<prefix:info><text>Использование: <accent>/heal [игрок]</accent>"
+    done: "<prefix:ok><text>Здоровье восстановлено."
+    done-other: "<prefix:ok><text>Игрок <accent><player></accent> вылечен."
+    dead: "<prefix:error><text>Игрок <accent><player></accent> мёртв."
+  feed:
+    description: "Утолить голод"
+    usage: "<prefix:info><text>Использование: <accent>/feed [игрок]</accent>"
+    done: "<prefix:ok><text>Голод утолён."
+    done-other: "<prefix:ok><text>Игрок <accent><player></accent> накормлен."
+    dead: "<prefix:error><text>Игрок <accent><player></accent> мёртв."
+  ext:
+    description: "Потушить огонь"
+    usage: "<prefix:info><text>Использование: <accent>/ext [игрок]</accent>"
+    done: "<prefix:ok><text>Вы больше не горите."
+    done-other: "<prefix:ok><text>Игрок <accent><player></accent> потушен."
+    dead: "<prefix:error><text>Игрок <accent><player></accent> мёртв."
+  burn:
+    description: "Поджечь игрока"
+    usage: "<prefix:info><text>Использование: <accent>/burn <игрок> [секунды]</accent>"
+    done: "<prefix:ok><accent><player></accent> <text>горит <accent><seconds> сек.</accent>"
+  suicide:
+    description: "Покончить с жизнью"
+    usage: "<prefix:info><text>Использование: <accent>/suicide</accent>"
+    done: "<prefix:info><text>Прощай, жестокий мир…"
+  speed:
+    description: "Скорость ходьбы или полёта (1–10)"
+    usage: "<prefix:info><text>Использование: <accent>/speed <1-10> [игрок]</accent>"
+    fly: "<prefix:ok><text>Скорость полёта <accent><player></accent>: <highlight><speed></highlight>."
+    walk: "<prefix:ok><text>Скорость ходьбы <accent><player></accent>: <highlight><speed></highlight>."
+  flyspeed:
+    description: "Скорость полёта (1–10)"
+    usage: "<prefix:info><text>Использование: <accent>/flyspeed <1-10> [игрок]</accent>"
+  walkspeed:
+    description: "Скорость ходьбы (1–10)"
+    usage: "<prefix:info><text>Использование: <accent>/walkspeed <1-10> [игрок]</accent>"
+  gamemode:
+    description: "Сменить режим игры"
+    usage: "<prefix:info><text>Использование: <accent>/gamemode <survival|creative|adventure|spectator> [игрок]</accent>"
+    unknown: "<prefix:error><text>Неизвестный режим «<accent><input></accent>»."
+    done: "<prefix:ok><text>Режим игры: <accent><mode></accent>."
+    done-other: "<prefix:ok><text>Режим игры <accent><player></accent>: <accent><mode></accent>."
+    modes:
+      survival: "выживание"
+      creative: "творческий"
+      adventure: "приключение"
+      spectator: "наблюдатель"
+  gmc:
+    description: "Творческий режим"
+    usage: "<prefix:info><text>Использование: <accent>/gmc [игрок]</accent>"
+  gms:
+    description: "Режим выживания"
+    usage: "<prefix:info><text>Использование: <accent>/gms [игрок]</accent>"
+  gma:
+    description: "Режим приключения"
+    usage: "<prefix:info><text>Использование: <accent>/gma [игрок]</accent>"
+  gmsp:
+    description: "Режим наблюдателя"
+    usage: "<prefix:info><text>Использование: <accent>/gmsp [игрок]</accent>"
+
+  # ─── Информация ──────────────────────────────────────────────────────────────
+  ping:
+    description: "Показать пинг"
+    usage: "<prefix:info><text>Использование: <accent>/ping [игрок]</accent>"
+    self: "<prefix:info><text>Ваш пинг: <accent><ping> мс</accent>."
+    other: "<prefix:info><text>Пинг <accent><player></accent>: <accent><ping> мс</accent>."
+  playtime:
+    description: "Сколько времени вы провели на сервере"
+    usage: "<prefix:info><text>Использование: <accent>/playtime [игрок]</accent>"
+    self: "<prefix:info><text>Вы играете уже <accent><time></accent>."
+    other: "<prefix:info><accent><player></accent> <text>играет уже <accent><time></accent>."
+  depth:
+    description: "Высота относительно уровня моря"
+    usage: "<prefix:info><text>Использование: <accent>/depth</accent>"
+    above: "<prefix:info><text>Вы на <accent><blocks></accent> бл. выше уровня моря."
+    below: "<prefix:info><text>Вы на <accent><blocks></accent> бл. ниже уровня моря."
+    level: "<prefix:info><text>Вы ровно на уровне моря."
+  getpos:
+    description: "Показать координаты"
+    usage: "<prefix:info><text>Использование: <accent>/getpos [игрок]</accent>"
+    self: "<prefix:info><text>Вы: <accent><world></accent> <highlight><x>, <y>, <z></highlight> <muted>(<direction>, <yaw>° / <pitch>°)"
+    other: "<prefix:info><accent><player></accent><text>: <accent><world></accent> <highlight><x>, <y>, <z></highlight> <muted>(<direction>)"
+  compass:
+    description: "Куда вы смотрите"
+    usage: "<prefix:info><text>Использование: <accent>/compass</accent>"
+    done: "<prefix:info><text>Вы смотрите на <accent><direction></accent> <muted>(<degrees>°)"
+    directions:
+      north: "север"
+      northeast: "северо-восток"
+      east: "восток"
+      southeast: "юго-восток"
+      south: "юг"
+      southwest: "юго-запад"
+      west: "запад"
+      northwest: "северо-запад"
+  near:
+    description: "Игроки поблизости"
+    usage: "<prefix:info><text>Использование: <accent>/near [игрок] [радиус]</accent>"
+    none: "<prefix:info><text>В радиусе <accent><radius></accent> бл. никого нет."
+    list: "<prefix:info><text>Рядом <muted>(<radius> бл.)</muted><text>: <players>"
+    entry: "<accent><player></accent> <muted>(<distance> м)</muted>"
+    separator: "<muted>, "
+  list:
+    description: "Игроки онлайн"
+    usage: "<prefix:info><text>Использование: <accent>/list</accent>"
+    done: "<prefix:info><text>Онлайн <accent><count></accent><muted>/<max></muted><text>: <players>"
+    entry: "<text><player>"
+    entry-vanished: "<muted><i><player></i>"
+    separator: "<muted>, "
+  whois:
+    description: "Информация об игроке"
+    usage: "<prefix:info><text>Использование: <accent>/whois <игрок></accent>"
+    done:
+      - "<accent><menu-font><player></menu-font></accent> <muted><uuid>"
+      - " <icon:dot> <text>Ник: <highlight><nick>"
+      - " <icon:dot> <text>Здоровье: <highlight><health></highlight> <muted>|</muted> <text>Голод: <highlight><food>"
+      - " <icon:dot> <text>Режим: <highlight><gamemode></highlight> <muted>|</muted> <text>Оператор: <op>"
+      - " <icon:dot> <text>Место: <highlight><world> <x>, <y>, <z>"
+      - " <icon:dot> <text>Полёт: <fly> <muted>|</muted> <text>Бессмертие: <god> <muted>|</muted> <text>Ваниш: <vanished>"
+      - " <icon:dot> <text>Пинг: <highlight><ping> мс</highlight> <muted>|</muted> <text>IP: <muted><ip>"
+      - " <icon:dot> <text>Первый вход: <highlight><first></highlight> <muted>|</muted> <text>В игре: <highlight><playtime>"
+  realname:
+    description: "Узнать настоящий ник по никнейму"
+    usage: "<prefix:info><text>Использование: <accent>/realname <ник></accent>"
+    entry: "<prefix:info><nick> <muted>—</muted> <accent><player>"
+    none: "<prefix:error><text>Никого с ником «<accent><input></accent>» нет."
+
+  # ─── Предметы ────────────────────────────────────────────────────────────────
+  hat:
+    description: "Надеть предмет из руки на голову"
+    usage: "<prefix:info><text>Использование: <accent>/hat</accent>"
+    done: "<prefix:ok><text>Теперь на вас <accent><item></accent>."
+    binding: "<prefix:error><text>Шлем с проклятием несъёмности снять нельзя."
+  repair:
+    description: "Починить предмет в руке или всё снаряжение"
+    usage: "<prefix:info><text>Использование: <accent>/repair [hand|all]</accent>"
+    hand: "<prefix:ok><accent><item></accent> <text>как новый."
+    all: "<prefix:ok><text>Починено предметов: <accent><amount></accent>."
+    nothing: "<prefix:info><text>Чинить нечего."
+    not-damaged: "<prefix:error><text>Этот предмет не нужно чинить."
+    enchanted: "<prefix:error><text>Зачарованные предметы чинить нельзя."
+    paid: "<prefix:info><text>Списано <accent><amount></accent>."
+  itemdb:
+    description: "Информация о предмете в руке"
+    usage: "<prefix:info><text>Использование: <accent>/itemdb</accent>"
+    item: "<prefix:info><text>Предмет: <accent><item></accent> <muted>(<material> ×<amount>)"
+    durability: " <icon:dot> <text>Прочность: <highlight><left></highlight><muted>/<max>"
+    custom: " <icon:dot> <text>Кастомный предмет: <highlight><id>"
+    model: " <icon:dot> <text>Модель: <highlight><model>"
+    custom-model-data: " <icon:dot> <text>CustomModelData: <highlight><value>"
+  itemname:
+    description: "Переименовать предмет в руке"
+    usage: "<prefix:info><text>Использование: <accent>/itemname [название]</accent>"
+    done: "<prefix:ok><text>Предмет переименован: <name>"
+    reset: "<prefix:ok><text>Название предмета сброшено."
+    too-long: "<prefix:error><text>Название длиннее <accent><max></accent> символов."
+  more:
+    description: "Заполнить стак до максимума"
+    usage: "<prefix:info><text>Использование: <accent>/more</accent>"
+    done: "<prefix:ok><text>Теперь в руке <accent><amount></accent> шт."
+  skull:
+    description: "Получить голову игрока"
+    usage: "<prefix:info><text>Использование: <accent>/skull [игрок]</accent>"
+    done: "<prefix:ok><text>Вы получили голову <accent><player></accent>."
+  enchant:
+    description: "Зачаровать предмет в руке"
+    usage: "<prefix:info><text>Использование: <accent>/enchant <чары> [уровень]</accent>"
+    unknown: "<prefix:error><text>Чары «<accent><input></accent>» не найдены."
+    unsafe: "<prefix:error><text>Такие чары или уровень не подходят этому предмету."
+    done: "<prefix:ok><text>Добавлено: <accent><enchantment></accent>."
+    removed: "<prefix:ok><text>Снято: <accent><enchantment></accent>."
+  fireball:
+    description: "Запустить огненный шар или другой снаряд"
+    usage: "<prefix:info><text>Использование: <accent>/fireball [тип] [скорость]</accent>"
+    unknown: "<prefix:error><text>Неизвестный снаряд «<accent><input></accent>»."
+  beezooka:
+    description: "Пчёло-базука"
+    usage: "<prefix:info><text>Использование: <accent>/beezooka</accent>"
+  clearinventory:
+    description: "Очистить инвентарь"
+    usage: "<prefix:info><text>Использование: <accent>/clear [игрок]</accent>"
+    done: "<prefix:ok><text>Инвентарь очищен <muted>(<amount> шт.)</muted><text>."
+    done-other: "<prefix:ok><text>Инвентарь <accent><player></accent> очищен <muted>(<amount> шт.)</muted><text>."
+  recipe:
+    description: "Показать рецепт предмета"
+    usage: "<prefix:info><text>Использование: <accent>/recipe [предмет]</accent>"
+    unknown: "<prefix:error><text>Предмет «<accent><input></accent>» не найден."
+    none: "<prefix:error><text>У предмета <accent><item></accent> нет рецепта."
+    title: "<dark_gray>Рецепт: <item> (<page>/<pages>)"
+    arrow: "<text>Результат"
+    previous: "<accent>« Предыдущий рецепт"
+    next: "<accent>Следующий рецепт »"
+    close: "<bad>Закрыть"
+
+  # ─── Верстаки ────────────────────────────────────────────────────────────────
+  workbench:
+    description: "Открыть верстак"
+    usage: "<prefix:info><text>Использование: <accent>/craft</accent>"
+  anvil:
+    description: "Открыть наковальню"
+    usage: "<prefix:info><text>Использование: <accent>/anvil</accent>"
+  stonecutter:
+    description: "Открыть камнерез"
+    usage: "<prefix:info><text>Использование: <accent>/stonecutter</accent>"
+  grindstone:
+    description: "Открыть точило: починка и снятие чар"
+    usage: "<prefix:info><text>Использование: <accent>/grindstone</accent>"
+  loom:
+    description: "Открыть ткацкий станок"
+    usage: "<prefix:info><text>Использование: <accent>/loom</accent>"
+  cartographytable:
+    description: "Открыть стол картографа"
+    usage: "<prefix:info><text>Использование: <accent>/cartographytable</accent>"
+  smithingtable:
+    description: "Открыть кузнечный стол"
+    usage: "<prefix:info><text>Использование: <accent>/smithingtable</accent>"
+  enchantingtable:
+    description: "Открыть стол зачарований"
+    usage: "<prefix:info><text>Использование: <accent>/enchantingtable</accent>"
+  disposal:
+    description: "Виртуальная мусорка"
+    usage: "<prefix:info><text>Использование: <accent>/trash</accent>"
+    title: "<dark_gray>Мусорка — предметы исчезнут"
+    done: "<prefix:ok><text>Уничтожено предметов: <accent><amount></accent>."
+
+  # ─── Ник, ваниш, просмотр инвентаря ──────────────────────────────────────────
+  nick:
+    description: "Сменить отображаемый ник"
+    usage: "<prefix:info><text>Использование: <accent>/nick [игрок] <ник|off></accent>"
+    done: "<prefix:ok><text>Теперь ваш ник: <nick>"
+    done-other: "<prefix:ok><text>Ник <accent><player></accent>: <nick>"
+    reset: "<prefix:ok><text>Ник сброшен."
+    reset-other: "<prefix:ok><text>Ник <accent><player></accent> сброшен."
+    invalid: "<prefix:error><text>Ник: от <accent><min></accent> до <accent><max></accent> букв, цифр или «_»."
+    taken: "<prefix:error><text>Ник «<accent><nick></accent>» уже занят."
+  vanish:
+    description: "Стать невидимым для игроков"
+    usage: "<prefix:info><text>Использование: <accent>/vanish [игрок] [on|off]</accent>"
+    turned-on: "<prefix:ok><text>Вы <good>невидимы</good> для игроков."
+    turned-off: "<prefix:ok><text>Вы снова <bad>видимы</bad>."
+    changed-other: "<prefix:ok><text>Ваниш игрока <accent><player></accent>: <state>."
+    actionbar: "<muted>Вы в ванише — вас никто не видит"
+  invsee:
+    description: "Посмотреть инвентарь игрока"
+    usage: "<prefix:info><text>Использование: <accent>/invsee <игрок></accent>"
+    self: "<prefix:error><text>Это ваш собственный инвентарь."
+    opened: "<prefix:info><text>Инвентарь <accent><player></accent> <muted>(только просмотр)"
+    opened-edit: "<prefix:info><text>Инвентарь <accent><player></accent> <muted>(можно изменять)"
+
+  # ─── Время и погода ──────────────────────────────────────────────────────────
+  day:
+    description: "Установить день"
+    usage: "<prefix:info><text>Использование: <accent>/day</accent>"
+    done: "<prefix:ok><text>В мире <accent><world></accent> наступил день."
+    world-denied: "<prefix:error><text>В мире <accent><world></accent> время менять нельзя."
+    broadcast: "<prefix:info><accent><player></accent> <text>установил день."
+  night:
+    description: "Установить ночь"
+    usage: "<prefix:info><text>Использование: <accent>/night</accent>"
+    done: "<prefix:ok><text>В мире <accent><world></accent> наступила ночь."
+    world-denied: "<prefix:error><text>В мире <accent><world></accent> время менять нельзя."
+    broadcast: "<prefix:info><accent><player></accent> <text>установил ночь."
+  sun:
+    description: "Установить ясную погоду"
+    usage: "<prefix:info><text>Использование: <accent>/sun</accent>"
+    done: "<prefix:ok><text>В мире <accent><world></accent> выглянуло солнце."
+    world-denied: "<prefix:error><text>В мире <accent><world></accent> погоду менять нельзя."
+    broadcast: "<prefix:info><accent><player></accent> <text>разогнал тучи."
+  rain:
+    description: "Включить дождь"
+    usage: "<prefix:info><text>Использование: <accent>/rain</accent>"
+    done: "<prefix:ok><text>В мире <accent><world></accent> пошёл дождь."
+    world-denied: "<prefix:error><text>В мире <accent><world></accent> погоду менять нельзя."
+    broadcast: "<prefix:info><accent><player></accent> <text>вызвал дождь."
+  storm:
+    description: "Включить грозу"
+    usage: "<prefix:info><text>Использование: <accent>/storm</accent>"
+    done: "<prefix:ok><text>В мире <accent><world></accent> началась гроза."
+    world-denied: "<prefix:error><text>В мире <accent><world></accent> погоду менять нельзя."
+    broadcast: "<prefix:info><accent><player></accent> <text>вызвал грозу."
+  ptime:
+    description: "Время суток только для себя"
+    usage: "<prefix:info><text>Использование: <accent>/ptime <day|night|noon|midnight|sunrise|sunset|reset|тики> [игрок]</accent>"
+    done: "<prefix:ok><text>Ваше личное время: <accent><time></accent>."
+    reset: "<prefix:ok><text>Личное время сброшено — снова как в мире."
+    done-other: "<prefix:ok><text>Личное время <accent><player></accent>: <accent><time></accent>."
+  pweather:
+    description: "Погода только для себя"
+    usage: "<prefix:info><text>Использование: <accent>/pweather <sun|rain|reset> [игрок]</accent>"
+    done: "<prefix:ok><text>Ваша личная погода: <accent><weather></accent>."
+    reset: "<prefix:ok><text>Личная погода сброшена."
+    done-other: "<prefix:ok><text>Личная погода <accent><player></accent>: <accent><weather></accent>."
+
+  # ─── Экономика ───────────────────────────────────────────────────────────────
+  balance:
+    description: "Показать баланс"
+    usage: "<prefix:info><text>Использование: <accent>/balance [игрок]</accent>"
+    self: "<prefix:info><text>Ваш баланс: <highlight><amount></highlight>"
+    other: "<prefix:info><text>Баланс <accent><player></accent>: <highlight><amount></highlight>"
+  pay:
+    description: "Перевести деньги игроку"
+    usage: "<prefix:info><text>Использование: <accent>/pay <игрок> <сумма></accent>"
+    self: "<prefix:error><text>Нельзя переводить деньги самому себе."
+    disabled: "<prefix:error><text>Игрок <accent><player></accent> не принимает переводы."
+    sent: "<prefix:ok><text>Вы перевели <highlight><amount></highlight> игроку <accent><player></accent>."
+    sent-commission: "<prefix:ok><text>Вы перевели <highlight><amount></highlight> игроку <accent><player></accent> <muted>(комиссия <commission>, получено <received>)"
+    received: "<prefix:ok><accent><player></accent> <text>перевёл вам <highlight><amount></highlight>."
+  paytoggle:
+    description: "Разрешить или запретить переводы себе"
+    usage: "<prefix:info><text>Использование: <accent>/paytoggle [игрок]</accent>"
+    turned-on: "<prefix:ok><text>Переводы вам <good>разрешены</good>."
+    turned-off: "<prefix:ok><text>Переводы вам <bad>запрещены</bad>."
+    changed-other: "<prefix:ok><text>Переводы игроку <accent><player></accent>: <state>."
+  balancetop:
+    description: "Самые богатые игроки"
+    usage: "<prefix:info><text>Использование: <accent>/baltop [страница]</accent>"
+    header: "<accent><menu-font>Топ богачей</menu-font></accent> <muted>(<page>/<pages>)"
+    entry: " <highlight><place>.</highlight> <text><player> <muted>—</muted> <highlight><amount>"
+    empty: "<prefix:info><text>Пока пусто."
+  eco:
+    description: "Управление балансом игроков"
+    usage: "<prefix:info><text>Использование: <accent>/eco <give|take|set|reset> <игрок> [сумма]</accent>"
+    done: "<prefix:ok><text>Баланс <accent><player></accent>: <highlight><balance></highlight>"
+    insufficient: "<prefix:error><text>У <accent><player></accent> только <highlight><amount></highlight>."
+    failed: "<prefix:error><text>Плагин экономики отклонил операцию."
+    notify-give: "<prefix:ok><text>Вам начислено <highlight><amount></highlight>. Баланс: <highlight><balance></highlight>"
+    notify-take: "<prefix:info><text>С вас списано <highlight><amount></highlight>. Баланс: <highlight><balance></highlight>"
+    notify-set: "<prefix:info><text>Ваш баланс изменён: <highlight><balance></highlight>"

@@ -9,6 +9,9 @@ modules:
   teleport: true
   homes: true
   spawn: true
+  player: true
+  world: true
+  economy: true
 
 permissions:
   # Второй набор прав: точные права EssentialsX (essentials.fly, essentials.home.others,
@@ -135,10 +138,70 @@ spawn:
     worlds: [spawn]
     y: -64
 
+# ─── Возможности игрока ────────────────────────────────────────────────────────
+fly:
+  # Миры, где /fly не включается (обход: applecore.fly.bypass-world).
+  disabled-worlds: []
+speed:
+  # Максимальная скорость без applecore.speed.bypass (1–10).
+  max-fly: 10
+  max-walk: 10
+near:
+  # Радиус /near по умолчанию и максимум без applecore.near.maxexempt.
+  radius: 200
+nick:
+  prefix: "~"
+  min-length: 3
+  max-length: 16
+  # Допустимые символы ника (регулярное выражение, без учёта цветов).
+  allowed: "[\\p{L}\\p{N}_]+"
+  # Показывать ник и в табе.
+  tab-list: true
+vanish:
+  # Игроки в ванише не подбирают предметы.
+  prevent-pickup: true
+repair:
+  # Чинить зачарованные предметы без applecore.repair.enchanted (как repair-enchanted в EssentialsX).
+  allow-enchanted: true
+  # Стоимость починки (0 — бесплатно; обход: applecore.repair.free).
+  cost:
+    hand: 0
+    all: 0
+itemname:
+  max-length: 50
+fireball:
+  # Разрушают ли /fireball и /beezooka блоки.
+  block-damage: false
+
+# ─── /day, /night, /sun, /rain, /storm ─────────────────────────────────────────
+world-commands:
+  # Миры, где можно менять время и погоду (пусто — во всех; обход: applecore.world-commands.any-world).
+  worlds: []
+  # Сообщать игрокам мира, кто изменил время или погоду.
+  broadcast: true
+
+# ─── Экономика ─────────────────────────────────────────────────────────────────
 economy:
-  # Формат сумм (java.text.DecimalFormat).
+  # auto      — AppleCore регистрирует свою экономику в Vault с низшим приоритетом:
+  #             если есть другой плагин экономики (CMI, XConomy …), работает он.
+  # applecore — экономика AppleCore главная.
+  # none      — своей экономики нет, только чужая через Vault.
+  provider: auto
+  starting-balance: 0
+  # Формат сумм (java.text.DecimalFormat) и подпись валюты.
   format: "#,##0.##"
   grouping-separator: " "
+  currency-suffix: " ⛃"
+  currency-singular: "монета"
+  currency-plural: "монет"
+  pay:
+    min: 1
+    # Комиссия перевода в процентах.
+    commission-percent: 0
+  # Как часто пересчитывать /baltop для чужого плагина экономики.
+  baltop-refresh: 5m
+  # Сообщать игроку об /eco give|take|set.
+  notify-eco: true
 
 storage:
   # Как часто изменённые данные игроков сохраняются на диск (минуты).

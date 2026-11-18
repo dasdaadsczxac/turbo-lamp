@@ -43,3 +43,68 @@ playerhome:
   aliases: [phome]
 spawn:
   cooldown: 0
+
+# ─── Возможности игрока ────────────────────────────────────────────────────────
+heal:
+  cooldown: 60s
+feed:
+  aliases: [eat, food]
+  cooldown: 30s
+ext:
+  aliases: [extinguish]
+god:
+  aliases: [godmode, tgm]
+gamemode:
+  aliases: [gm]
+workbench:
+  aliases: [craft, wb, wbench]
+cartographytable:
+  aliases: [carttable, cartography]
+smithingtable:
+  aliases: [smithtable]
+enchantingtable:
+  aliases: [etable, enchanttable]
+disposal:
+  aliases: [trash]
+repair:
+  aliases: [fix]
+itemdb:
+  aliases: [dura, durability, itemno, db]
+itemname:
+  aliases: [iname, itemrename, irename, rename]
+clearinventory:
+  aliases: [ci, clean, clear, clearinvent]
+getpos:
+  aliases: [coords, position, whereami, getlocation, getloc, getcord, curpos]
+list:
+  aliases: [online, playerlist, plist, who, players]
+fireball:
+  aliases: [fireentity, fireskull]
+  cooldown: 3s
+beezooka:
+  aliases: [beecannon]
+  cooldown: 3s
+vanish:
+  aliases: [v]
+
+# ─── Время и погода (донат) ────────────────────────────────────────────────────
+day:
+  cooldown: 60s
+night:
+  cooldown: 60s
+sun:
+  cooldown: 60s
+rain:
+  cooldown: 60s
+storm:
+  cooldown: 60s
+
+# ─── Экономика (отключите, если /balance, /pay, /eco даёт другой плагин) ───────
+balance:
+  aliases: [bal, money]
+balancetop:
+  aliases: [baltop, topbal]
+paytoggle:
+  aliases: [payoff, payon]
+eco:
+  aliases: [economy]

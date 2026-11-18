@@ -45,17 +45,28 @@ Legend: ✅ done · 🔜 next · ⏳ planned
 - Verified on Paper 1.21.11 + LuckPerms with two bot players: limits from `essentials.sethome.multiple.vip`,
   `/back` via `essentials.back`, `/tpahere` via `essentials.tpahere`, warm-up cancel on move/damage, TPA flow.
 
-## Stage 3: Essentials utilities, chat, economy 🔜
+## Stage 3: Essentials utilities, world perks, economy (no chat) ✅
 
-Player: `fly`, `god`, `heal`, `feed`, `ext`, `burn`, `speed`, `flyspeed`, `gamemode (gm, gmc/gms/gma/gmsp)`, `hat`,
-`repair (fix)`, `workbench (craft, wb)`, `anvil`, `stonecutter`, `grindstone`, `loom`, `cartographytable`,
-`smithingtable`, `enchantingtable`, `trash (disposal)`, `itemdb`, `itemrename`, `clear (ci)`, `invsee`, `near`,
-`getpos`, `depth`, `compass`, `ptime`, `pweather`, `suicide`, `kill`, `nick`, `realname`, `whois`, `ping`, `list`,
-`fireball`, `vanish`. World: `day`, `night`, `time`, `sun`, `rain`, `storm`, `weather`.
-Chat: `msg`, `reply`, `msgtoggle`, `ignore`, `socialspy`, `broadcast (bc)`, `staffchat`.
-Economy (Vault): `balance`, `pay`, `paytoggle`, `baltop`, `eco give|take|set|reset` (console syntax used by donation menus).
+Chat is out of scope at the owner's request: no /msg, /r, /msgtoggle, /ignore, /socialspy, /broadcast, staff or
+donate chat. Everything else is EssentialsX-named, so the EssentialsX nodes apply automatically.
 
-## Stage 4: GUI warps ⏳
+- Abilities: `fly`, `god`, `heal`, `feed (eat)`, `ext`, `burn`, `suicide`, `speed`/`flyspeed`/`walkspeed`,
+  `gamemode (gm)` + `gmc`/`gms`/`gma`/`gmsp`; fly, god, nick and vanish persist and are restored on join.
+- Information: `ping`, `playtime`, `depth`, `getpos`, `compass`, `near`, `list`, `whois`, `realname`.
+- Items: `hat`, `repair (fix) [all]`, `itemdb`, `itemname`, `more`, `skull`, `enchant`, `fireball [type]`, `beezooka`,
+  `clearinventory (ci, clear)` (vanilla `clear` syntax falls through to `minecraft:clear`), `recipe` (GUI).
+- Workstations: `workbench (craft)`, `anvil`, `stonecutter`, `grindstone`, `loom`, `cartographytable`, `smithingtable`,
+  `enchantingtable (etable)`, `disposal (trash)`.
+- Staff: `nick`, `vanish`, `invsee` (view-only unless `.modify`).
+- World perks: `day`, `night`, `sun`, `rain`, `storm` (allowed worlds, broadcast, 60 s cooldown), `ptime`, `pweather`.
+  Vanilla `/time` and `/weather` are left alone.
+- Economy: AppleCore accounts (`data/economy.json`) registered in Vault with Lowest priority by default, so a dedicated
+  economy plugin still wins; `balance`, `pay` (optional commission), `paytoggle`, `balancetop`,
+  `eco give|take|set|reset` with the EssentialsX console syntax used by the donation menus.
+- Verified on Paper 1.21.11 + LuckPerms + Vault with bot players: every donor command denied, then unlocked by its
+  EssentialsX node only; cooldowns; workstation windows; `/eco take` from the console; `/pay`, `/paytoggle`, `/baltop`.
+
+## Stage 4: GUI warps 🔜
 
 Server and player warps in the bordo pack menus (`\uEB98` / `\uEB99` backgrounds, slot layout from the pack's
 `README_warps.txt`), pagination, "My warps", create button, icons from custom-item plugins, visits and likes, player

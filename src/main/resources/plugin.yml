@@ -148,3 +148,124 @@ permissions:
   applecore.setspawn:
     description: /setspawn
     default: op
+
+  # ─── Player abilities ────────────────────────────────────────────────────────
+  applecore.fly: {description: /fly (donation perk), default: op}
+  applecore.fly.others: {description: /fly for another player, default: op}
+  applecore.fly.bypass-world: {description: /fly in fly.disabled-worlds, default: op}
+  applecore.god: {description: /god, default: op}
+  applecore.god.others: {description: /god for another player, default: op}
+  applecore.heal: {description: /heal (donation perk), default: op}
+  applecore.heal.others: {description: /heal another player, default: op}
+  applecore.feed: {description: /feed (donation perk), default: op}
+  applecore.feed.others: {description: /feed another player, default: op}
+  applecore.ext: {description: /ext (donation perk), default: op}
+  applecore.ext.others: {description: /ext another player, default: op}
+  applecore.burn: {description: /burn (donation perk), default: op}
+  applecore.suicide: {description: /suicide (donation perk), default: op}
+  applecore.speed: {description: /speed /flyspeed /walkspeed, default: op}
+  applecore.speed.fly: {description: Change fly speed, default: op}
+  applecore.speed.walk: {description: Change walk speed, default: op}
+  applecore.speed.others: {description: /speed for another player, default: op}
+  applecore.speed.bypass: {description: Ignore speed.max-fly / max-walk, default: op}
+  applecore.gamemode: {description: /gamemode /gmc /gms /gma /gmsp, default: op}
+  applecore.gamemode.all: {description: Every game mode, default: op}
+  applecore.gamemode.survival: {description: Survival, default: op}
+  applecore.gamemode.creative: {description: Creative, default: op}
+  applecore.gamemode.adventure: {description: Adventure, default: op}
+  applecore.gamemode.spectator: {description: Spectator, default: op}
+  applecore.gamemode.others: {description: Change another player's game mode, default: op}
+
+  # ─── Information ─────────────────────────────────────────────────────────────
+  applecore.ping: {description: /ping, default: true}
+  applecore.ping.others: {description: /ping player, default: op}
+  applecore.playtime: {description: /playtime (donation perk), default: op}
+  applecore.playtime.others: {description: /playtime player, default: op}
+  applecore.depth: {description: /depth (donation perk), default: op}
+  applecore.getpos: {description: /getpos (donation perk), default: op}
+  applecore.getpos.others: {description: /getpos player, default: op}
+  applecore.compass: {description: /compass, default: true}
+  applecore.near: {description: /near (donation perk), default: op}
+  applecore.near.others: {description: /near player, default: op}
+  applecore.near.maxexempt: {description: /near beyond near.radius, default: op}
+  applecore.near.exclude: {description: Hidden from /near, default: false}
+  applecore.list: {description: /list, default: true}
+  applecore.whois: {description: /whois, default: op}
+  applecore.whois.ip: {description: See the IP in /whois, default: op}
+  applecore.realname: {description: /realname, default: true}
+
+  # ─── Items ───────────────────────────────────────────────────────────────────
+  applecore.hat: {description: /hat (donation perk), default: op}
+  applecore.hat.ignore-binding: {description: /hat over a curse of binding helmet, default: op}
+  applecore.repair: {description: /repair /fix (donation perk), default: op}
+  applecore.repair.all: {description: /fix all (donation perk), default: op}
+  applecore.repair.armor: {description: /fix all includes armour, default: op}
+  applecore.repair.enchanted: {description: Repair enchanted items when repair.allow-enchanted is false, default: op}
+  applecore.repair.free: {description: Ignore repair.cost, default: op}
+  applecore.itemdb: {description: /itemdb (donation perk), default: op}
+  applecore.itemname: {description: /itemname, default: op}
+  applecore.itemname.color: {description: Colours in /itemname, default: op}
+  applecore.more: {description: /more, default: op}
+  applecore.skull: {description: /skull, default: op}
+  applecore.skull.others: {description: /skull <player>, default: op}
+  applecore.enchant: {description: /enchant, default: op}
+  applecore.enchant.unsafe: {description: Levels and items beyond vanilla rules, default: op}
+  applecore.fireball: {description: /fireball (donation perk), default: op}
+  applecore.fireball.fireball: {description: /fireball fireball, default: op}
+  applecore.fireball.small: {description: /fireball small, default: op}
+  applecore.fireball.large: {description: /fireball large, default: op}
+  applecore.fireball.arrow: {description: /fireball arrow, default: op}
+  applecore.fireball.skull: {description: /fireball skull, default: op}
+  applecore.fireball.egg: {description: /fireball egg, default: op}
+  applecore.fireball.snowball: {description: /fireball snowball, default: op}
+  applecore.fireball.expbottle: {description: /fireball expbottle, default: op}
+  applecore.fireball.dragon: {description: /fireball dragon, default: op}
+  applecore.fireball.trident: {description: /fireball trident, default: op}
+  applecore.beezooka: {description: /beezooka (donation perk), default: op}
+  applecore.clearinventory: {description: /clear (donation perk), default: op}
+  applecore.clearinventory.others: {description: /clear player, default: op}
+  applecore.recipe: {description: /recipe (donation perk), default: op}
+
+  # ─── Workstations ────────────────────────────────────────────────────────────
+  applecore.workbench: {description: /craft (donation perk), default: op}
+  applecore.anvil: {description: /anvil (donation perk), default: op}
+  applecore.stonecutter: {description: /stonecutter (donation perk), default: op}
+  applecore.grindstone: {description: /grindstone (donation perk), default: op}
+  applecore.loom: {description: /loom (donation perk), default: op}
+  applecore.cartographytable: {description: /cartographytable (donation perk), default: op}
+  applecore.smithingtable: {description: /smithingtable, default: op}
+  applecore.enchantingtable: {description: /enchantingtable, default: op}
+  applecore.disposal: {description: /trash (donation perk), default: op}
+
+  # ─── Nick, vanish, invsee ────────────────────────────────────────────────────
+  applecore.nick: {description: /nick, default: op}
+  applecore.nick.others: {description: /nick for another player, default: op}
+  applecore.nick.color: {description: Colours in /nick, default: op}
+  applecore.vanish: {description: /vanish, default: op}
+  applecore.vanish.others: {description: /vanish another player, default: op}
+  applecore.vanish.see: {description: See vanished players, default: op}
+  applecore.invsee: {description: /invsee (donation perk), default: op}
+  applecore.invsee.modify: {description: Edit inventories opened with /invsee, default: op}
+  applecore.invsee.preventmodify: {description: Own inventory can't be edited through /invsee, default: false}
+
+  # ─── Time and weather ────────────────────────────────────────────────────────
+  applecore.day: {description: /day (donation perk; essentials.time.set), default: op}
+  applecore.night: {description: /night (donation perk; essentials.time.set), default: op}
+  applecore.sun: {description: /sun (donation perk; essentials.weather), default: op}
+  applecore.rain: {description: /rain (essentials.weather), default: op}
+  applecore.storm: {description: /storm (donation perk; essentials.weather), default: op}
+  applecore.world-commands.any-world: {description: /day /night /sun … outside world-commands.worlds, default: op}
+  applecore.ptime: {description: /ptime (donation perk), default: op}
+  applecore.ptime.others: {description: /ptime for another player, default: op}
+  applecore.pweather: {description: /pweather, default: op}
+  applecore.pweather.others: {description: /pweather for another player, default: op}
+
+  # ─── Economy ─────────────────────────────────────────────────────────────────
+  applecore.balance: {description: /balance, default: true}
+  applecore.balance.others: {description: /balance player, default: op}
+  applecore.pay: {description: /pay, default: true}
+  applecore.pay.offline: {description: /pay to offline players, default: op}
+  applecore.paytoggle: {description: /paytoggle, default: true}
+  applecore.paytoggle.others: {description: /paytoggle for another player, default: op}
+  applecore.balancetop: {description: /baltop, default: true}
+  applecore.eco: {description: /eco give|take|set|reset, default: op}

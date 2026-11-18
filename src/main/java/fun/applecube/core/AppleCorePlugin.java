@@ -8,6 +8,9 @@ import fun.applecube.core.item.ItemFactory;
 import fun.applecube.core.message.Messages;
 import fun.applecube.core.module.Module;
 import fun.applecube.core.module.admin.AdminModule;
+import fun.applecube.core.module.economy.EconomyModule;
+import fun.applecube.core.module.player.PlayerModule;
+import fun.applecube.core.module.world.WorldModule;
 import fun.applecube.core.module.homes.HomesModule;
 import fun.applecube.core.module.spawn.SpawnModule;
 import fun.applecube.core.module.teleport.TeleportModule;
@@ -91,6 +94,9 @@ public final class AppleCorePlugin extends JavaPlugin {
         list.add(new TeleportModule(this));
         list.add(new HomesModule(this));
         list.add(new SpawnModule(this));
+        list.add(new PlayerModule(this));
+        list.add(new WorldModule(this));
+        list.add(new EconomyModule(this));
         return list;
     }
 

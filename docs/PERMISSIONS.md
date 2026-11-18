@@ -75,3 +75,73 @@ The effective home limit is the larger of the two systems; players with neither 
 |---|---|---|
 | `/spawn` | `applecore.spawn` (+ `.others`) | `essentials.spawn` (+ `.others`) |
 | `/setspawn` | `applecore.setspawn` | `essentials.setspawn` |
+
+## Player abilities
+
+| Command | AppleCore | EssentialsX |
+|---|---|---|
+| `/fly` | `applecore.fly` (+ `.others`) | `essentials.fly` (+ `.others`) |
+| `/god` | `applecore.god` (+ `.others`) | `essentials.god` (+ `.others`) |
+| `/heal`, `/feed`, `/ext` | `applecore.heal\|feed\|ext` (+ `.others`) | `essentials.heal\|feed\|ext` (+ `.others`) |
+| `/heal`, `/feed` cooldown | `applecore.heal.cooldown.bypass` | `essentials.heal.cooldown.bypass` **or** `essentials.commandcooldowns.bypass.heal` |
+| `/burn`, `/suicide` | `applecore.burn`, `applecore.suicide` | `essentials.burn`, `essentials.suicide` |
+| `/speed`, `/flyspeed`, `/walkspeed` | `applecore.speed` + `.fly` / `.walk` / `.others` / `.bypass` | `essentials.speed` + same sub-nodes |
+| `/gamemode`, `/gmc`, `/gms`, `/gma`, `/gmsp` | `applecore.gamemode` + `.<mode>` or `.all`, `.others` | `essentials.gamemode` + same sub-nodes |
+
+## Information
+
+| Command | AppleCore | EssentialsX |
+|---|---|---|
+| `/ping`, `/playtime`, `/getpos` | `applecore.<cmd>` (+ `.others`) | `essentials.<cmd>` (+ `.others`) |
+| `/depth`, `/compass`, `/list`, `/realname` | `applecore.<cmd>` | `essentials.<cmd>` |
+| `/near` | `applecore.near` (+ `.others`, `.maxexempt`) | `essentials.near` (+ same) |
+| Hidden from `/near` (explicit grant only) | `applecore.near.exclude` | `essentials.near.exclude` |
+| `/whois` | `applecore.whois` (+ `.ip`) | `essentials.whois` (+ `.ip`) |
+
+## Items and workstations
+
+| Command | AppleCore | EssentialsX |
+|---|---|---|
+| `/hat` | `applecore.hat` (+ `.ignore-binding`) | `essentials.hat` (+ same) |
+| `/repair` (`/fix`) | `applecore.repair`, `.all`, `.armor`, `.enchanted` | `essentials.repair`, same sub-nodes |
+| `/itemdb`, `/more`, `/recipe` | `applecore.<cmd>` | `essentials.<cmd>` |
+| `/itemname` | `applecore.itemname` (+ `.color`) | `essentials.itemname` (+ `.color`) |
+| `/skull` | `applecore.skull` (+ `.others`) | `essentials.skull` (+ `.others`) |
+| `/enchant` | `applecore.enchant` (+ `.unsafe`) | `essentials.enchant` |
+| `/fireball [type]` | `applecore.fireball` + `applecore.fireball.<type>` | `essentials.fireball` + `essentials.fireball.<type>` |
+| `/beezooka` | `applecore.beezooka` | `essentials.beezooka` |
+| `/clear` (`/ci`) | `applecore.clearinventory` (+ `.others`) | `essentials.clearinventory` (+ `.others`) |
+| `/craft`, `/anvil`, `/stonecutter`, `/grindstone`, `/loom`, `/cartographytable`, `/smithingtable` | `applecore.workbench`, `applecore.anvil`, … | `essentials.workbench`, `essentials.anvil`, … |
+| `/enchantingtable` | `applecore.enchantingtable` | — |
+| `/trash` | `applecore.disposal` | `essentials.disposal` |
+
+## Nick, vanish, invsee
+
+| Command | AppleCore | EssentialsX |
+|---|---|---|
+| `/nick` | `applecore.nick` (+ `.others`, `.color`) | `essentials.nick` (+ same) |
+| `/vanish` | `applecore.vanish` (+ `.others`) | `essentials.vanish` (+ `.others`) |
+| `/invsee` | `applecore.invsee` (+ `.modify`) | `essentials.invsee` (+ `.modify`) |
+| Inventory protected from `/invsee` edits (explicit grant only) | `applecore.invsee.preventmodify` | `essentials.invsee.preventmodify` |
+
+## Time and weather
+
+| Command | AppleCore | EssentialsX |
+|---|---|---|
+| `/day`, `/night` | `applecore.day`, `applecore.night` | **`essentials.time.set`** |
+| `/sun`, `/rain`, `/storm` | `applecore.sun\|rain\|storm` | **`essentials.weather`** |
+| Outside `world-commands.worlds` | `applecore.world-commands.any-world` | — |
+| `/ptime`, `/pweather` | `applecore.ptime\|pweather` (+ `.others`) | `essentials.ptime\|pweather` (+ `.others`) |
+
+## Economy
+
+| Command | AppleCore | EssentialsX |
+|---|---|---|
+| `/balance` | `applecore.balance` (+ `.others`) | `essentials.balance` (+ `.others`) |
+| `/pay` | `applecore.pay` (+ `.offline`) | `essentials.pay` (+ `.offline`) |
+| `/paytoggle` | `applecore.paytoggle` (+ `.others`) | `essentials.paytoggle` (+ `.others`) |
+| `/baltop` | `applecore.balancetop` | `essentials.balancetop` |
+| `/eco give\|take\|set\|reset` | `applecore.eco` | `essentials.eco` |
+
+Operators get every EssentialsX node automatically (Bukkit grants undeclared nodes to ops), exactly as with EssentialsX.
+That is why opt-in flags such as `near.exclude` and `invsee.preventmodify` count only when explicitly granted.

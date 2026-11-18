@@ -109,7 +109,9 @@ public final class CommandRegistry {
             Long cooldown = cooldowns.get(command.name());
             boolean tracked = cooldown != null && sender instanceof Player player
                     && !plugin.permissions().has(player, "applecore.cooldown.bypass")
-                    && !plugin.permissions().has(player, "applecore." + command.name() + ".cooldown.bypass");
+                    && !plugin.permissions().has(player, "applecore." + command.name() + ".cooldown.bypass")
+                    && !(plugin.permissions().essentialsCompat()
+                    && player.hasPermission("essentials." + command.name() + ".cooldown.bypass"));
             if (tracked) {
                 long left = plugin.cooldowns().remaining(((Player) sender).getUniqueId(), "cmd:" + command.name());
                 if (left > 0) {

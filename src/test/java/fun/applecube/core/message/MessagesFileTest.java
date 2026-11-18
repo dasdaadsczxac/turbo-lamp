@@ -70,7 +70,7 @@ class MessagesFileTest {
                 Matcher matcher = KEY_LITERAL.matcher(Files.readString(file));
                 while (matcher.find()) {
                     String key = matcher.group(1);
-                    if (key.endsWith(".yml") || isConfigKey(configs, key)) {
+                    if (key.endsWith(".yml") || key.endsWith(".json") || isConfigKey(configs, key)) {
                         continue;
                     }
                     if (!messages.contains(key)) {
