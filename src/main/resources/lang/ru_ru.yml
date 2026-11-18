@@ -1,0 +1,75 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  AppleCore — русский язык
+#
+#  Формат: MiniMessage (https://docs.advntr.dev/minimessage/format), &-коды тоже работают.
+#  Теги AppleCore:
+#    <prefix:ok|error|warn|info>        значок перед сообщением (с паком — «!»-иконки APPLECUBE)
+#    <icon:lmb|rmb|mmb|bar|dot|apple>   иконки мыши, полоска, точка, яблоко
+#    <menu-font>…</menu-font>           жирный шрифт меню пака (без пака — обычный жирный)
+#    <accent> <text> <muted> <highlight> <good> <bad> <warn> <info>
+#                                       цвета темы (config.yml → style.colors)
+#    <pack>…</pack> / <plain>…</plain>  только с ресурспаком / только без него
+#  Символы пака пишите в двойных кавычках: "\uEBA1". Пустая строка '' отключает сообщение.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+prefix:
+  ok: "<pack><white>\uEBA1</white> </pack><plain><good>✔</good> </plain>"
+  error: "<pack><white>\uEBA0</white> </pack><plain><bad>✘</bad> </plain>"
+  warn: "<pack><white>\uEBA2</white> </pack><plain><warn>⚠</warn> </plain>"
+  info: "<pack><white>\uEBA3</white> </pack><plain><info>✦</info> </plain>"
+
+icons:
+  lmb: "<pack><white>\uEB01</white></pack><plain><highlight>ЛКМ</highlight></plain>"
+  rmb: "<pack><white>\uEB02</white></pack><plain><highlight>ПКМ</highlight></plain>"
+  mmb: "<pack><white>\uEB03</white></pack><plain><highlight>СКМ</highlight></plain>"
+  bar: "<pack>\uEB00</pack><plain>┃</plain>"
+  dot: "<pack>\uEB05</pack><plain>•</plain>"
+  apple: "<pack><white>\uEB04</white></pack><plain><accent>❤</accent></plain>"
+
+common:
+  enabled: "<good>включено</good>"
+  disabled: "<bad>выключено</bad>"
+  none: "<muted>нет</muted>"
+  console: "Консоль"
+
+time:
+  days: "<amount> д."
+  hours: "<amount> ч."
+  minutes: "<amount> мин."
+  seconds: "<amount> сек."
+
+errors:
+  no-permission: "<prefix:error><text>Недостаточно прав для этой команды."
+  no-permission-rank: "<prefix:error><text>Доступно с привилегии <rank><text>. Купить: <click:open_url:'https://applecube.fun'><hover:show_text:'<text>Открыть сайт'><accent><u>applecube.fun</u></accent></hover></click>"
+  players-only: "<prefix:error><text>Команда доступна только игрокам."
+  player-not-found: "<prefix:error><text>Игрок <accent><player></accent> не в сети."
+  player-never-joined: "<prefix:error><text>Игрок <accent><player></accent> ни разу не заходил на сервер."
+  invalid-number: "<prefix:error><text>«<accent><input></accent>» — не число."
+  number-range: "<prefix:error><text>Укажите число от <accent><min></accent> до <accent><max></accent>."
+  cooldown: "<prefix:warn><text>Подождите ещё <accent><time></accent>."
+  internal: "<prefix:error><text>Что-то пошло не так. Сообщите администрации."
+  economy-unavailable: "<prefix:error><text>Экономика недоступна: нужен Vault и плагин экономики."
+
+teleport:
+  warmup: "<prefix:info><text>Телепортация через <accent><seconds> сек.</accent> — не двигайтесь."
+  bossbar: "<text>Телепортация через <highlight><seconds></highlight> сек."
+  cancelled-move: "<prefix:warn><text>Телепортация отменена: вы сдвинулись с места."
+  cancelled-damage: "<prefix:warn><text>Телепортация отменена: вы получили урон."
+  unsafe: "<prefix:error><text>Точка назначения небезопасна — телепортация отменена."
+  failed: "<prefix:error><text>Не удалось телепортироваться."
+
+resource-pack:
+  prompt: "<accent>APPLECUBE</accent> <text>— ресурспак сервера: меню, иконки и шрифт."
+
+commands:
+  applecore:
+    description: "Управление плагином AppleCore"
+    usage: "<prefix:info><text>Использование: <accent>/applecore <reload|info></accent>"
+    reloaded: "<prefix:ok><text>AppleCore перезагружен за <accent><ms> мс</accent>. Новые команды и модули включатся после рестарта."
+    info:
+      - "<accent><menu-font>AppleCore</menu-font></accent> <muted>v<version>"
+      - " <icon:dot> <text>Язык: <highlight><language>"
+      - " <icon:dot> <text>Ресурспак: <resourcepack>"
+      - " <icon:dot> <text>Модули: <highlight><modules>"
+      - " <icon:dot> <text>Команд: <highlight><commands>"
+      - " <icon:dot> <text>Интеграции: <muted><hooks>"

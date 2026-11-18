@@ -1,0 +1,29 @@
+name: AppleCore
+version: '${project.version}'
+main: fun.applecube.core.AppleCorePlugin
+api-version: '1.21'
+author: APPLECUBE
+website: https://applecube.fun
+description: Essentials-style core for APPLECUBE - commands, permissions, GUI warps, donation ranks and killer money.
+softdepend:
+  - Vault
+  - PlaceholderAPI
+  - LuckPerms
+  - ItemsAdder
+  - Nexo
+  - Oraxen
+  - CraftEngine
+  - HeadDatabase
+
+# Commands are registered at runtime through Paper's command API (see commands.yml).
+# Permission reference: docs/PERMISSIONS.md
+permissions:
+  applecore.admin:
+    description: /applecore reload | info
+    default: op
+  applecore.cooldown.bypass:
+    description: Ignore every command cooldown from commands.yml
+    default: op
+  applecore.teleport.bypass-delay:
+    description: Teleport instantly (no warm-up)
+    default: op

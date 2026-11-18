@@ -1,0 +1,106 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  AppleCore — main configuration
+#  Reload with /applecore reload (command/module changes need a restart).
+# ═══════════════════════════════════════════════════════════════════════════════
+
+language:
+  # File name from plugins/AppleCore/lang/ without .yml (bundled: ru_ru, en_us).
+  default: ru_ru
+  # Use the player's client language when a matching file exists.
+  per-player: false
+
+# Feature modules. A disabled module registers no commands or listeners (restart required).
+modules: {}
+
+commands:
+  # Hide commands the player has no permission for (tab-complete and "unknown command").
+  # Keep false on donation servers: players then see which rank unlocks a command.
+  hide-unpermitted: false
+  # When a permission is missing, name the cheapest donation rank that grants it (ranks.yml).
+  no-permission-rank-hint: true
+
+# ─── Resource pack (APPLECUBE "bordo" pack through ItemsAdder) ───────────────────
+resource-pack:
+  # true  — menus use the pack: window backgrounds in the title, item_model buttons, pack sounds,
+  #         chat "!" icons and the bold menu font.
+  # false — plain vanilla design everywhere (no pack required).
+  enabled: true
+  # Players who declined or failed to download the pack automatically get the plain design.
+  plain-for-declined: true
+  # Tooltip frame applied to every menu item while the pack is used ("" to disable).
+  tooltip-style: "bordo_menu:menu"
+  # Font used by the <menu-font> tag.
+  menu-font: "bordo_menu:bold"
+  # Send a pack from AppleCore. Leave disabled when ItemsAdder already hosts and sends the pack.
+  send:
+    enabled: false
+    url: ""
+    hash: ""
+    required: false
+
+# Theme colours, available in every message as tags: <accent>, <text>, <muted> …
+style:
+  colors:
+    accent: "#FB2200"
+    text: "#F8F0DC"
+    muted: "#9C8C80"
+    highlight: "#FFC94A"
+    good: "#5BD16B"
+    bad: "#FF5A4E"
+    warn: "#FFC23D"
+    info: "#59C3FF"
+
+# Sounds: "pack" is played when the viewer uses the resource pack, "plain" otherwise.
+sounds:
+  menu-open:
+    pack: "bordo_menu:menu.open_rtp"
+    plain: "minecraft:block.ender_chest.open"
+    volume: 0.8
+  click:
+    pack: "bordo_menu:auction.tick"
+    plain: "minecraft:ui.button.click"
+    volume: 0.6
+  success:
+    pack: "bordo_menu:auction.success"
+    plain: "minecraft:entity.player.levelup"
+    volume: 0.8
+  error:
+    pack: "bordo_menu:auction.cancel"
+    plain: "minecraft:block.note_block.bass"
+    volume: 0.8
+  teleport:
+    pack: "minecraft:entity.enderman.teleport"
+    plain: "minecraft:entity.enderman.teleport"
+    volume: 0.7
+
+# ─── Teleportation (homes, warps, spawn, tpa …) ─────────────────────────────────
+teleport:
+  # Warm-up in seconds. applecore.teleport.delay.<n> lowers it per rank,
+  # applecore.teleport.bypass-delay removes it.
+  delay: 3
+  cancel-on-move: true
+  cancel-on-damage: true
+  particles: true
+  bossbar:
+    enabled: true
+    # PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE. Avoid YELLOW with the pack's bossbar_clear module.
+    color: RED
+    overlay: PROGRESS
+  # Look for a safe spot when the destination is obstructed or above lava/void.
+  safe-location: true
+  # Damage immunity after arriving (ticks, 20 = 1 second).
+  invulnerability-ticks: 60
+  back:
+    # Remember the previous location on command/plugin teleports for /back.
+    record-teleports: true
+    # Remember the death location (needs applecore.back.ondeath).
+    record-death: true
+
+economy:
+  # java.text.DecimalFormat pattern for money amounts.
+  format: "#,##0.##"
+  grouping-separator: " "
+
+storage:
+  # How often changed player data is written to disk.
+  autosave-minutes: 5

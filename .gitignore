@@ -1,0 +1,17 @@
+# Build output
+target/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Local test servers and logs
+run/
+*.log
+
+# Workspace attachments (third-party jars, resource-pack archives)
+.hoplite/attachments/

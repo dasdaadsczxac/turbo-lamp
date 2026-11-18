@@ -1,0 +1,14 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  AppleCore — per-command settings
+#  Commands not listed here use their defaults (enabled, built-in aliases, no cooldown).
+#
+#    enabled: false   — do not register the command, e.g. to leave it to another plugin (restart)
+#    aliases: [a, b]  — replaces the built-in aliases (restart)
+#    cooldown: 30s    — per-player cooldown: 10s, 5m, 1h30m … (reload)
+#                       bypass: applecore.<command>.cooldown.bypass or applecore.cooldown.bypass
+#
+#  /ec and /kit are intentionally not part of AppleCore (AppleEnderChest and AppleKits own them).
+# ═══════════════════════════════════════════════════════════════════════════════
+
+applecore:
+  aliases: [acore, ac]
