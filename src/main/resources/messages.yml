@@ -303,6 +303,42 @@ menus:
         - "<text>из ItemsAdder, Nexo или Oraxen,"
         - "<text>может стать иконкой варпа."
 
+# ─── Донатные привилегии (/ranks) ──────────────────────────────────────────────
+# <rank> — значок привилегии (с ресурспаком) или её цветное название.
+ranks:
+  list-header: "<icon:bar> <accent><menu-font>Привилегии</menu-font></accent> <muted>· applecube.fun"
+  list-entry: " <icon:dot> <rank> <muted>— <text><price> ₽</text> · дома <highlight><homes></highlight> · варпы <highlight><warps></highlight> · KillerMoney <highlight>x<multiplier></highlight>"
+  list-entry-held: " <good>✔</good> <rank> <muted>— <text><price> ₽</text> · дома <highlight><homes></highlight> · варпы <highlight><warps></highlight> · KillerMoney <highlight>x<multiplier></highlight> <good>(у вас)</good>"
+  list-footer: "<prefix:info><text>Купить: <click:open_url:'https://applecube.fun'><hover:show_text:'<text>Открыть сайт'><accent><u>applecube.fun</u></accent></hover></click>"
+  info:
+    - "<icon:bar> <accent><player></accent>"
+    - " <icon:dot> <text>Привилегия: <rank>"
+    - " <icon:dot> <text>Точек дома: <highlight><homes></highlight>, варпов: <highlight><warps>"
+    - " <icon:dot> <text>Множитель KillerMoney: <highlight>x<multiplier>"
+  none: "<muted>нет"
+  unknown: "<prefix:error><text>Привилегия <accent><rank></accent> не найдена. Список: <accent>/ranks"
+  bad-time: "<prefix:error><text>Срок <accent><time></accent> не подходит. Пример: <accent>30d</accent>, <accent>12h</accent>, <accent>1mo</accent>."
+  given: "<prefix:ok><text>Игроку <accent><player></accent> выдана привилегия <rank><text>."
+  taken: "<prefix:ok><text>У игрока <accent><player></accent> снята привилегия <rank><text>."
+  announce: "<prefix:ok><accent><player></accent> <text>приобрёл привилегию <rank><text>! Спасибо за поддержку сервера"
+  title: "<rank>"
+  subtitle: "<text>Привилегия активирована"
+
+# ─── KillerMoney ───────────────────────────────────────────────────────────────
+killermoney:
+  # Награда за моба (actionbar или чат — notify в killermoney.yml). <multiplier> — строка ниже, если множитель больше 1.
+  mob: "<good>+<amount></good> <muted>за</muted> <text><mob></text><multiplier>"
+  multiplier: " <highlight>x<value></highlight>"
+  pvp-killer: "<prefix:ok><text>Вы забрали <good><amount></good> у игрока <accent><player></accent>."
+  pvp-victim: "<prefix:warn><accent><player></accent> <text>забрал у вас <bad><amount></bad>."
+  pvp-cooldown: "<prefix:info><text>За повторное убийство <accent><player></accent> деньги будут через <accent><time></accent>."
+  info:
+    - "<icon:bar> <accent>KillerMoney</accent> <muted>· <player>"
+    - " <icon:dot> <text>Ваш множитель: <highlight>x<multiplier></highlight> <muted>(выше с привилегией: /ranks)"
+    - " <icon:dot> <text>За убийство игрока: <highlight><percent>%</highlight> <text>его баланса"
+    - " <icon:dot> <text>Награды за мобов:"
+  info-mob: "   <muted>·</muted> <text><mob></text> <muted>—</muted> <highlight><amount>"
+
 commands:
   applecore:
     description: "Управление плагином AppleCore"
@@ -820,3 +856,16 @@ commands:
       - " <accent>/serverwarp order <варп> <число></accent> <muted>— порядок в меню"
       - " <accent>/serverwarp perm <варп> [право|none]</accent> <muted>— доступ по праву"
       - " <accent>/serverwarp list</accent> <muted>— список"
+
+  # ─── Привилегии и KillerMoney ────────────────────────────────────────────────
+  ranks:
+    description: "Донатные привилегии: список, информация, выдача"
+    usage:
+      - "<prefix:info><text>Привилегии:"
+      - " <accent>/ranks</accent> <muted>— список и цены"
+      - " <accent>/ranks info [игрок]</accent> <muted>— привилегия, лимиты и множитель"
+      - " <accent>/ranks give <игрок> <привилегия> [срок]</accent> <muted>— выдать (для донат-магазина)"
+      - " <accent>/ranks take <игрок> <привилегия></accent> <muted>— снять"
+  killermoney:
+    description: "Множитель и награды KillerMoney"
+    usage: "<prefix:info><text>Использование: <accent>/killermoney [игрок]</accent>"

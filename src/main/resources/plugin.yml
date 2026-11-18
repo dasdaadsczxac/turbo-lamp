@@ -287,3 +287,12 @@ permissions:
   applecore.warpdesc.color: {description: Colours and formatting in /warpdesc, default: op}
   applecore.serverwarp: {description: /serverwarp and editing server warps (essentials.setwarp), default: op}
   applecore.playerwarps.unlimited: {description: No player warp limit (limits - applecore.playerwarps.limit.<n>), default: op}
+
+  # ─── Ranks and KillerMoney ───────────────────────────────────────────────────
+  # applecore.rank.<id> (one per rank in ranks.yml) are registered at runtime with the rank preset as children;
+  # members of the LuckPerms group from ranks.yml get the preset without them.
+  applecore.ranks: {description: /ranks - rank list and own rank info, default: true}
+  applecore.ranks.others: {description: /ranks info player, default: op}
+  applecore.ranks.manage: {description: /ranks give|take - for donation shops (runs ranks.yml commands), default: op}
+  applecore.killermoney: {description: /killermoney - own multiplier and rewards, default: true}
+  applecore.killermoney.others: {description: /killermoney player, default: op}
