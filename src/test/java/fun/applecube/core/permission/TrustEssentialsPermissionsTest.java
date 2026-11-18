@@ -37,7 +37,6 @@ class TrustEssentialsPermissionsTest {
     void noAdminPowersFromPlayerNodes() {
         // trustessentials.systemwarp only lists server warps; it must not manage them.
         assertTrue(TrustEssentialsPermissions.map("applecore.serverwarp").isEmpty());
-        assertTrue(TrustEssentialsPermissions.map("applecore.ranks.manage").isEmpty());
         assertTrue(TrustEssentialsPermissions.map("applecore.playerwarps.unlimited").isEmpty());
         assertTrue(TrustEssentialsPermissions.map("trustessentials.fly").isEmpty());
     }

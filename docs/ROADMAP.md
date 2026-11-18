@@ -90,7 +90,7 @@ donate chat. Everything else is EssentialsX-named, so the EssentialsX nodes appl
   name validation, `/serverwarp` denied and then allowed by `essentials.setwarp`, `/warp <warp> <player>` by
   `essentials.warp.others`, console `/serverwarp list`.
 
-## Stage 5: Donation ranks, KillerMoney, TrustEssentials permissions ✅
+## Stage 5: Donation ranks, KillerMoney, TrustEssentials permissions ✅ (ranks removed in stage 7)
 
 - `ranks.yml`, taken from the server's DeluxeMenus `donate.yml`: guard (Страж) → khignt → prince → king → imperator →
   triton → gercog → caesar, plus the seasonal pumpkin. Each rank: LuckPerms `group`, name, badge glyph (from the
@@ -125,23 +125,35 @@ donate chat. Everything else is EssentialsX-named, so the EssentialsX nodes appl
   used the code value: player warp limit 1 instead of 0, empty currency suffix).
 - Documentation: `docs/PERMISSIONS.md` (all node sets, TrustEssentials table), README, AGENTS.md.
 
+## Stage 7: No rank system, limits only from LuckPerms ✅
+
+At the owner's request:
+
+- The rank system is removed: `ranks.yml`, `/ranks`, `applecore.rank.<id>`, rank presets in permission checks, the
+  "available from rank …" hint and the `%applecore_rank*%` placeholders. Donation ranks are LuckPerms groups.
+- Limits come only from LuckPerms permissions, with no limit tables in the configs: `applecore.homes.limit.<n>`
+  (everyone has `applecore.homes.limit.1` from `plugin.yml`), `applecore.playerwarps.limit.<n>` (none: no own warps),
+  `applecore.killermoney.multiplier.<x>`. Removed `homes.default-limit`, `homes.sethome-multiple` (EssentialsX named
+  sets; `essentials.sethome.multiple.unlimited` still works) and `warps.player-limit`. Numeric nodes are read from the
+  player's groups including inheritance, plus `plugin.yml` defaults (LuckPerms reports those only through
+  `hasPermission`).
+- `/setwarp` without a warp limit says own warps come with a donation rank.
+- Verified on Paper 1.21.11 + LuckPerms + PlaceholderAPI with bots: no nodes → 1 home, no own warps, x1; group `king`
+  (parent `prince`) → 20 homes, 10 warps, x1.5, also in `%applecore_homes_limit%`, `%applecore_warps_limit%`,
+  `%applecore_killermoney_x%`; negated `applecore.homes.limit.1` → 0 homes; `essentials.sethome.multiple.unlimited`
+  → ∞; `/ranks` is an unknown command.
+
 ## Handoff
 
-State: stages 1–6 are done; each tag `stage-N` builds with `mvn package` and was loaded on Paper 1.21.11.
+State: stages 1–7 are done; each tag `stage-N` builds with `mvn package` and was loaded on Paper 1.21.11.
 
-Assumptions to confirm with the server owner:
-
-- `ranks.yml` was built from `plugins/DeluxeMenus/gui_menus/menu/donate.yml` of the APPLECUBE pack (prices, colours,
-  perks, home and warp limits). Only AppleCore commands are in the presets; `/kit`, `/rtp`, `/ec`, `/grant`, `/bc`,
-  punishments, auction slots and regions belong to other plugins. Pumpkin inherits Caesar; KillerMoney multipliers
-  (x1.1 … x2.5) are not in the donate menu and were chosen as a sensible curve.
-- The rank badges (`\uF823`, `\u0200` … `\u0217`, `\u01D3`) come from the server's main resource pack, as in the donate
-  menu; the bordo pack does not define them. Players without that pack see the coloured rank name.
-- Player warps start at Prince (`warps.player-limit: 0`), as in the donate menu.
+Server setup: give the LuckPerms donation groups their commands (AppleCore, EssentialsX or TrustEssentials nodes) and
+their limits as numeric nodes, see `docs/PERMISSIONS.md` → Limits. Player warps need `applecore.playerwarps.limit.<n>`
+(on APPLECUBE from Prince).
 
 Not verifiable here: the menus with the real resource pack in a client (bots cannot render packs; layouts were matched
 to the pack's slot map and checked item by item), and the KillerMoney action bar (bots do not report it; the same text
 was checked in chat mode).
 
-Ideas for later: `/serverwarp import` from EssentialsX / TrustEssentials warp files, a GUI for `/ranks`, PvP
-protection for new players in KillerMoney.
+Ideas for later: `/serverwarp import` from EssentialsX / TrustEssentials warp files, PvP protection for new players in
+KillerMoney.

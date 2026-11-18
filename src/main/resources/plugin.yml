@@ -4,7 +4,7 @@ main: fun.applecube.core.AppleCorePlugin
 api-version: '1.21'
 author: APPLECUBE
 website: https://applecube.fun
-description: Essentials-style core for APPLECUBE - commands, permissions, GUI warps, donation ranks and killer money.
+description: Essentials-style core for APPLECUBE - commands, permissions, GUI warps and killer money.
 softdepend:
   - Vault
   - PlaceholderAPI
@@ -140,6 +140,10 @@ permissions:
   applecore.homes.unlimited:
     description: No home limit (essentials.sethome.multiple.unlimited)
     default: op
+  # Home limits are LuckPerms nodes applecore.homes.limit.<n> (highest wins); everyone starts with one home.
+  applecore.homes.limit.1:
+    description: One home (default for everyone; raise with applecore.homes.limit.<n>, negate for none)
+    default: true
 
   # ─── Spawn ───────────────────────────────────────────────────────────────────
   applecore.spawn:
@@ -289,13 +293,9 @@ permissions:
   applecore.warpdesc.others: {description: /warpdesc other players' warps, default: op}
   applecore.warpdesc.color: {description: Colours and formatting in /warpdesc, default: op}
   applecore.serverwarp: {description: /serverwarp and editing server warps (essentials.setwarp), default: op}
-  applecore.playerwarps.unlimited: {description: No player warp limit (limits - applecore.playerwarps.limit.<n>), default: op}
+  applecore.playerwarps.unlimited: {description: No player warp limit (limits - LuckPerms nodes applecore.playerwarps.limit.<n>; none means no player warps), default: op}
 
-  # ─── Ranks and KillerMoney ───────────────────────────────────────────────────
-  # applecore.rank.<id> (one per rank in ranks.yml) are registered at runtime with the rank preset as children;
-  # members of the LuckPerms group from ranks.yml get the preset without them.
-  applecore.ranks: {description: /ranks - rank list and own rank info, default: true}
-  applecore.ranks.others: {description: /ranks info player, default: op}
-  applecore.ranks.manage: {description: /ranks give|take - for donation shops (runs ranks.yml commands), default: op}
+  # ─── KillerMoney ─────────────────────────────────────────────────────────────
+  # Multiplier: LuckPerms node applecore.killermoney.multiplier.<x> on the donation groups (highest wins).
   applecore.killermoney: {description: /killermoney - own multiplier and rewards, default: true}
   applecore.killermoney.others: {description: /killermoney player, default: op}

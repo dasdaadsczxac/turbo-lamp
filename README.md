@@ -18,17 +18,16 @@ Essentials-style core plugin for the **APPLECUBE** Minecraft server.
   Table: [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
   The command set follows TrustEssentials and EssentialsX (names and aliases), minus `/ec` and kits, which
   belong to AppleEnderChest and AppleKits.
-- **GUI warps**: two tabs, server warps (set by staff) and player warps (created by players, limited per rank),
-  drawn with the APPLECUBE "bordo" resource pack. Icons can be ItemsAdder, Nexo, Oraxen, CraftEngine or
+- **GUI warps**: two tabs, server warps (set by staff) and player warps (created by players, limited by LuckPerms
+  permissions), drawn with the APPLECUBE "bordo" resource pack. Icons can be ItemsAdder, Nexo, Oraxen, CraftEngine or
   HeadDatabase items, vanilla items, `item_model` components or textured heads.
-- **Donation ranks** (`ranks.yml`, from the server's donate menu): guard → caesar (+ the seasonal pumpkin) as
-  permission presets with home / warp limits and a KillerMoney multiplier. A donation shop only has to put the player
-  into the LuckPerms group (or run `/ranks give <player> <rank> [time]`). Players without access see which rank
-  unlocks a command.
+- **Limits only from LuckPerms**: home and warp limits, the KillerMoney multiplier and the teleport warm-up are numeric
+  permission nodes on the donation groups (`applecore.homes.limit.20`, `applecore.playerwarps.limit.10`,
+  `applecore.killermoney.multiplier.1.5` …), highest wins. AppleCore has no rank system and no limit tables.
 - **KillerMoney** (`killermoney.yml`): money for killing mobs and a share of the victim's balance for PvP kills, with
-  anti-farm limits and a multiplier per donation rank (`killermoney: x1.5`).
-- **PlaceholderAPI**: `%applecore_rank%`, `%applecore_rank_display%`, `%applecore_killermoney_x%`,
-  `%applecore_homes_limit%`, `%applecore_warps_limit%`, `%applecore_balance%` …
+  anti-farm limits and a multiplier per LuckPerms group.
+- **PlaceholderAPI**: `%applecore_killermoney_x%`, `%applecore_homes_limit%`, `%applecore_warps%`,
+  `%applecore_warps_limit%`, `%applecore_balance%` …
 - **Russian only**: every text lives in one editable file, `messages.yml` (MiniMessage and `&` codes).
   There is no language switching.
 - **Resource-pack aware**: with the pack, menus use glyph backgrounds, `item_model` buttons, pack sounds,
@@ -55,6 +54,6 @@ Essentials-style core plugin for the **APPLECUBE** Minecraft server.
 mvn package            # compile, run unit tests, build the jar
 ```
 
-Tests check the text pipeline, duration parsing, the EssentialsX and TrustEssentials permission mappings, rank and
-KillerMoney parsing, that every message key used in code exists in `messages.yml`, and that every permission checked
-in code is declared in `plugin.yml`.
+Tests check the text pipeline, duration parsing, the EssentialsX and TrustEssentials permission mappings, KillerMoney
+parsing, that every message key used in code exists in `messages.yml`, and that every permission checked in code is
+declared in `plugin.yml`.

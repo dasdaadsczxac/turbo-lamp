@@ -15,7 +15,6 @@ import fun.applecube.core.module.homes.HomesModule;
 import fun.applecube.core.module.spawn.SpawnModule;
 import fun.applecube.core.module.teleport.TeleportModule;
 import fun.applecube.core.module.warps.WarpsModule;
-import fun.applecube.core.module.ranks.RanksModule;
 import fun.applecube.core.module.killermoney.KillerMoneyModule;
 import fun.applecube.core.hook.PapiExpansion;
 import fun.applecube.core.pack.PackStyle;
@@ -105,7 +104,6 @@ public final class AppleCorePlugin extends JavaPlugin {
         list.add(new WorldModule(this));
         list.add(new EconomyModule(this));
         list.add(new WarpsModule(this));
-        list.add(new RanksModule(this));
         list.add(new KillerMoneyModule(this));
         return list;
     }

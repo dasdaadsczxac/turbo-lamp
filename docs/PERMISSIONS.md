@@ -1,6 +1,6 @@
 # AppleCore permissions
 
-Every check accepts **three node sets** plus the player's donation rank:
+Every check accepts **three node sets**:
 
 1. **AppleCore**: `applecore.<command>`, `applecore.<command>.others`, …
 2. **EssentialsX**: the exact node EssentialsX checks for the same thing. A LuckPerms setup made for
@@ -8,16 +8,36 @@ Every check accepts **three node sets** plus the player's donation rank:
 3. **TrustEssentials** (the plugin APPLECUBE ran before): `trustessentials.<command>` with its own names
    (`createhome`, `createwarp`, `carttable` …) and `.other`. Table at the end of this file
    (`permissions.trustessentials-compat: true`).
-4. **Rank presets** (`ranks.yml`): members of a rank's LuckPerms group (or holders of `applecore.rank.<id>`) get every
-   node of the preset, including inherited ranks, and its home / warp limits and KillerMoney multiplier.
 
 Any of them grants access; an AppleCore node explicitly set to `false` in LuckPerms always denies. The mappings live in
 `EssentialsPermissions` and `TrustEssentialsPermissions` and are unit-tested. EssentialsX's own rule is
 `essentials.<command>` (with `/r` → `essentials.msg`), so most rows are a prefix swap; the exceptions are marked
 **bold**. Nodes marked "—" are AppleCore-only; EssentialsX / TrustEssentials wildcards never grant them.
 
-Defaults (`plugin.yml`): player basics are `true`, everything else `op`. Donation commands are unlocked by the rank
-presets; groups that already have the EssentialsX or TrustEssentials nodes need nothing extra.
+Defaults (`plugin.yml`): player basics are `true`, everything else `op`. AppleCore has no rank system: donation ranks
+are LuckPerms groups that hold these nodes.
+
+## Limits
+
+Limits and multipliers come **only from LuckPerms permissions**; there are no limit tables in AppleCore's configs.
+Numeric nodes are read from the player's own and inherited groups, the highest value wins (the lowest for the
+teleport delay), and `.unlimited` removes the limit.
+
+| Limit | Node | Without a node |
+|---|---|---|
+| Homes | `applecore.homes.limit.<n>`, `applecore.homes.unlimited` (**`essentials.sethome.multiple.unlimited`**) | 1: `applecore.homes.limit.1` is `default: true` in `plugin.yml`; negate it for none |
+| Player warps | `applecore.playerwarps.limit.<n>`, `applecore.playerwarps.unlimited` | 0: no own warps |
+| KillerMoney multiplier | `applecore.killermoney.multiplier.<x>` (`1.5`, `x1.5`, `1_5`, `2`) | x1, then times `global-multiplier` |
+| Teleport warm-up, seconds | `applecore.teleport.delay.<n>` (lowest wins) | `teleport.delay` in `config.yml` |
+
+Example for the APPLECUBE groups (each inherits the previous one, so only the increase is needed):
+
+```
+lp group prince permission set applecore.playerwarps.limit.10
+lp group king permission set applecore.homes.limit.20
+lp group king permission set applecore.playerwarps.limit.15
+lp group king permission set applecore.killermoney.multiplier.1.5
+```
 
 ## General
 
@@ -70,11 +90,12 @@ presets; groups that already have the EssentialsX or TrustEssentials nodes need 
 | `/playerhome` | `applecore.playerhome` | **`essentials.home.others`** |
 | `/sethome` | `applecore.sethome` (+ `.others`) | `essentials.sethome` (+ `.others`) |
 | `/delhome` | `applecore.delhome` (+ `.others`) | `essentials.delhome` (+ `.others`) |
-| Home limit | `applecore.homes.limit.<n>` (highest wins) | `essentials.sethome.multiple` + `.multiple.<set>` (sets in `homes.sethome-multiple`, same as EssentialsX `sethome-multiple`) |
+| Home limit | `applecore.homes.limit.<n>` (highest wins, see [Limits](#limits)) | — |
 | No home limit | `applecore.homes.unlimited` | **`essentials.sethome.multiple.unlimited`** |
 | `/sethome` in a disabled world | `applecore.sethome.bypass-world` | — |
 
-The effective home limit is the larger of the two systems; players with neither get `homes.default-limit`.
+EssentialsX named home sets (`essentials.sethome.multiple.<set>` with numbers in its config) are not read: the limit is
+the number in the AppleCore node.
 
 ## Spawn
 
@@ -159,7 +180,7 @@ The effective home limit is the larger of the two systems; players with neither 
 | One server warp (when `warps.per-warp-permission: true`) | `applecore.warps.<warp>` | `essentials.warps.<warp>` |
 | `/warpinfo` | `applecore.warpinfo` | **`essentials.warp`** |
 | `/setwarp` (own player warps) | `applecore.setwarp` | `essentials.setwarp` |
-| Player warp limit (highest wins, default `warps.player-limit`, rank `warps:`) | `applecore.playerwarps.limit.<n>`, `applecore.playerwarps.unlimited` | — |
+| Player warp limit (highest wins, see [Limits](#limits)) | `applecore.playerwarps.limit.<n>`, `applecore.playerwarps.unlimited` | — |
 | No creation cost / any world | `applecore.setwarp.free`, `applecore.setwarp.bypass-world` | — |
 | `/delwarp` own (+ other players' warps) | `applecore.delwarp` (+ `.others`) | `essentials.delwarp` (+ `.others`) |
 | `/warpicon`, `/warpdesc` own (+ others) | `applecore.warpicon`, `applecore.warpdesc` (+ `.others`) | — |
@@ -169,19 +190,15 @@ The effective home limit is the larger of the two systems; players with neither 
 
 Server warps are staff-only and AppleCore-only: on APPLECUBE `/setwarp` was a donor perk (from Prince), so neither
 `essentials.setwarp` nor `trustessentials.createwarp` / `trustessentials.systemwarp` (which only lists them) grants
-`/serverwarp`. Without a rank a player's warp limit is `warps.player-limit` (0), and `/setwarp` answers with the
-cheapest rank that has warps. A server warp can also require any node: `/serverwarp perm <warp> <node>`.
+`/serverwarp`. A player without `applecore.playerwarps.limit.<n>` cannot create own warps, and `/setwarp` says they
+come with a donation rank. A server warp can also require any node: `/serverwarp perm <warp> <node>`.
 
-## Ranks and KillerMoney
+## KillerMoney
 
 | What | AppleCore | Notes |
 |---|---|---|
-| Hold a rank | `applecore.rank.<id>` or LuckPerms group `group.<group>` | `ranks.yml`; the preset counts in every check |
-| `/ranks`, `/ranks info` | `applecore.ranks` | `true` |
-| `/ranks info <player>` | `applecore.ranks.others` | |
-| `/ranks give\|take` (donation shop) | `applecore.ranks.manage` | runs `give-commands` / `take-commands` |
 | `/killermoney` (+ `.others`) | `applecore.killermoney` | `true` |
-| KillerMoney multiplier without a rank | `applecore.killermoney.multiplier.<x>` (`2`, `1_5`, `x1.5`) | highest of rank / node, times `global-multiplier` |
+| Multiplier | `applecore.killermoney.multiplier.<x>` (`2`, `1.5`, `1_5`, `x1.5`) | highest wins, times `global-multiplier` |
 
 Operators get every EssentialsX node automatically (Bukkit grants undeclared nodes to ops), exactly as with EssentialsX.
 That is why opt-in flags such as `near.exclude` and `invsee.preventmodify` count only when explicitly granted.
@@ -193,7 +210,7 @@ its base node, the row says so: its `/back` always returns to the death point, `
 `/tppos` is the coordinate form of `/tp`, `/playerhome` opens other players' homes. Cooldown bypasses exist only for
 `/day` `/night` (`trustessentials.time.cooldown.bypass`), `/sun` `/rain` `/storm` (`trustessentials.weather.cooldown.bypass`)
 and `/back` (`trustessentials.back.cooldown.bypass`). Home and warp limits were per-group settings in TrustEssentials;
-in AppleCore they are the `homes:` / `warps:` values of `ranks.yml`.
+in AppleCore they are LuckPerms nodes on the groups (see [Limits](#limits)).
 
 | AppleCore | TrustEssentials (any of) |
 |---|---|

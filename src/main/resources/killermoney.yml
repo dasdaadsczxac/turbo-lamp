@@ -2,9 +2,9 @@
 #  AppleCore — KillerMoney: деньги за убийство мобов и игроков (нужен Vault)
 #  /applecore reload применяет изменения.
 #
-#  Множитель игрока = наибольший из: killermoney у его привилегий (ranks.yml, например x1.5)
-#  и права applecore.killermoney.multiplier.<x> (например applecore.killermoney.multiplier.2 или .1_5),
-#  затем умножается на global-multiplier. Узнать свой множитель: /killermoney
+#  Множитель игрока задаётся правом LuckPerms applecore.killermoney.multiplier.<x> (берётся наибольший),
+#  например: lp group king permission set applecore.killermoney.multiplier.1.5
+#  (можно и .2, .x2, .1_5). Без права — x1. Затем умножается на global-multiplier. Свой множитель: /killermoney
 # ═══════════════════════════════════════════════════════════════════════════════
 
 enabled: true

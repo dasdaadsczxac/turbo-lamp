@@ -4,7 +4,6 @@ import fun.applecube.core.AppleCorePlugin;
 import fun.applecube.core.config.ConfigFile;
 import fun.applecube.core.hook.EconomyService;
 import fun.applecube.core.module.Module;
-import fun.applecube.core.module.ranks.RanksModule;
 import fun.applecube.core.text.Ph;
 import fun.applecube.core.util.Durations;
 import net.kyori.adventure.text.Component;
@@ -35,8 +34,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * KillerMoney (stage 5): money for killing mobs (ranges per type, anti-farm limits) and a share of the victim's
- * balance for PvP kills. Rewards are multiplied by the player's donation rank (ranks.yml killermoney: x1.5) or
- * applecore.killermoney.multiplier.<x>, and by global-multiplier.
+ * balance for PvP kills. Rewards are multiplied by the LuckPerms permission applecore.killermoney.multiplier.<x>
+ * (set on the donation groups) and by global-multiplier.
  */
 public final class KillerMoneyModule extends Module implements Listener {
 
@@ -96,12 +95,27 @@ public final class KillerMoneyModule extends Module implements Listener {
         return cfg;
     }
 
-    /** Rank multiplier or applecore.killermoney.multiplier.<x> (the larger), times global-multiplier. */
+    /** The highest applecore.killermoney.multiplier.<x> (1 without one), times global-multiplier. */
     public double multiplier(Player player) {
-        RanksModule ranks = plugin.module(RanksModule.class);
-        double rank = ranks == null ? 1 : ranks.killerMoney(player);
-        double perm = plugin.permissions().highestDecimal(player, "applecore.killermoney.multiplier.", 1);
-        return Math.max(rank, perm) * RanksModule.parseMultiplier(cfg.getString("global-multiplier", "1"));
+        return plugin.permissions().highestDecimal(player, "applecore.killermoney.multiplier.", 1)
+                * parseMultiplier(cfg.getString("global-multiplier", "1"));
+    }
+
+    /** "x1.5", "1.5", "x2" → 1.5 / 2; anything else → 1. */
+    static double parseMultiplier(@Nullable String raw) {
+        if (raw == null) {
+            return 1;
+        }
+        String s = raw.trim().toLowerCase(Locale.ROOT).replace(',', '.');
+        if (s.startsWith("x") || s.startsWith("х")) {
+            s = s.substring(1);
+        }
+        try {
+            double value = Double.parseDouble(s);
+            return value > 0 && Double.isFinite(value) ? value : 1;
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 
     private boolean worldAllowed(LivingEntity entity) {

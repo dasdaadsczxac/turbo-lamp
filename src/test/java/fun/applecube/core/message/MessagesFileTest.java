@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class MessagesFileTest {
 
     private static final Pattern KEY_LITERAL = Pattern.compile(
-            "\"((?:errors|teleport|common|time|prefix|icons|resource-pack|commands|menus|warps|homes|ranks|killermoney|"
+            "\"((?:errors|teleport|common|time|prefix|icons|resource-pack|commands|menus|warps|homes|killermoney|"
                     + "economy|chat|spawn|vanish|tpa)\\.[a-z0-9.\\-]+[a-z0-9])\"");
 
     private static YamlConfiguration resource(String path) throws IOException {
@@ -61,7 +61,7 @@ class MessagesFileTest {
     void keysUsedInCodeExist() throws IOException {
         YamlConfiguration messages = resource("/messages.yml");
         YamlConfiguration[] configs = {
-                resource("/config.yml"), resource("/warps.yml"), resource("/ranks.yml"),
+                resource("/config.yml"), resource("/warps.yml"),
                 resource("/killermoney.yml"), resource("/menus/warps.yml")};
         Set<String> missing = new TreeSet<>();
         try (Stream<Path> files = Files.walk(Path.of("src/main/java"))) {

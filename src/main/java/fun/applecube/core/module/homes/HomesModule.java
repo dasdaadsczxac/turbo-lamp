@@ -4,7 +4,7 @@ import fun.applecube.core.AppleCorePlugin;
 import fun.applecube.core.command.AbstractCommand;
 import fun.applecube.core.module.Module;
 
-/** Homes (stage 2). Limits: applecore.homes.limit.<n> or EssentialsX sethome-multiple sets. */
+/** Homes (stage 2). Limit: LuckPerms nodes applecore.homes.limit.<n> (highest wins) or applecore.homes.unlimited. */
 public final class HomesModule extends Module {
 
     public HomesModule(AppleCorePlugin plugin) {

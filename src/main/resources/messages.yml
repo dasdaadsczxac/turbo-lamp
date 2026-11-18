@@ -42,7 +42,6 @@ time:
 
 errors:
   no-permission: "<prefix:error><text>Недостаточно прав для этой команды."
-  no-permission-rank: "<prefix:error><text>Доступно с привилегии <rank><text>. Купить: <click:open_url:'https://applecube.fun'><hover:show_text:'<text>Открыть сайт'><accent><u>applecube.fun</u></accent></hover></click>"
   players-only: "<prefix:error><text>Команда доступна только игрокам."
   player-not-found: "<prefix:error><text>Игрок <accent><player></accent> не в сети."
   player-never-joined: "<prefix:error><text>Игрок <accent><player></accent> ни разу не заходил на сервер."
@@ -99,6 +98,7 @@ warps:
   world-disabled: "<prefix:error><text>В этом мире нельзя ставить варпы."
   name-taken: "<prefix:error><text>Название <accent><warp></accent> уже занято."
   limit: "<prefix:error><text>Достигнут лимит варпов: <accent><limit></accent>. Удалите старый (<accent>/delwarp</accent>) или получите привилегию выше."
+  no-warps: "<prefix:error><text>Свои варпы доступны с привилегией. Купить: <click:open_url:'https://applecube.fun'><hover:show_text:'<text>Открыть сайт'><accent><u>applecube.fun</u></accent></hover></click>"
   created:
     - "<prefix:ok><text>Варп <accent><warp></accent> создан <muted>(<count>/<limit>)</muted>."
     - "<icon:dot> <text>Иконка: <accent>/warpicon <warp></accent> <muted>(предмет в руке или выбор из меню)"
@@ -303,27 +303,6 @@ menus:
         - "<text>из ItemsAdder, Nexo или Oraxen,"
         - "<text>может стать иконкой варпа."
 
-# ─── Донатные привилегии (/ranks) ──────────────────────────────────────────────
-# <rank> — значок привилегии (с ресурспаком) или её цветное название.
-ranks:
-  list-header: "<icon:bar> <accent><menu-font>Привилегии</menu-font></accent> <muted>· applecube.fun"
-  list-entry: " <icon:dot> <rank> <muted>— <text><price> ₽</text> · дома <highlight><homes></highlight> · варпы <highlight><warps></highlight> · KillerMoney <highlight>x<multiplier></highlight>"
-  list-entry-held: " <good>✔</good> <rank> <muted>— <text><price> ₽</text> · дома <highlight><homes></highlight> · варпы <highlight><warps></highlight> · KillerMoney <highlight>x<multiplier></highlight> <good>(у вас)</good>"
-  list-footer: "<prefix:info><text>Купить: <click:open_url:'https://applecube.fun'><hover:show_text:'<text>Открыть сайт'><accent><u>applecube.fun</u></accent></hover></click>"
-  info:
-    - "<icon:bar> <accent><player></accent>"
-    - " <icon:dot> <text>Привилегия: <rank>"
-    - " <icon:dot> <text>Точек дома: <highlight><homes></highlight>, варпов: <highlight><warps>"
-    - " <icon:dot> <text>Множитель KillerMoney: <highlight>x<multiplier>"
-  none: "<muted>нет"
-  unknown: "<prefix:error><text>Привилегия <accent><rank></accent> не найдена. Список: <accent>/ranks"
-  bad-time: "<prefix:error><text>Срок <accent><time></accent> не подходит. Пример: <accent>30d</accent>, <accent>12h</accent>, <accent>1mo</accent>."
-  given: "<prefix:ok><text>Игроку <accent><player></accent> выдана привилегия <rank><text>."
-  taken: "<prefix:ok><text>У игрока <accent><player></accent> снята привилегия <rank><text>."
-  announce: "<prefix:ok><accent><player></accent> <text>приобрёл привилегию <rank><text>! Спасибо за поддержку сервера"
-  title: "<rank>"
-  subtitle: "<text>Привилегия активирована"
-
 # ─── KillerMoney ───────────────────────────────────────────────────────────────
 killermoney:
   # Награда за моба (actionbar или чат — notify в killermoney.yml). <multiplier> — строка ниже, если множитель больше 1.
@@ -334,7 +313,7 @@ killermoney:
   pvp-cooldown: "<prefix:info><text>За повторное убийство <accent><player></accent> деньги будут через <accent><time></accent>."
   info:
     - "<icon:bar> <accent>KillerMoney</accent> <muted>· <player>"
-    - " <icon:dot> <text>Ваш множитель: <highlight>x<multiplier></highlight> <muted>(выше с привилегией: /ranks)"
+    - " <icon:dot> <text>Ваш множитель: <highlight>x<multiplier></highlight> <muted>(у привилегий выше)"
     - " <icon:dot> <text>За убийство игрока: <highlight><percent>%</highlight> <text>его баланса"
     - " <icon:dot> <text>Награды за мобов:"
   info-mob: "   <muted>·</muted> <text><mob></text> <muted>—</muted> <highlight><amount>"
@@ -857,15 +836,7 @@ commands:
       - " <accent>/serverwarp perm <варп> [право|none]</accent> <muted>— доступ по праву"
       - " <accent>/serverwarp list</accent> <muted>— список"
 
-  # ─── Привилегии и KillerMoney ────────────────────────────────────────────────
-  ranks:
-    description: "Донатные привилегии: список, информация, выдача"
-    usage:
-      - "<prefix:info><text>Привилегии:"
-      - " <accent>/ranks</accent> <muted>— список и цены"
-      - " <accent>/ranks info [игрок]</accent> <muted>— привилегия, лимиты и множитель"
-      - " <accent>/ranks give <игрок> <привилегия> [срок]</accent> <muted>— выдать (для донат-магазина)"
-      - " <accent>/ranks take <игрок> <привилегия></accent> <muted>— снять"
+  # ─── KillerMoney ─────────────────────────────────────────────────────────────
   killermoney:
     description: "Множитель и награды KillerMoney"
     usage: "<prefix:info><text>Использование: <accent>/killermoney [игрок]</accent>"

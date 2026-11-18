@@ -50,7 +50,6 @@ class EssentialsPermissionsTest {
         assertNull(EssentialsPermissions.map("applecore.warpicon"));
         // Server warps are staff-only; on APPLECUBE essentials.setwarp is a donor perk, so it must not grant them.
         assertNull(EssentialsPermissions.map("applecore.serverwarp"));
-        assertNull(EssentialsPermissions.map("applecore.ranks.manage"));
         assertNull(EssentialsPermissions.map("essentials.fly"));
     }
 }

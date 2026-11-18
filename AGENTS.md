@@ -11,15 +11,19 @@ Read this before changing code. It is written for any developer or AI model that
 - **Russian only, no localization system.** Every player-facing string lives in `src/main/resources/messages.yml`
   (one file, Russian). Do not add language files or locale switching. `MessagesFileTest` fails the build if a key
   used in code is missing or a command has no `description`/`usage`. Config comments are Russian too.
-- **Three permission sets plus rank presets.** Check permissions only through
+- **Three permission sets, no rank system.** Check permissions only through
   `plugin.permissions().has(sender, "applecore.x")` (or `ctx.require` / `ctx.hasPermission`); it also accepts the exact
-  EssentialsX node, the TrustEssentials node and the presets of the player's ranks (`ranks.yml`). Name commands after
-  their EssentialsX counterpart when one exists, so `applecore.<cmd>` maps to `essentials.<cmd>` automatically; add
-  exceptions to `EssentialsPermissions` (+ `EssentialsPermissionsTest`) and AppleCore-only features to its
-  `APPLECORE_ONLY` set. TrustEssentials nodes are an explicit table in `TrustEssentialsPermissions` (taken from its
-  executors; add a row only with evidence). Numeric limits go through `highest()` / `lowest()` so rank `homes:` /
-  `warps:` count. Never let a donor-level node grant a staff feature. Declare new AppleCore nodes in `plugin.yml` and
-  list the equivalents in `docs/PERMISSIONS.md`; donation commands go into the rank presets in `ranks.yml`.
+  EssentialsX node and the TrustEssentials node. Name commands after their EssentialsX counterpart when one exists, so
+  `applecore.<cmd>` maps to `essentials.<cmd>` automatically; add exceptions to `EssentialsPermissions`
+  (+ `EssentialsPermissionsTest`) and AppleCore-only features to its `APPLECORE_ONLY` set. TrustEssentials nodes are an
+  explicit table in `TrustEssentialsPermissions` (taken from its executors; add a row only with evidence). Never let a
+  donor-level node grant a staff feature. Declare new AppleCore nodes in `plugin.yml` and list the equivalents in
+  `docs/PERMISSIONS.md`.
+- **Limits only from LuckPerms permissions** (owner's decision). Donation ranks are LuckPerms groups. Per-player
+  numbers are numeric nodes read with `highest()` / `lowest()` / `highestDecimal()` (`applecore.homes.limit.<n>`,
+  `applecore.playerwarps.limit.<n>`, `applecore.killermoney.multiplier.<x>`); a default for everyone is a
+  `default: true` node in `plugin.yml` (`applecore.homes.limit.1`). Do not add limit tables, rank presets or group maps
+  to the configs.
 - **Config defaults:** `getConfig().getInt("path", def)` returns `def`, not the bundled value, when an older
   `config.yml` lacks the key, so `def` must equal the value in the bundled `config.yml`.
 - Do not commit third-party jars (TrustEssentials) or the resource-pack archive. The pack is installed on the
@@ -40,7 +44,7 @@ fun.applecube.core
 │                        item/ (ItemsAdder, Nexo, Oraxen, CraftEngine, HDB)
 ├── item/                ItemSpec (config format), ItemFactory (spec → ItemStack), ItemBuilder
 ├── gui/                 Menu, MenuListener, Click
-├── permission/          PermissionService (all node sets, ranks, limits, rank hint), EssentialsPermissions,
+├── permission/          PermissionService (all node sets, numeric limits), EssentialsPermissions,
 │                        TrustEssentialsPermissions (mappings)
 ├── teleport/            TeleportService (warm-up, safety, /back), SafeLocation
 ├── user/                User (JSON model), UserManager (load/save lifecycle)
@@ -58,8 +62,8 @@ fun.applecube.core
    `.others`. Throw `ctx.usage()` or `new CommandException("key", Ph.of(...))` for errors.
 3. Register it in the module's `enable()` with `command(new XCommand(plugin))`.
 4. Add `commands.name.description`, `commands.name.usage` and the messages to `messages.yml` (Russian).
-5. Add the permission to `plugin.yml` and `docs/PERMISSIONS.md` (with its EssentialsX node) and, if it is a
-   donation perk, to the rank presets (stage 5).
+5. Add the permission to `plugin.yml` and `docs/PERMISSIONS.md` (with its EssentialsX node). Donation perks default to
+   `op`; the server owner grants them to the LuckPerms donation groups.
 6. Optionally list it in `commands.yml` (aliases/cooldown).
 
 ## Messages

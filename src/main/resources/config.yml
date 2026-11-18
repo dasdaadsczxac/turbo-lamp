@@ -13,7 +13,6 @@ modules:
   world: true
   economy: true
   warps: true
-  ranks: true
   killermoney: true
 
 permissions:
@@ -26,10 +25,8 @@ permissions:
 
 commands:
   # Скрывать команды без прав из подсказок (и отвечать «неизвестная команда»).
-  # На донат-сервере лучше false: игрок увидит, какая привилегия открывает команду.
+  # На донат-сервере лучше false: игрок видит донатные команды и сообщение о нехватке прав.
   hide-unpermitted: false
-  # При нехватке прав называть самую дешёвую привилегию, которая их даёт (ranks.yml, этап 5).
-  no-permission-rank-hint: true
 
 # ─── Ресурспак APPLECUBE «bordo» (через ItemsAdder) ─────────────────────────────
 resource-pack:
@@ -114,16 +111,12 @@ teleport:
 
 # ─── Дома ──────────────────────────────────────────────────────────────────────
 homes:
-  # Лимит без прав на лимит. Больше — applecore.homes.limit.<n> или applecore.homes.unlimited.
-  default-limit: 1
+  # Лимит домов задаётся только правами LuckPerms (берётся наибольший):
+  #   applecore.homes.limit.<n>  — например lp group king permission set applecore.homes.limit.20
+  #   applecore.homes.unlimited  — без ограничений (в EssentialsX: essentials.sethome.multiple.unlimited)
+  # Всем игрокам по умолчанию выдано applecore.homes.limit.1 (один дом); запретить: … applecore.homes.limit.1 false
   # Название для /sethome без аргумента.
   default-name: home
-  # Наборы как sethome-multiple в EssentialsX: essentials.sethome.multiple даёт «default»,
-  # essentials.sethome.multiple.<набор> — значение набора. Выбирается наибольший лимит.
-  sethome-multiple:
-    default: 3
-    vip: 5
-    staff: 10
   # Миры, где нельзя ставить дом (обход: applecore.sethome.bypass-world).
   disabled-worlds: []
 
@@ -213,10 +206,9 @@ economy:
 warps:
   # Какая вкладка открывается по /warp: server или players (/playerwarps всегда открывает варпы игроков).
   default-tab: server
-  # Сколько варпов может создать игрок без привилегии (на APPLECUBE варпы — с «Принца», лимиты в ranks.yml).
-  # Больше — applecore.playerwarps.limit.<n>
-  # (берётся наибольшее), без ограничений — applecore.playerwarps.unlimited. 0 — только с привилегией.
-  player-limit: 0
+  # Лимит варпов игрока — только права LuckPerms (берётся наибольший): applecore.playerwarps.limit.<n>,
+  # без ограничений — applecore.playerwarps.unlimited. Без этих прав свой варп создать нельзя
+  # (на APPLECUBE — с «Принца»: lp group prince permission set applecore.playerwarps.limit.10).
   # Цена создания варпа игрока (нужен Vault). 0 — бесплатно. Без оплаты: applecore.setwarp.free
   creation-cost: 0
   # Миры, где игроки не могут ставить варпы. Обход: applecore.setwarp.bypass-world

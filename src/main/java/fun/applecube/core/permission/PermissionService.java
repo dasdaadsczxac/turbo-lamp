@@ -2,21 +2,16 @@ package fun.applecube.core.permission;
 
 import fun.applecube.core.AppleCorePlugin;
 import fun.applecube.core.text.Ph;
-import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Permission checks for AppleCore. Every check accepts several node sets:
@@ -25,20 +20,18 @@ import java.util.function.Function;
  *     {@code applecore.homes.limit.5} (highest wins) or {@code applecore.teleport.delay.1} (lowest wins);</li>
  *     <li>the exact EssentialsX nodes ({@link EssentialsPermissions}) and TrustEssentials nodes
  *     ({@link TrustEssentialsPermissions}), so a LuckPerms setup made for either keeps working
- *     ({@code permissions.essentials-compat} / {@code permissions.trustessentials-compat} in config.yml);</li>
- *     <li>the presets of the player's donation ranks (ranks.yml), including their limits.</li>
+ *     ({@code permissions.essentials-compat} / {@code permissions.trustessentials-compat} in config.yml).</li>
  * </ul>
+ * Donation ranks are LuckPerms groups holding these nodes. Limits and multipliers come only from permissions;
+ * AppleCore has no rank system and no limit tables of its own.
  */
 public final class PermissionService {
 
     public static final int UNLIMITED = Integer.MAX_VALUE;
 
     private final AppleCorePlugin plugin;
-    private final Map<String, Integer> sethomeMultiple = new LinkedHashMap<>();
     private boolean essentialsCompat = true;
     private boolean trustEssentialsCompat = true;
-    private @Nullable BiFunction<CommandSender, String, Component> rankHint;
-    private @Nullable Function<Player, Set<String>> rankNodes;
 
     public PermissionService(AppleCorePlugin plugin) {
         this.plugin = plugin;
@@ -47,18 +40,11 @@ public final class PermissionService {
     public void reload() {
         essentialsCompat = plugin.getConfig().getBoolean("permissions.essentials-compat", true);
         trustEssentialsCompat = plugin.getConfig().getBoolean("permissions.trustessentials-compat", true);
-        sethomeMultiple.clear();
-        ConfigurationSection sets = plugin.getConfig().getConfigurationSection("homes.sethome-multiple");
-        if (sets != null) {
-            for (String set : sets.getKeys(false)) {
-                sethomeMultiple.put(set, sets.getInt(set));
-            }
-        }
     }
 
     /**
-     * True when the AppleCore node, its EssentialsX or TrustEssentials equivalent, or the player's donation rank
-     * grants it. An AppleCore node explicitly set to false (e.g. negated in LuckPerms) always denies.
+     * True when the AppleCore node or its EssentialsX or TrustEssentials equivalent is granted. An AppleCore node
+     * explicitly set to false (e.g. negated in LuckPerms) always denies.
      */
     public boolean has(Permissible who, String node) {
         if (who.hasPermission(node)) {
@@ -80,33 +66,7 @@ public final class PermissionService {
                 }
             }
         }
-        return grantedByRank(who, node);
-    }
-
-    private boolean grantedByRank(Permissible who, String node) {
-        Set<String> nodes = rankNodes(who);
-        if (nodes.isEmpty()) {
-            return false;
-        }
-        if (nodes.contains(node)) {
-            return true;
-        }
-        for (int dot = node.lastIndexOf('.'); dot > 0; dot = node.lastIndexOf('.', dot - 1)) {
-            if (nodes.contains(node.substring(0, dot) + ".*")) {
-                return true;
-            }
-        }
         return false;
-    }
-
-    /** Nodes granted by the player's donation ranks (ranks.yml); empty without the ranks module. */
-    public Set<String> rankNodes(Permissible who) {
-        return rankNodes != null && who instanceof Player player ? rankNodes.apply(player) : Set.of();
-    }
-
-    /** The ranks module registers the presets of the player's ranks. */
-    public void rankProvider(@Nullable Function<Player, Set<String>> provider) {
-        this.rankNodes = provider;
     }
 
     public boolean essentialsCompat() {
@@ -135,17 +95,21 @@ public final class PermissionService {
         return false;
     }
 
-    /** Tails of the granted nodes starting with {@code prefix}: effective permissions plus the rank presets. */
-    private List<String> tails(Permissible who, String prefix) {
-        List<String> out = new ArrayList<>();
+    /**
+     * Tails of the granted nodes starting with {@code prefix}: the player's own and inherited LuckPerms nodes, plus
+     * nodes declared in plugin.yml with a default, which LuckPerms grants through hasPermission only.
+     */
+    private Set<String> tails(Permissible who, String prefix) {
+        Set<String> out = new HashSet<>();
         for (PermissionAttachmentInfo info : who.getEffectivePermissions()) {
             if (info.getValue() && info.getPermission().startsWith(prefix)) {
                 out.add(info.getPermission().substring(prefix.length()));
             }
         }
-        for (String node : rankNodes(who)) {
-            if (node.startsWith(prefix)) {
-                out.add(node.substring(prefix.length()));
+        for (Permission declared : Bukkit.getPluginManager().getPermissions()) {
+            String name = declared.getName();
+            if (name.startsWith(prefix) && who.hasPermission(name)) {
+                out.add(name.substring(prefix.length()));
             }
         }
         return out;
@@ -201,28 +165,15 @@ public final class PermissionService {
     }
 
     /**
-     * Home limit: {@code applecore.homes.limit.<n>} / {@code applecore.homes.unlimited}, or EssentialsX's
-     * {@code essentials.sethome.multiple[.<set>]} with the sets from {@code homes.sethome-multiple}
-     * (same meaning as {@code sethome-multiple} in the EssentialsX config). The larger value wins.
+     * Home limit, only from permissions: the highest {@code applecore.homes.limit.<n>}, or
+     * {@code applecore.homes.unlimited} (EssentialsX {@code essentials.sethome.multiple.unlimited}); 0 without them.
+     * plugin.yml gives everyone {@code applecore.homes.limit.1}; LuckPerms groups raise it or negate it.
      */
     public int homeLimit(Player player) {
         if (has(player, "applecore.homes.unlimited")) {
             return UNLIMITED;
         }
-        int limit = highest(player, "applecore.homes.limit.", plugin.getConfig().getInt("homes.default-limit", 1));
-        if (essentialsCompat) {
-            int essentials = 0;
-            if (player.hasPermission("essentials.sethome.multiple")) {
-                essentials = sethomeMultiple.getOrDefault("default", 1);
-            }
-            for (Map.Entry<String, Integer> set : sethomeMultiple.entrySet()) {
-                if (player.hasPermission("essentials.sethome.multiple." + set.getKey())) {
-                    essentials = Math.max(essentials, set.getValue());
-                }
-            }
-            limit = Math.max(limit, essentials);
-        }
-        return limit;
+        return highest(player, "applecore.homes.limit.", 0);
     }
 
     private static @Nullable Integer parse(String raw) {
@@ -233,22 +184,8 @@ public final class PermissionService {
         }
     }
 
-    /** Ranks module registers a provider: (viewer, permission) → the cheapest rank that grants it, or null. */
-    public void rankHint(@Nullable BiFunction<CommandSender, String, Component> provider) {
-        this.rankHint = provider;
-    }
-
-    /** Tells the sender they lack a permission; mentions the donation rank that unlocks it if known. */
+    /** Tells the sender they lack a permission. */
     public void denied(CommandSender sender, String permission) {
-        if (rankHint != null && sender instanceof Player player
-                && plugin.getConfig().getBoolean("commands.no-permission-rank-hint", true)) {
-            Component rank = rankHint.apply(sender, permission);
-            if (rank != null) {
-                plugin.messages().send(sender, "errors.no-permission-rank", Ph.of("rank", rank), Ph.of("permission", permission));
-                plugin.pack().play(player, "error");
-                return;
-            }
-        }
         plugin.messages().send(sender, "errors.no-permission", Ph.of("permission", permission));
         if (sender instanceof Player player) {
             plugin.pack().play(player, "error");

@@ -145,8 +145,7 @@ final class WarpCommands {
             }
             int limit = module.limit(self);
             if (limit <= 0) {
-                // No player warps without a rank: the denial names the cheapest rank with applecore.setwarp.
-                throw CommandException.noPermission("applecore.setwarp");
+                throw new CommandException("warps.no-warps");
             }
             long owned = module.store().countOwned(self.getUniqueId());
             if (owned >= limit) {

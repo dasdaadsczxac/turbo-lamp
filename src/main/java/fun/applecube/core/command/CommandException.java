@@ -23,7 +23,7 @@ public final class CommandException extends Exception {
         this.placeholders = placeholders;
     }
 
-    /** Missing permission; rendered through the permission service (with the donation-rank hint). */
+    /** Missing permission; rendered through the permission service. */
     public static CommandException noPermission(String permission) {
         return new CommandException("errors.no-permission", permission);
     }

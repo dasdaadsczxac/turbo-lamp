@@ -36,7 +36,7 @@ public final class EssentialsPermissions {
 
     /** AppleCore-only features; EssentialsX nodes (and its wildcards) must not grant these. */
     private static final Set<String> APPLECORE_ONLY = Set.of(
-            "rank", "ranks", "group", "killermoney", "playerwarps", "homes", "teleport", "serverwarp", "warpicon", "warpdesc",
+            "rank", "group", "killermoney", "playerwarps", "homes", "teleport", "serverwarp", "warpicon", "warpdesc",
             "world-commands");
 
     private EssentialsPermissions() {
