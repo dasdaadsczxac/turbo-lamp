@@ -29,7 +29,6 @@ class EssentialsPermissionsTest {
         assertEquals("essentials.teleport.timer.bypass", EssentialsPermissions.map("applecore.teleport.bypass-delay"));
         assertEquals("essentials.tpo", EssentialsPermissions.map("applecore.tptoggle.bypass"));
         assertEquals("essentials.sethome.multiple.unlimited", EssentialsPermissions.map("applecore.homes.unlimited"));
-        assertEquals("essentials.setwarp", EssentialsPermissions.map("applecore.serverwarp"));
         assertEquals("essentials.warp", EssentialsPermissions.map("applecore.warpinfo"));
         assertEquals("essentials.warp.others", EssentialsPermissions.map("applecore.warp.others"));
         assertEquals("essentials.delwarp", EssentialsPermissions.map("applecore.delwarp"));
@@ -49,6 +48,9 @@ class EssentialsPermissionsTest {
         assertNull(EssentialsPermissions.map("applecore.killermoney.multiplier"));
         assertNull(EssentialsPermissions.map("applecore.playerwarps.limit.3"));
         assertNull(EssentialsPermissions.map("applecore.warpicon"));
+        // Server warps are staff-only; on APPLECUBE essentials.setwarp is a donor perk, so it must not grant them.
+        assertNull(EssentialsPermissions.map("applecore.serverwarp"));
+        assertNull(EssentialsPermissions.map("applecore.ranks.manage"));
         assertNull(EssentialsPermissions.map("essentials.fly"));
     }
 }
