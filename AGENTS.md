@@ -63,6 +63,13 @@ fun.applecube.core
   `<plain>…</plain>` for content that only makes sense with or without the resource pack.
 - Never name a placeholder `pack` or `plain`, and never use YAML keys `on`, `off`, `yes`, `no` (YAML turns them into booleans).
 
+## Menus
+
+- A menu extends `gui/Menu`; its layout and items live in `src/main/resources/menus/<menu>.yml` (`slots`, `items` in
+  the `ItemSpec` format `item` / `model` / `fallback`), its texts in `messages.yml` under `menus.<menu>.<key>.name|lore`.
+  Follow the pack's slot map and give every pack button a vanilla `fallback`. Example: `module/warps/WarpMenu` with
+  `menus/warps.yml`.
+
 ## Resource pack contract (APPLECUBE bordo v2)
 
 - Chat icons: `\uEBA0` red, `\uEBA1` green, `\uEBA2` yellow, `\uEBA3` blue; always render them white.

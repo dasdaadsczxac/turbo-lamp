@@ -89,6 +89,220 @@ tpa:
   cancelled: "<prefix:ok><text>Отменено запросов: <accent><amount></accent>."
   cancelled-by: "<prefix:info><accent><player></accent> <text>отменил запрос на телепортацию."
 
+# ─── Варпы ─────────────────────────────────────────────────────────────────────
+warps:
+  teleported: "<prefix:ok><text>Вы на варпе <accent><warp></accent>."
+  not-found: "<prefix:error><text>Варп <accent><warp></accent> не найден."
+  no-access: "<prefix:error><text>У вас нет доступа к варпу <accent><warp></accent>."
+  closed: "<prefix:error><text>Владелец закрыл варп <accent><warp></accent>."
+  invalid-name: "<prefix:error><text>Название «<accent><warp></accent>» не подходит: от 2 до 16 букв, цифр, <accent>_</accent> или <accent>-</accent>."
+  world-disabled: "<prefix:error><text>В этом мире нельзя ставить варпы."
+  name-taken: "<prefix:error><text>Название <accent><warp></accent> уже занято."
+  limit: "<prefix:error><text>Достигнут лимит варпов: <accent><limit></accent>. Удалите старый (<accent>/delwarp</accent>) или получите привилегию выше."
+  created:
+    - "<prefix:ok><text>Варп <accent><warp></accent> создан <muted>(<count>/<limit>)</muted>."
+    - "<icon:dot> <text>Иконка: <accent>/warpicon <warp></accent> <muted>(предмет в руке или выбор из меню)"
+    - "<icon:dot> <text>Описание: <accent>/warpdesc <warp> текст</accent>"
+  moved: "<prefix:ok><text>Варп <accent><warp></accent> перенесён сюда."
+  deleted: "<prefix:ok><text>Варп <accent><warp></accent> удалён."
+  delete-confirm: "<prefix:warn><text>Ещё раз Shift + <icon:rmb> <text>в течение 5 секунд — и варп <accent><warp></accent> будет удалён."
+  now-open: "<prefix:ok><text>Варп <accent><warp></accent> открыт для всех."
+  now-closed: "<prefix:info><text>Варп <accent><warp></accent> закрыт: телепортироваться можете только вы."
+  liked: "<prefix:ok><text>Вам нравится варп <accent><warp></accent>."
+  unliked: "<prefix:info><text>Лайк с варпа <accent><warp></accent> убран."
+  icon-set: "<prefix:ok><text>Иконка варпа <accent><warp></accent> обновлена."
+  description-set: "<prefix:ok><text>Описание варпа <accent><warp></accent> обновлено."
+  description-cleared: "<prefix:ok><text>Описание варпа <accent><warp></accent> удалено."
+  description-too-long: "<prefix:error><text>Строка описания длиннее <accent><max></accent> символов."
+  description-too-many-lines: "<prefix:error><text>Не больше <accent><max></accent> строк описания (строки разделяются знаком <accent>|</accent>)."
+  # /warpinfo; строка <description> заменяется описанием варпа.
+  info-server:
+    - "<icon:bar> <accent><warp></accent> <muted>— серверный варп"
+    - "<description>"
+    - "<icon:dot> <text>Место: <highlight><world></highlight> <muted><x>, <y>, <z>"
+  info-player:
+    - "<icon:bar> <accent><warp></accent> <muted>— варп игрока <highlight><owner>"
+    - "<description>"
+    - "<icon:dot> <text>Место: <highlight><world></highlight> <muted><x>, <y>, <z>"
+    - "<icon:dot> <text>Посещений: <highlight><visits></highlight>, лайков: <highlight><likes></highlight>, создан <highlight><date>"
+    - "<icon:dot> <text>Статус: <state>"
+  # /serverwarp
+  server:
+    created: "<prefix:ok><text>Серверный варп <accent><warp></accent> создан. Иконка, название и описание: <accent>/serverwarp icon|title|desc</accent>"
+    moved: "<prefix:ok><text>Серверный варп <accent><warp></accent> перенесён сюда."
+    not-server: "<prefix:error><text>Варп <accent><warp></accent> принадлежит игроку <accent><owner></accent>, это не серверный варп."
+    renamed: "<prefix:ok><text>Варп <accent><old></accent> теперь называется <accent><warp></accent>."
+    title-set: "<prefix:ok><text>Варп <accent><name></accent> в меню: <warp>"
+    order-set: "<prefix:ok><text>Позиция варпа <accent><warp></accent>: <highlight><order></highlight> <muted>(меньше — раньше)"
+    perm-set: "<prefix:ok><text>Варп <accent><warp></accent> доступен только с правом <highlight><permission></highlight>."
+    perm-cleared: "<prefix:ok><text>Варп <accent><warp></accent> доступен всем."
+    unknown-item: "<prefix:error><text>Предмет <accent><item></accent> не найден: опечатка или не установлен плагин предметов."
+    list-header: "<icon:bar> <accent>Серверные варпы</accent> <muted>(<count>)"
+    list-entry: " <icon:dot> <accent><name></accent> <text><warp></text> <muted>#<order> · <world> <x>, <y>, <z> · <permission>"
+    list-empty: "<prefix:info><text>Серверных варпов пока нет: <accent>/serverwarp set <название></accent>"
+
+# ─── Меню ──────────────────────────────────────────────────────────────────────
+# <pack>…</pack> видят игроки с ресурспаком, <plain>…</plain> — без него.
+menus:
+  warps:
+    # С ресурспаком заголовок — картинка фона (\uEB40 сдвигает её к краю окна); цвет обязательно белый.
+    title-server: "<pack><white>\uEB40\uEB98</white></pack><plain>Серверные варпы</plain>"
+    title-players: "<pack><white>\uEB40\uEB99</white></pack><plain>Варпы игроков</plain>"
+    title-mine: "<pack><white>\uEB40\uEB99</white></pack><plain>Мои варпы</plain>"
+    title-icons: "<pack><white>\uEB40\uEB99</white></pack><plain>Иконка варпа</plain>"
+    tab-server:
+      name: "<accent>Серверные варпы"
+      lore:
+        - "<text>Точки, которые поставила администрация"
+        - ""
+        - "<icon:lmb> <text>Открыть"
+    tab-players:
+      name: "<accent>Варпы игроков"
+      lore:
+        - "<text>Точки, которые создали игроки"
+        - ""
+        - "<icon:lmb> <text>Открыть"
+    info-server:
+      name: "<accent>Серверные варпы"
+      lore:
+        - "<text>Точки, которые поставила администрация."
+        - ""
+        - "<icon:lmb> <text>по варпу — телепортироваться"
+        - "<text>Команда: <highlight>/warp название"
+    info-players:
+      name: "<accent>Варпы игроков"
+      lore:
+        - "<text>Точки, которые создали игроки."
+        - ""
+        - "<icon:lmb> <text>— телепортироваться"
+        - "<icon:rmb> <text>— поставить или убрать лайк"
+        - ""
+        - "<text>Свой варп: <highlight>/setwarp название"
+        - "<icon:rmb> <text>— сменить иконку"
+        - "<text>Shift + <icon:lmb> <text>— открыть или закрыть"
+        - "<text>Shift + <icon:rmb> <text>— удалить"
+    info-icons:
+      name: "<accent>Иконка варпа"
+      lore:
+        - "<text>Выберите иконку из списка"
+        - "<text>или возьмите предмет в руку и нажмите"
+        - "<text>на кнопку «Предмет из руки»."
+    server-warp:
+      name: "<accent><warp>"
+      lore:
+        - "<description>"
+        - ""
+        - "<icon:dot> <text>Место: <highlight><world></highlight> <muted><x>, <y>, <z>"
+        - ""
+        - "<icon:lmb> <text>Телепортироваться"
+      # Добавляется к описанию для администрации (/serverwarp).
+      staff-lore:
+        - "<icon:rmb> <text>Сменить иконку"
+        - "<text>Shift + <icon:rmb> <text>Удалить"
+    player-warp:
+      name: "<accent><warp>"
+      lore:
+        - "<text>Владелец: <highlight><owner>"
+        - "<description>"
+        - ""
+        - "<icon:dot> <text>Посещений: <highlight><visits></highlight>  Лайков: <highlight><likes>"
+        - "<icon:dot> <text>Создан: <highlight><date>"
+        - "<icon:dot> <state>"
+        - ""
+        - "<icon:lmb> <text>Телепортироваться"
+        - "<icon:rmb> <text><like-action>"
+    own-warp:
+      name: "<accent><warp> <muted>(ваш)"
+      lore:
+        - "<description>"
+        - ""
+        - "<icon:dot> <text>Посещений: <highlight><visits></highlight>  Лайков: <highlight><likes>"
+        - "<icon:dot> <text>Создан: <highlight><date>"
+        - "<icon:dot> <state>"
+        - ""
+        - "<icon:lmb> <text>Телепортироваться"
+        - "<icon:rmb> <text>Сменить иконку"
+        - "<text>Shift + <icon:lmb> <text>Открыть / закрыть"
+        - "<text>Shift + <icon:rmb> <text>Удалить"
+    state-open: "<good>Открыт для всех"
+    state-closed: "<bad>Закрыт владельцем"
+    like: "Поставить лайк"
+    unlike: "Убрать лайк"
+    empty:
+      name: "<muted>Здесь пока пусто"
+      lore:
+        - "<text>Варпов ещё нет."
+    empty-mine:
+      name: "<muted>У вас нет варпов"
+      lore:
+        - "<text>Встаньте на нужное место"
+        - "<text>и введите <highlight>/setwarp название"
+    back:
+      name: "<accent>Назад"
+      lore:
+        - "<text>В главное меню"
+    back-mine:
+      name: "<accent>Назад"
+      lore:
+        - "<text>К моим варпам"
+    back-server:
+      name: "<accent>Назад"
+      lore:
+        - "<text>К серверным варпам"
+    close:
+      name: "<bad>Закрыть"
+      lore: []
+    previous:
+      name: "<accent>Предыдущая страница"
+      lore: []
+    next:
+      name: "<accent>Следующая страница"
+      lore: []
+    page:
+      name: "<text>Страница <accent><page></accent> из <accent><pages>"
+      lore: []
+    my-warps:
+      name: "<accent>Мои варпы"
+      lore:
+        - "<text>Создано: <highlight><count></highlight> из <highlight><limit>"
+        - ""
+        - "<icon:lmb> <text>Показать только мои"
+    all-warps:
+      name: "<accent>Все варпы игроков"
+      lore:
+        - "<text>Создано вами: <highlight><count></highlight> из <highlight><limit>"
+        - ""
+        - "<icon:lmb> <text>Показать все"
+    create:
+      name: "<good>Создать варп"
+      lore:
+        - "<text>Встаньте на место будущего варпа"
+        - "<text>и введите <highlight>/setwarp название"
+        - ""
+        - "<text>Создано: <highlight><count></highlight> из <highlight><limit>"
+        - ""
+        - "<icon:lmb> <text>Подставить команду в чат"
+    create-hint: "<prefix:info><text>Введите название варпа: <accent>/setwarp название</accent> <muted>(нажмите, чтобы подставить)"
+    icon:
+      name: "<accent>Выбрать эту иконку"
+      lore:
+        - "<icon:lmb> <text>Установить"
+    icon-selected:
+      name: "<good>Текущая иконка"
+    icon-hand:
+      name: "<accent>Предмет из руки"
+      lore:
+        - "<text>Сделать иконкой предмет,"
+        - "<text>который вы держите в руке"
+        - ""
+        - "<icon:lmb> <text>Установить"
+    icon-hand-empty:
+      name: "<muted>Возьмите предмет в руку"
+      lore:
+        - "<text>Любой предмет из руки, в том числе"
+        - "<text>из ItemsAdder, Nexo или Oraxen,"
+        - "<text>может стать иконкой варпа."
+
 commands:
   applecore:
     description: "Управление плагином AppleCore"
@@ -570,3 +784,39 @@ commands:
     notify-give: "<prefix:ok><text>Вам начислено <highlight><amount></highlight>. Баланс: <highlight><balance></highlight>"
     notify-take: "<prefix:info><text>С вас списано <highlight><amount></highlight>. Баланс: <highlight><balance></highlight>"
     notify-set: "<prefix:info><text>Ваш баланс изменён: <highlight><balance></highlight>"
+
+  # ─── Варпы ───────────────────────────────────────────────────────────────────
+  warp:
+    description: "Меню варпов или телепорт на варп"
+    usage: "<prefix:info><text>Использование: <accent>/warp [варп] [игрок]</accent>"
+  playerwarps:
+    description: "Меню варпов игроков"
+    usage: "<prefix:info><text>Использование: <accent>/playerwarps</accent>"
+  setwarp:
+    description: "Создать свой варп или перенести его сюда"
+    usage: "<prefix:info><text>Использование: <accent>/setwarp <название></accent>"
+  delwarp:
+    description: "Удалить варп"
+    usage: "<prefix:info><text>Использование: <accent>/delwarp <варп></accent>"
+  warpinfo:
+    description: "Информация о варпе"
+    usage: "<prefix:info><text>Использование: <accent>/warpinfo <варп></accent>"
+  warpicon:
+    description: "Иконка варпа: предмет из руки или выбор из меню"
+    usage: "<prefix:info><text>Использование: <accent>/warpicon <варп></accent> <muted>(с пустой рукой — выбор из меню)"
+  warpdesc:
+    description: "Описание варпа (строки через |)"
+    usage: "<prefix:info><text>Использование: <accent>/warpdesc <варп> [текст | вторая строка]</accent> <muted>(без текста — удалить)"
+  serverwarp:
+    description: "Серверные варпы: создание и настройка"
+    usage:
+      - "<prefix:info><text>Серверные варпы:"
+      - " <accent>/serverwarp set <название></accent> <muted>— создать здесь или перенести"
+      - " <accent>/serverwarp delete <варп></accent> <muted>— удалить"
+      - " <accent>/serverwarp rename <варп> <новое></accent> <muted>— переименовать"
+      - " <accent>/serverwarp title <варп> [текст]</accent> <muted>— название в меню (цвета, MiniMessage)"
+      - " <accent>/serverwarp icon <варп> [предмет] [замена]</accent> <muted>— иконка: рука, id предмета или меню"
+      - " <accent>/serverwarp desc <варп> [строка | строка]</accent> <muted>— описание"
+      - " <accent>/serverwarp order <варп> <число></accent> <muted>— порядок в меню"
+      - " <accent>/serverwarp perm <варп> [право|none]</accent> <muted>— доступ по праву"
+      - " <accent>/serverwarp list</accent> <muted>— список"

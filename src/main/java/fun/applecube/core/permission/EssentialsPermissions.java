@@ -32,6 +32,8 @@ public final class EssentialsPermissions {
             Map.entry("applecore.teleport.bypass-move", "essentials.teleport.timer.move"),
             Map.entry("applecore.cooldown.bypass", "essentials.commandcooldowns.bypass"),
             Map.entry("applecore.homes.unlimited", "essentials.sethome.multiple.unlimited"),
+            // In EssentialsX /setwarp creates the shared warps, so its holders manage AppleCore server warps.
+            Map.entry("applecore.serverwarp", "essentials.setwarp"),
             Map.entry("applecore.tptoggle.bypass", "essentials.tpo"));
 
     /** AppleCore-only features; EssentialsX nodes (and its wildcards) must not grant these. */

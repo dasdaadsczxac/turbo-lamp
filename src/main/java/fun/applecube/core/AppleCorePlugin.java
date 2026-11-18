@@ -14,6 +14,7 @@ import fun.applecube.core.module.world.WorldModule;
 import fun.applecube.core.module.homes.HomesModule;
 import fun.applecube.core.module.spawn.SpawnModule;
 import fun.applecube.core.module.teleport.TeleportModule;
+import fun.applecube.core.module.warps.WarpsModule;
 import fun.applecube.core.pack.PackStyle;
 import fun.applecube.core.permission.PermissionService;
 import fun.applecube.core.storage.AsyncIo;
@@ -97,6 +98,7 @@ public final class AppleCorePlugin extends JavaPlugin {
         list.add(new PlayerModule(this));
         list.add(new WorldModule(this));
         list.add(new EconomyModule(this));
+        list.add(new WarpsModule(this));
         return list;
     }
 

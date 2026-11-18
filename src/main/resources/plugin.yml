@@ -269,3 +269,21 @@ permissions:
   applecore.paytoggle.others: {description: /paytoggle for another player, default: op}
   applecore.balancetop: {description: /baltop, default: true}
   applecore.eco: {description: /eco give|take|set|reset, default: op}
+
+  # ─── Warps ───────────────────────────────────────────────────────────────────
+  applecore.warp: {description: /warp /warps /playerwarps - menu and teleport (essentials.warp), default: true}
+  applecore.warp.others: {description: /warp warp player (essentials.warp.others), default: op}
+  applecore.warp.bypass-closed: {description: Use player warps their owners closed, default: op}
+  applecore.warpinfo: {description: /warpinfo (essentials.warp), default: true}
+  applecore.setwarp: {description: /setwarp - own player warps, limited by applecore.playerwarps.limit.<n> (essentials.setwarp), default: true}
+  applecore.setwarp.free: {description: Create player warps without warps.creation-cost, default: op}
+  applecore.setwarp.bypass-world: {description: Create player warps in warps.disabled-worlds, default: op}
+  applecore.delwarp: {description: /delwarp own warps (essentials.delwarp), default: true}
+  applecore.delwarp.others: {description: /delwarp other players' warps, default: op}
+  applecore.warpicon: {description: /warpicon own warps, default: true}
+  applecore.warpicon.others: {description: /warpicon other players' warps, default: op}
+  applecore.warpdesc: {description: /warpdesc own warps, default: true}
+  applecore.warpdesc.others: {description: /warpdesc other players' warps, default: op}
+  applecore.warpdesc.color: {description: Colours and formatting in /warpdesc, default: op}
+  applecore.serverwarp: {description: /serverwarp and editing server warps (essentials.setwarp), default: op}
+  applecore.playerwarps.unlimited: {description: No player warp limit (limits - applecore.playerwarps.limit.<n>), default: op}

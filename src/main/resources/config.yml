@@ -12,6 +12,7 @@ modules:
   player: true
   world: true
   economy: true
+  warps: true
 
 permissions:
   # Второй набор прав: точные права EssentialsX (essentials.fly, essentials.home.others,
@@ -202,6 +203,32 @@ economy:
   baltop-refresh: 5m
   # Сообщать игроку об /eco give|take|set.
   notify-eco: true
+
+# ─── Варпы (/warp, /setwarp, /serverwarp) ────────────────────────────────────
+# Внешний вид меню — menus/warps.yml, тексты — messages.yml (warps.*, menus.warps.*).
+warps:
+  # Какая вкладка открывается по /warp: server или players (/playerwarps всегда открывает варпы игроков).
+  default-tab: server
+  # Сколько варпов может создать игрок без привилегии. Больше — applecore.playerwarps.limit.<n>
+  # (берётся наибольшее), без ограничений — applecore.playerwarps.unlimited. 0 — только по правам.
+  player-limit: 1
+  # Цена создания варпа игрока (нужен Vault). 0 — бесплатно. Без оплаты: applecore.setwarp.free
+  creation-cost: 0
+  # Миры, где игроки не могут ставить варпы. Обход: applecore.setwarp.bypass-world
+  disabled-worlds: []
+  # Допустимые названия варпов (регулярное выражение Java).
+  name-pattern: "[\\p{L}\\p{N}_\\-]{2,16}"
+  # Порядок варпов игроков: likes (лайки, потом посещения), visits, newest или name.
+  sort: likes
+  # true — на каждый серверный варп нужно право applecore.warps.<варп> (в EssentialsX: essentials.warps.<варп>),
+  # как per-warp-permission в EssentialsX.
+  per-warp-permission: false
+  # Команда кнопки «Назад» без «/», например главное меню DeluxeMenus. Пусто — кнопка просто закрывает меню.
+  back-command: "menu"
+  # Описание варпа игрока (/warpdesc): строк и символов в строке.
+  description:
+    max-lines: 3
+    max-line-length: 40
 
 storage:
   # Как часто изменённые данные игроков сохраняются на диск (минуты).

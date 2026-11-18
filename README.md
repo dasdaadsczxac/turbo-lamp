@@ -33,7 +33,8 @@ Essentials-style core plugin for the **APPLECUBE** Minecraft server.
 
 1. Build or download `AppleCore-<version>.jar` and drop it into `plugins/`.
 2. Install the APPLECUBE bordo v2 pack through ItemsAdder (`/iazip`); it already contains the AppleCore warp menus.
-3. Start the server once, then edit `plugins/AppleCore/config.yml`, `commands.yml` and `messages.yml`.
+3. Start the server once, then edit `plugins/AppleCore/config.yml`, `commands.yml`, `messages.yml` and
+   `menus/warps.yml` (warp menu layout and icon palette).
 4. `/applecore reload` applies config and message changes; enabling/disabling commands or modules needs a restart.
 
 ## Documentation

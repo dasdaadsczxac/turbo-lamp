@@ -66,12 +66,29 @@ donate chat. Everything else is EssentialsX-named, so the EssentialsX nodes appl
 - Verified on Paper 1.21.11 + LuckPerms + Vault with bot players: every donor command denied, then unlocked by its
   EssentialsX node only; cooldowns; workstation windows; `/eco take` from the console; `/pay`, `/paytoggle`, `/baltop`.
 
-## Stage 4: GUI warps 🔜
+## Stage 4: GUI warps ✅
 
-Server and player warps in the bordo pack menus (`\uEB98` / `\uEB99` backgrounds, slot layout from the pack's
-`README_warps.txt`), pagination, "My warps", create button, icons from custom-item plugins, visits and likes, player
-warp limits per rank, per-warp permissions, plain-design fallback. Commands: `warp (warps)`, `setwarp`, `delwarp`,
-`warpinfo`, `serverwarp`, `warpicon`, `warpdesc`.
+- `module/warps`: `Warp` (JSON model), `WarpStore` (`data/warps.json`, atomic writes on the IO thread), `WarpMenu`
+  (server / players / my warps), `IconPickerMenu`, `WarpCommands`, `ServerWarpCommand`.
+- Menu layout `menus/warps.yml` follows the pack's `README_warps.txt`: tabs 0-3 / 5-8 (invisible `ui_invisible`
+  items over the drawn tabs), info 4, 28 warp slots, back 45, my warps 47, pages 48-50, create 51, close 53.
+  Titles `<white>\uEB40\uEB98</white>` (server) and `\uEB99` (players). Without the pack: the same slots with vanilla
+  fallbacks, a glass frame and a glowing selected tab.
+- Server warps (`/serverwarp set|delete|rename|title|icon|desc|order|perm|list`): MiniMessage titles and descriptions,
+  sort order, optional permission, per-warp permissions like EssentialsX. Staff can also change icons and delete
+  them from the menu (RMB, Shift+RMB twice).
+- Player warps (`/setwarp`, `/delwarp`, `/warpicon`, `/warpdesc`, `/warpinfo`): limit `warps.player-limit` or
+  `applecore.playerwarps.limit.<n>`, optional creation cost, disabled worlds, visits, likes (RMB), open/closed
+  (Shift+LMB), two-step delete (Shift+RMB twice), sorting by likes/visits/newest/name.
+- Icons: palette from `menus/warps.yml`, the item in hand (ItemsAdder / Nexo / Oraxen / CraftEngine / HeadDatabase
+  ids are kept, otherwise material + `item_model` / custom model data / head texture), `owner-head`, or
+  `/serverwarp icon <warp> <item> [fallback]` with any item id.
+- EssentialsX: `essentials.warp`, `essentials.warp.others`, `essentials.warps.<warp>`, `essentials.delwarp`;
+  `essentials.setwarp` manages server warps (see docs/PERMISSIONS.md).
+- Verified on Paper 1.21.11 + LuckPerms with bot players: pack and plain layouts (titles, models, fallbacks, glass
+  frame, tab glow), pagination over 32 warps, tab switching, icon picker, likes, closing, two-step delete, limits,
+  name validation, `/serverwarp` denied and then allowed by `essentials.setwarp`, `/warp <warp> <player>` by
+  `essentials.warp.others`, console `/serverwarp list`.
 
 ## Stage 5: Donation ranks and KillerMoney ⏳
 

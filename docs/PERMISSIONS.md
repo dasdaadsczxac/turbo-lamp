@@ -143,5 +143,26 @@ The effective home limit is the larger of the two systems; players with neither 
 | `/baltop` | `applecore.balancetop` | `essentials.balancetop` |
 | `/eco give\|take\|set\|reset` | `applecore.eco` | `essentials.eco` |
 
+## Warps
+
+| Command / feature | AppleCore | EssentialsX |
+|---|---|---|
+| `/warp` (menu), `/warp <warp>`, `/playerwarps` | `applecore.warp` | `essentials.warp` |
+| `/warp <warp> <player>` | `applecore.warp.others` | `essentials.warp.others` |
+| One server warp (when `warps.per-warp-permission: true`) | `applecore.warps.<warp>` | `essentials.warps.<warp>` |
+| `/warpinfo` | `applecore.warpinfo` | **`essentials.warp`** |
+| `/setwarp` (own player warps) | `applecore.setwarp` | `essentials.setwarp` |
+| Player warp limit (highest wins, default `warps.player-limit`) | `applecore.playerwarps.limit.<n>`, `applecore.playerwarps.unlimited` | — |
+| No creation cost / any world | `applecore.setwarp.free`, `applecore.setwarp.bypass-world` | — |
+| `/delwarp` own (+ other players' warps) | `applecore.delwarp` (+ `.others`) | `essentials.delwarp` (+ `.others`) |
+| `/warpicon`, `/warpdesc` own (+ others) | `applecore.warpicon`, `applecore.warpdesc` (+ `.others`) | — |
+| Colours in `/warpdesc` | `applecore.warpdesc.color` | — |
+| Use player warps their owners closed | `applecore.warp.bypass-closed` | — |
+| `/serverwarp`; deleting and editing server warps (`/delwarp`, `/warpicon`, `/warpdesc`, menu) | `applecore.serverwarp` | **`essentials.setwarp`** |
+
+In EssentialsX `/setwarp` creates the shared warps, so holders of `essentials.setwarp` manage AppleCore's server
+warps. In AppleCore `/setwarp` creates the player's own warp (limited per rank); server warps are created with
+`/serverwarp set <name>`. A server warp can also require any node of your choice: `/serverwarp perm <warp> <node>`.
+
 Operators get every EssentialsX node automatically (Bukkit grants undeclared nodes to ops), exactly as with EssentialsX.
 That is why opt-in flags such as `near.exclude` and `invsee.preventmodify` count only when explicitly granted.

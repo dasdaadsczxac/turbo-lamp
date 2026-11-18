@@ -108,3 +108,15 @@ paytoggle:
   aliases: [payoff, payon]
 eco:
   aliases: [economy]
+
+# ─── Варпы (/warp открывает меню, /serverwarp — серверные варпы) ──────────────
+warp:
+  aliases: [warps]
+playerwarps:
+  aliases: [pwarps, pwarp]
+setwarp:
+  aliases: [createwarp, addwarp]
+delwarp:
+  aliases: [remwarp, rmwarp, deletewarp, removewarp]
+serverwarp:
+  aliases: [swarp]

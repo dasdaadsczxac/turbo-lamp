@@ -29,6 +29,10 @@ class EssentialsPermissionsTest {
         assertEquals("essentials.teleport.timer.bypass", EssentialsPermissions.map("applecore.teleport.bypass-delay"));
         assertEquals("essentials.tpo", EssentialsPermissions.map("applecore.tptoggle.bypass"));
         assertEquals("essentials.sethome.multiple.unlimited", EssentialsPermissions.map("applecore.homes.unlimited"));
+        assertEquals("essentials.setwarp", EssentialsPermissions.map("applecore.serverwarp"));
+        assertEquals("essentials.warp", EssentialsPermissions.map("applecore.warpinfo"));
+        assertEquals("essentials.warp.others", EssentialsPermissions.map("applecore.warp.others"));
+        assertEquals("essentials.delwarp", EssentialsPermissions.map("applecore.delwarp"));
     }
 
     @Test
@@ -43,6 +47,8 @@ class EssentialsPermissionsTest {
         assertNull(EssentialsPermissions.map("applecore.teleport.delay.1"));
         assertNull(EssentialsPermissions.map("applecore.rank.king"));
         assertNull(EssentialsPermissions.map("applecore.killermoney.multiplier"));
+        assertNull(EssentialsPermissions.map("applecore.playerwarps.limit.3"));
+        assertNull(EssentialsPermissions.map("applecore.warpicon"));
         assertNull(EssentialsPermissions.map("essentials.fly"));
     }
 }
